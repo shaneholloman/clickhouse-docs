@@ -105,26 +105,26 @@ ClickPipes には、多くのユースケースをカバーする妥当なデフ
 
 ### オブジェクトストレージ ClickPipes \{#clickpipes-advanced-settings-object-storage\}
 
-| Setting                            | Default value |  Description                     |                    
-|------------------------------------|---------------|---------------------------------------------------------------------------------------|
-| `Max insert bytes`                 | 10GB          | 1回の挿入バッチで処理するバイト数。                                  |
-| `Max file count`                   | 100           | 1回の挿入バッチで処理するファイルの最大数。                          |
-| `Max threads`                      | auto(3)       | ファイル処理に使用する[同時実行スレッド数の上限](/operations/settings/settings#max_threads)。 |
-| `Max insert threads`               | 1             | ファイル処理に使用する[同時実行挿入スレッド数の上限](/operations/settings/settings#max_insert_threads)。 |
-| `Min insert block size bytes`      | 1GB           | テーブルに挿入可能な[ブロック内の最小サイズ（バイト数）](/operations/settings/settings#min_insert_block_size_bytes)。 |
-| `Max download threads`             | 4             | [同時実行ダウンロードスレッド数の上限](/operations/settings/settings#max_download_threads)。 |
-| `Object storage polling interval`  | 30s           | ClickHouse クラスターへデータを挿入する前の最大待機時間を設定します。 |
-| `Parallel distributed insert select` | 2           | [parallel_distributed_insert_select 設定](/operations/settings/settings#parallel_distributed_insert_select)。 |
-| `Parallel view processing`         | false         | アタッチされた VIEW への書き込みを[逐次ではなく並行して](/operations/settings/settings#parallel_view_processing)行うかどうか。 |
-| `Use cluster function`             | true          | 複数ノード間でファイルを並行処理するかどうか。 |
+| Setting                              | Default value | Description                                                                                                            |
+| ------------------------------------ | ------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `Max insert bytes`                   | 10 GB         | 1回の挿入バッチで処理するバイト数。                                                                                                     |
+| `Max file count`                     | 100           | 1回の挿入バッチで処理するファイルの最大数。                                                                                                 |
+| `Max threads`                        | auto(3)       | ファイル処理に使用する[同時実行スレッド数の上限](/operations/settings/settings#max_threads)。                                                  |
+| `Max insert threads`                 | 1             | ファイル処理に使用する[同時実行挿入スレッド数の上限](/operations/settings/settings#max_insert_threads)。                                         |
+| `Min insert block size bytes`        | 1 GB          | テーブルに挿入可能な[ブロック内の最小サイズ (バイト数) ](/operations/settings/settings#min_insert_block_size_bytes)。                            |
+| `Max download threads`               | 4             | [同時実行ダウンロードスレッド数の上限](/operations/settings/settings#max_download_threads)。                                              |
+| `Object storage polling interval`    | 30 s          | ClickHouse クラスターへデータを挿入する前の最大待機時間を設定します。                                                                               |
+| `Parallel distributed insert select` | 2             | [parallel&#95;distributed&#95;insert&#95;select 設定](/operations/settings/settings#parallel_distributed_insert_select)。 |
+| `Parallel view processing`           | false         | アタッチされた VIEW への書き込みを[逐次ではなく並行して](/operations/settings/settings#parallel_view_processing)行うかどうか。                        |
+| `Use cluster function`               | true          | 複数ノード間でファイルを並行処理するかどうか。                                                                                                |
 
-<Image img={cp_advanced_settings} alt="ClickPipes の高度な設定" size="lg" border/>
+<Image img={cp_advanced_settings} alt="ClickPipes の高度な設定" size="lg" border />
 
 ### ストリーミング ClickPipes \{#clickpipes-advanced-settings-streaming\}
 
-| 設定                               | デフォルト値 |  説明                                                                                  |                    
-|------------------------------------|---------------|---------------------------------------------------------------------------------------|
-| `Streaming max insert wait time`   | 5s            | データを ClickHouse クラスターに挿入する前の最大待機時間を設定します。                |
+| 設定                               | デフォルト値 | 説明                                        |
+| -------------------------------- | ------ | ----------------------------------------- |
+| `Streaming max insert wait time` | 5 s    | データを ClickHouse クラスターに挿入する前の最大待機時間を設定します。 |
 
 ## エラー レポート \{#error-reporting\}
 
@@ -136,9 +136,9 @@ ClickPipes は、宛先テーブルとは別に、`<destination_table_name>_clic
 
 ### システムエラー \{#system-errors\}
 
-ClickPipe の動作に関連するエラー（ネットワークや接続などを含む）は、すべて `system.clickpipes_log` テーブルに保存されます。このテーブルには 7 日間の[有効期限 (TTL)](/engines/table-engines/mergetree-family/mergetree#table_engine-mergetree-ttl) が設定されています。
+ClickPipe の動作に関連するエラー (ネットワークや接続などを含む) は、すべて `system.clickpipes_log` テーブルに保存されます。このテーブルには 7 日間の[有効期限 (TTL)](/engines/table-engines/mergetree-family/mergetree#table_engine-mergetree-ttl) が設定されています。
 
-ClickPipes が 15 分経過してもデータソースに接続できない場合、または 1 時間経過しても送信先に接続できない場合、ClickPipes インスタンスは停止し、（ClickHouse インスタンスが利用可能であれば）システムエラーテーブルに適切なメッセージを保存します。
+ClickPipes が 15 分経過してもデータソースに接続できない場合、または 1 時間経過しても送信先に接続できない場合、ClickPipes インスタンスは停止し、 (ClickHouse インスタンスが利用可能であれば) システムエラーテーブルに適切なメッセージを保存します。
 
 ## FAQ \{#faq\}
 

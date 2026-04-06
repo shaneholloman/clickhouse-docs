@@ -105,26 +105,26 @@ ClickPipes 提供了合理的默认设置，可满足大多数使用场景的需
 
 ### 对象存储 ClickPipes \{#clickpipes-advanced-settings-object-storage\}
 
-| Setting                            | Default value |  Description                     |                    
-|------------------------------------|---------------|---------------------------------------------------------------------------------------|
-| `Max insert bytes`                 | 10GB          | 在单个插入批次中可处理的最大字节数。                                                     |
-| `Max file count`                   | 100           | 在单个插入批次中可处理的最大文件数。                                                     |
-| `Max threads`                      | auto(3)       | 用于文件处理的[最大并发线程数](/operations/settings/settings#max_threads)。            |
-| `Max insert threads`               | 1             | 用于文件处理的[最大并发插入线程数](/operations/settings/settings#max_insert_threads)。 |
-| `Min insert block size bytes`      | 1GB           | [可插入到表中的数据块的最小字节大小](/operations/settings/settings#min_insert_block_size_bytes)。 |
-| `Max download threads`             | 4             | [最大并发下载线程数](/operations/settings/settings#max_download_threads)。             |
-| `Object storage polling interval`  | 30s           | 配置在将数据插入 ClickHouse 集群前的最大等待时间。                                      |
-| `Parallel distributed insert select` | 2           | [并行分布式 INSERT SELECT 设置](/operations/settings/settings#parallel_distributed_insert_select)。 |
-| `Parallel view processing`         | false         | 是否启用并行而非顺序地将数据推送到附加 VIEW。详见[相关设置](/operations/settings/settings#parallel_view_processing)。 |
-| `Use cluster function`             | true          | 是否在多个节点之间并行处理文件。                                                        |
+| Setting                              | Default value | Description                                                                                 |
+| ------------------------------------ | ------------- | ------------------------------------------------------------------------------------------- |
+| `Max insert bytes`                   | 10 GB         | 在单个插入批次中可处理的最大字节数。                                                                          |
+| `Max file count`                     | 100           | 在单个插入批次中可处理的最大文件数。                                                                          |
+| `Max threads`                        | auto(3)       | 用于文件处理的[最大并发线程数](/operations/settings/settings#max_threads)。                                |
+| `Max insert threads`                 | 1             | 用于文件处理的[最大并发插入线程数](/operations/settings/settings#max_insert_threads)。                       |
+| `Min insert block size bytes`        | 1 GB          | [可插入到表中的数据块的最小字节大小](/operations/settings/settings#min_insert_block_size_bytes)。             |
+| `Max download threads`               | 4             | [最大并发下载线程数](/operations/settings/settings#max_download_threads)。                            |
+| `Object storage polling interval`    | 30 s          | 配置在将数据插入 ClickHouse 集群前的最大等待时间。                                                             |
+| `Parallel distributed insert select` | 2             | [并行分布式 INSERT SELECT 设置](/operations/settings/settings#parallel_distributed_insert_select)。 |
+| `Parallel view processing`           | false         | 是否启用并行而非顺序地将数据推送到附加 VIEW。详见[相关设置](/operations/settings/settings#parallel_view_processing)。  |
+| `Use cluster function`               | true          | 是否在多个节点之间并行处理文件。                                                                            |
 
-<Image img={cp_advanced_settings} alt="ClickPipes 的高级设置" size="lg" border/>
+<Image img={cp_advanced_settings} alt="ClickPipes 的高级设置" size="lg" border />
 
 ### 流式 ClickPipes \{#clickpipes-advanced-settings-streaming\}
 
-| 设置                               | 默认值        |  描述                              |                    
-|------------------------------------|---------------|---------------------------------------------------------------------------------------|
-| `Streaming max insert wait time`   | 5s            | 配置在将数据插入 ClickHouse 集群之前的最长等待时间。 |
+| 设置                               | 默认值 | 描述                               |
+| -------------------------------- | --- | -------------------------------- |
+| `Streaming max insert wait time` | 5 s | 配置在将数据插入 ClickHouse 集群之前的最长等待时间。 |
 
 ## 错误报告 \{#error-reporting\}
 
@@ -132,13 +132,13 @@ ClickPipes 会根据摄取过程中遇到的错误类型，将错误分别存储
 
 ### 记录错误 \{#record-errors\}
 
-ClickPipes 会在目标表所在的数据库中创建一个后缀为 `<destination_table_name>_clickpipes_error` 的表。该表会包含由于数据格式不正确或表结构不匹配而产生的所有错误，并保存整条无效消息。此表的[生存时间 (TTL)](/engines/table-engines/mergetree-family/mergetree#table_engine-mergetree-ttl)为 7 天。
+ClickPipes 会在目标表所在的数据库中创建一个后缀为 `<destination_table_name>_clickpipes_error` 的表。该表会包含由于数据格式不正确或 schema 不匹配而产生的所有错误，并保存整条无效消息。此表的[生存时间 (TTL)](/engines/table-engines/mergetree-family/mergetree#table_engine-mergetree-ttl)为 7 天。
 
 ### 系统错误 \{#system-errors\}
 
-与 ClickPipe 运行相关的错误将存储在 `system.clickpipes_log` 表中。该表还会记录所有与 ClickPipe 运行相关的其他错误（如网络、连接等）。此表的[生存时间 (TTL)](/engines/table-engines/mergetree-family/mergetree#table_engine-mergetree-ttl) 为 7 天。
+与 ClickPipe 运行相关的错误将存储在 `system.clickpipes_log` 表中。该表还会记录所有与 ClickPipe 运行相关的其他错误 (如网络、连接等) 。此表的[生存时间 (TTL)](/engines/table-engines/mergetree-family/mergetree#table_engine-mergetree-ttl) 为 7 天。
 
-如果 ClickPipes 在 15 分钟内无法连接到数据源，或在 1 小时内无法连接到目标端，则该 ClickPipes 实例会停止运行，并在系统错误表中存储一条相应的消息（前提是 ClickHouse 实例可用）。
+如果 ClickPipes 在 15 分钟内无法连接到数据源，或在 1 小时内无法连接到目标端，则该 ClickPipes 实例会停止运行，并在系统错误表中存储一条相应的消息 (前提是 ClickHouse 实例可用) 。
 
 ## 常见问题解答 \{#faq\}
 
