@@ -105,26 +105,26 @@ ClickPipes는 대부분의 사용 사례를 충족하는 합리적인 기본 설
 
 ### 객체 스토리지 ClickPipes \{#clickpipes-advanced-settings-object-storage\}
 
-| 설정                                | 기본값        |  설명                              |                    
-|------------------------------------|---------------|---------------------------------------------------------------------------------------|
-| `Max insert bytes`                 | 10GB          | 단일 insert 배치에서 처리하는 바이트 수입니다.                                  |
-| `Max file count`                   | 100           | 단일 insert 배치에서 처리할 파일의 최대 개수입니다.                          |
-| `Max threads`                      | auto(3)       | 파일 처리를 위한 [동시 실행 스레드의 최대 개수](/operations/settings/settings#max_threads)입니다. |
-| `Max insert threads`               | 1             | 파일 처리를 위한 [동시 실행 insert 스레드의 최대 개수](/operations/settings/settings#max_insert_threads)입니다. |
-| `Min insert block size bytes`      | 1GB           | 테이블에 insert할 수 있는 [블록의 최소 바이트 크기](/operations/settings/settings#min_insert_block_size_bytes)입니다. |
-| `Max download threads`             | 4             | [동시 실행 다운로드 스레드의 최대 개수](/operations/settings/settings#max_download_threads)입니다. |
-| `Object storage polling interval`  | 30s           | ClickHouse 클러스터로 데이터를 insert하기 전까지의 최대 대기 시간을 설정합니다. |
-| `Parallel distributed insert select` | 2           | [Parallel distributed insert select 설정](/operations/settings/settings#parallel_distributed_insert_select)입니다. |
-| `Parallel view processing`         | false         | [순차적으로가 아니라 동시에](/operations/settings/settings#parallel_view_processing) 연결된 뷰로 푸시할지 여부입니다. |
-| `Use cluster function`             | true          | 여러 노드에 걸쳐 파일을 병렬로 처리할지 여부입니다. |
+| 설정                                   | 기본값     | 설명                                                                                                            |
+| ------------------------------------ | ------- | ------------------------------------------------------------------------------------------------------------- |
+| `Max insert bytes`                   | 10 GB   | 단일 삽입 배치에서 처리하는 바이트 수입니다.                                                                                 |
+| `Max file count`                     | 100     | 단일 삽입 배치에서 처리할 파일의 최대 개수입니다.                                                                              |
+| `Max threads`                        | auto(3) | 파일 처리를 위한 [동시 실행 스레드의 최대 개수](/operations/settings/settings#max_threads)입니다.                                   |
+| `Max insert threads`                 | 1       | 파일 처리를 위한 [동시 실행 삽입 스레드의 최대 개수](/operations/settings/settings#max_insert_threads)입니다.                     |
+| `Min insert block size bytes`        | 1 GB    | 테이블에 삽입할 수 있는 [블록의 최소 바이트 크기](/operations/settings/settings#min_insert_block_size_bytes)입니다.              |
+| `Max download threads`               | 4       | [동시 실행 다운로드 스레드의 최대 개수](/operations/settings/settings#max_download_threads)입니다.                               |
+| `Object storage polling interval`    | 30 s    | ClickHouse 클러스터로 데이터를 삽입하기 전까지의 최대 대기 시간을 설정합니다.                                                          |
+| `Parallel distributed insert select` | 2       | [Parallel distributed 삽입 select 설정](/operations/settings/settings#parallel_distributed_insert_select)입니다. |
+| `Parallel view processing`           | false   | [순차적으로가 아니라 동시에](/operations/settings/settings#parallel_view_processing) 연결된 뷰로 푸시할지 여부입니다.                   |
+| `Use cluster function`               | true    | 여러 노드에 걸쳐 파일을 병렬로 처리할지 여부입니다.                                                                                 |
 
-<Image img={cp_advanced_settings} alt="ClickPipes 고급 설정" size="lg" border/>
+<Image img={cp_advanced_settings} alt="ClickPipes 고급 설정" size="lg" border />
 
 ### 스트리밍 ClickPipes \{#clickpipes-advanced-settings-streaming\}
 
-| 설정                                | 기본값        |  설명                             |                    
-|------------------------------------|---------------|---------------------------------------------------------------------------------------|
-| `Streaming max insert wait time`   | 5s            | ClickHouse 클러스터에 데이터를 삽입하기까지의 최대 대기 시간을 구성합니다. |
+| 설정                               | 기본값 | 설명                                             |
+| -------------------------------- | --- | ---------------------------------------------- |
+| `Streaming max insert wait time` | 5 s | ClickHouse 클러스터에 데이터를 삽입하기까지의 최대 대기 시간을 구성합니다. |
 
 ## 오류 보고 \{#error-reporting\}
 
