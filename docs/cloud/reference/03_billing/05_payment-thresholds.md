@@ -13,7 +13,7 @@ import billing_2 from '@site/static/images/cloud/reference/billing_payment_thres
 
 ## Payment thresholds {#threshholds}
 
-If you are a pay as you go customer and your amount due in a billing period for ClickHouse Cloud reaches $1,000 USD or the equivalent value, your payment method configured to your organization will be automatically charged. 
+If you are a pay as you go customer and your amount due in a billing period for ClickHouse Cloud reaches $1,000 USD or the equivalent value, your payment method configured to your organization will be automatically charged.
 
 :::tip
 If you wish to adjust the default payment threshold amount, [contact support](mailto:support@clickhouse.com).
