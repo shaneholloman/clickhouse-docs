@@ -85,12 +85,6 @@ Your use of ClickHouse Cloud requires your organization to have at least one act
 
 ### Steps to add a backup credit card {#steps-add-backup-cc}
 
-:::note
-After configuring a backup credit card, you will also have the option to click on the button to edit your credit card and set it as the primary payment method.
-However, if you do this, your credit card will become your only payment method for the organization and your Marketplace subscription will be completely removed from ClickHouse Cloud.
-You will need to go back into your marketplace account to reconfigure it based on the steps in the section ["Set up marketplace billing from your cloud provider"](#set-up-marketplace-billing-from-cp).
-:::
-
 1. Navigate to the **Billing** page in the ClickHouse Cloud console.
 2. The top of the billing page will show your primary payment method as a Marketplace subscription and the backup payment method as **None**.
 3. Click the **add credit card** button to set a backup payment method.
@@ -98,6 +92,12 @@ You will need to go back into your marketplace account to reconfigure it based o
 <Image img={add_backup} alt="Add backup credit card" size="lg"/>
 
 4. Follow the instructions to add or update your credit card’s billing address details. After saving, the **Billing** page will reflect the backup credit card alongside the primary marketplace subscription.
+
+:::note
+After configuring a backup credit card, you will also have the option to click on the button to edit your credit card and set it as the primary payment method.
+However, if you do this, your credit card will become your only payment method for the organization and your Marketplace subscription will be completely removed from ClickHouse Cloud.
+You will need to go back into your marketplace account to reconfigure it based on the steps in the section ["Set up marketplace billing from your cloud provider"](#set-up-marketplace-billing-from-cp).
+:::
 
 ## Set up marketplace billing from your cloud provider {#set-up-marketplace-billing-from-cp}
 
