@@ -39,5 +39,5 @@ If your organization reaches 90% of the payment threshold and is on-track to exc
 You will also receive an email notification as well as an invoice when you exceed the payment threshold.
 
 :::note
-Payment threshold notifications are not currently supported for PAYG orgs
+Payment threshold notifications are currently only supported for orgs being billed in arrears (PAYG)
 :::
