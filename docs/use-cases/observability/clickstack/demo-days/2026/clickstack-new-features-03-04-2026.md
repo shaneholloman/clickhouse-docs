@@ -27,7 +27,7 @@ A new template gallery rounds things out. Four pre-built dashboards covering OTe
 
 *Demo by [@pulpdrew](https://github.com/pulpdrew)*
 
-<iframe width="768" height="432" src="https://www.youtube.com/embed/e_IIKG3f6SE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="768" height="432" src="https://www.youtube.com/embed/Tfe9kJygoEg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 Dashboard variable filters now support their own filter conditions. The motivating case is straightforward: if you have a "service name" dropdown on a Node.js dashboard, you probably only want that dropdown to list Node.js services, not every service in your environment. You can now configure a filter condition directly on the dashboard variable to scope what gets shown.
 
@@ -61,7 +61,7 @@ The fix is a one-minute time window prepended to the windowed query array for se
 
 *Demo by [@knudtty](https://github.com/knudtty)*
 
-<iframe width="768" height="432" src="https://www.youtube.com/embed/bHII8nR5aL0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="768" height="432" src="https://www.youtube.com/embed/e_IIKG3f6SE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 A copy-as-JSON button is now available in the row viewer, letting you grab the entire log row in one click. The button shows up in the full sidebar view too. It's handy for pasting a row into an LLM prompt to ask where this log would appear in the code, or just capturing a complete event for an incident report without manually selecting all the text.
 
