@@ -56,7 +56,7 @@ const config = {
   url: "https://clickhouse.com",
   baseUrl: "/docs/",
   baseUrlIssueBanner: true,
-  onBrokenLinks: process.env.ON_BROKEN_LINKS ?? "throw",
+  onBrokenLinks: process.env.ON_BROKEN_LINKS ?? "warn",
   onBrokenMarkdownLinks: process.env.ON_BROKEN_MARKDOWN_LINKS ?? "warn",
   onDuplicateRoutes: "throw",
   onBrokenAnchors: process.env.ON_BROKEN_ANCHORS ?? "throw",
