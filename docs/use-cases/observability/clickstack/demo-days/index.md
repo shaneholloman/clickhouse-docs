@@ -10,12 +10,10 @@ keywords: ['ClickStack', 'Demo days']
 
 ## ClickStack demo days {#clickstack-demo-days}
 
-This folder contains recordings from our ClickStack Demo Days.
+These folders contain recordings from our Demo Days - our internal dev calls, where we share what we’re currently building and exploring in ClickStack.
 
-These sessions are updated regularly and are based on our internal development calls, where we showcase the latest features and ideas in ClickStack amongst the team.
+Some of what you'll see will make it into the product. Some is shared to get early feedback. And some is just experimental and may never ship.
 
-Many of the features demonstrated here will make their way into the product. Others are shared to gather feedback from the community, and some are purely experimental and may never be released.
+If something catches your eye, check out the linked PRs and let us know what you think. We want this to be a space where the community can stay close to what's happening and help shape where ClickStack goes next.
 
-We encourage you to watch the videos to stay up to date with ongoing development. If a particular feature interests you, you can follow the linked PRs and share your feedback directly.
-
-Our goal is to make this a collaborative space where the community can engage with and help shape the future of ClickStack.
+If you've got questions or feedback, reach out on the ClickHouse Slack channel [#o11y-clickstack](https://clickhouse.com/slack) or via our [public repository](https://github.com/hyperdxio/hyperdx/tree/main).
