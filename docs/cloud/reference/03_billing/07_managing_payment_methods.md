@@ -2,7 +2,7 @@
 sidebar_label: 'Managing payment methods'
 slug: /manage/manage/billing/managing-payment-methods
 title: 'Managing payment methods'
-description: 'Manage MP subscriptions and add a backup credit card'
+description: 'Manage marketplace subscriptions and add a backup credit card'
 keywords: ['billing']
 doc_type: 'guide'
 ---
@@ -21,7 +21,7 @@ This doc covers how to manage and update how your organization is billed in Clic
 - You must have an Admin or Billing role in the organization to update payment methods.
 - The marketplace subscriptions available to you are those that are active on other organizations where you have an Admin or Billing role.
 - To share a marketplace subscription from another organization, you must have an Admin or Billing role in both the current organization and the organization that owns the marketplace subscription.
-- All services in the organization you are switching must be on the same cloud provider as the marketplace (AWS, GCP or Azure).
+- All services in the organization you want to bill via marketplace subscription must be on the same cloud provider as the marketplace (AWS, GCP or Azure).
 
 :::note
 You can’t share another organization’s credit card.
@@ -35,15 +35,15 @@ If your organization is currently billed via credit card, you can update your ca
 ### Steps to add or update your credit card {#steps-add-update}
 
 1. Navigate to **Billing** in the ClickHouse Cloud console.
-2. If you wish to add a credit card, then at the top of the page, click the button to **add a payment method**
+2. If you wish to add a credit card, then at the top of the page, click the button to **add a payment method**.
 
 <Image img={add_payment_method} alt="Add a payment method" size="lg"/>
 
-3. If you wish to edit your credit card, then at the top of the page, click the button to **edit your credit card**
+3. If you wish to edit your credit card, then at the top of the page, click the button to **edit your credit card**.
 
 <Image img={edit_credit_card} alt="Edit your credit card" size="lg"/>
 
-4. In both cases, follow the instructions to add or update your credit card’s billing address details
+4. In both cases, follow the instructions to add or update your credit card’s billing address details.
 
 ## Configure an organization's billing to an existing marketplace subscription {#configure-billing-to-existing-mp-sub}
 
@@ -53,7 +53,7 @@ If you have multiple organizations, you can:
 
 ### Steps to switch an organization from credit card billing to a marketplace subscription that's already active on one of your other organizations {#steps-switch-org-already-active}
 
-1. Navigate to **Settings > Billing** in the ClickHouse Cloud console.
+1. Navigate to the **Billing** page in the ClickHouse Cloud console.
 2. Click the edit icon next to the **payment method**.
 
 <Image img={edit_payment_method} alt="Edit payment method" size="lg"/>
@@ -65,7 +65,7 @@ If you have multiple organizations, you can:
 
 ### Steps to change an organization's current marketplace subscription to one that's used by a different organization {#steps-switch-org-different-org}
 
-1. Navigate to **Settings > Billing** in the ClickHouse Cloud console.
+1. Navigate to the **Billing** page in the ClickHouse Cloud console.
 2. Click the edit icon next to the **payment method**.
 
 <Image img={edit_payment_method_2} alt="Edit payment method" size="lg"/>
@@ -85,7 +85,13 @@ Your use of ClickHouse Cloud requires your organization to have at least one act
 
 ### Steps to add a backup credit card {#steps-add-backup-cc}
 
-1. Navigate to **Settings > Billing** in the ClickHouse Cloud console.
+:::note
+After configuring a backup credit card, you will also have the option to click on the button to edit your credit card and set it as the primary payment method.
+However, if you do this, your credit card will become your only payment method for the organization and your Marketplace subscription will be completely removed from ClickHouse Cloud.
+You will need to go back into your marketplace account to reconfigure it based on the steps in the section ["Set up marketplace billing from your cloud provider"](#set-up-marketplace-billing-from-cp).
+:::
+
+1. Navigate to the **Billing** page in the ClickHouse Cloud console.
 2. The top of the billing page will show your primary payment method as a Marketplace subscription and the backup payment method as **None**.
 3. Click the **add credit card** button to set a backup payment method.
 
