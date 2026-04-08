@@ -25,15 +25,15 @@ A new template gallery rounds things out. Four pre-built dashboards covering OTe
 
 ## Filters for filters {#filters-for-filters}
 
-*Demo by [@MikeShi42](https://github.com/MikeShi42)*
+*Demo by [@pulpdrew](https://github.com/pulpdrew)*
 
-<iframe width="768" height="432" src="https://www.youtube.com/embed/Tfe9kJygoEg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="768" height="432" src="https://www.youtube.com/embed/e_IIKG3f6SE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 Dashboard variable filters now support their own filter conditions. The motivating case is straightforward: if you have a "service name" dropdown on a Node.js dashboard, you probably only want that dropdown to list Node.js services, not every service in your environment. You can now configure a filter condition directly on the dashboard variable to scope what gets shown.
 
 The filter selector has also been updated to support multi-select. For dashboards that group by service, being able to pick several values at once from a dropdown makes comparisons a lot more practical.
 
-**Related PRs:** [#2039](https://github.com/hyperdxio/hyperdx/pull/2039) Add input filter pills below search input
+**Related PRs:** [#1969](https://github.com/hyperdxio/hyperdx/pull/1969) Add conditions to Dashboard filters; Support filter multi-select
 
 ## RBAC for predefined dashboards {#rbac-for-predefined-dashboards}
 
