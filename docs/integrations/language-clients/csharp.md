@@ -103,6 +103,7 @@ Below is a full list of all the settings, their default values, and their effect
 | UseCustomDecimals | `bool` | `true` | `UseCustomDecimals` | Use `ClickHouseDecimal` for arbitrary precision; if false, uses .NET `decimal` (128-bit limit) |
 | ReadStringsAsByteArrays | `bool` | `false` | `ReadStringsAsByteArrays` | Read `String` and `FixedString` columns as `byte[]` instead of `string`; useful for binary data |
 | UseFormDataParameters | `bool` | `false` | `UseFormDataParameters` | Send parameters as form data instead of URL query string |
+| ParameterTypeResolver | `IParameterTypeResolver` | `null` | — | Custom resolver for `@`-style parameter type mapping; see [Custom parameter type mapping](#parameter-type-mapping) |
 | JsonReadMode | `JsonReadMode` | `Binary` | `JsonReadMode` | How JSON data is returned: `Binary` (returns `JsonObject`) or `String` (returns raw JSON string) |
 | JsonWriteMode | `JsonWriteMode` | `String` | `JsonWriteMode` | How JSON data is sent: `String` (serializes via `JsonSerializer`, accepts all inputs) or `Binary` (registered POCOs only with type hints) |
 
@@ -494,6 +495,10 @@ Unlike the `object[]` overload, `InsertBinaryAsync<T>` does not accept an explic
 If `ColumnTypes` is set in `InsertOptions`, they will override the POCO attributes.
 :::
 
+#### Schema evolution
+
+POCO inserts work seamlessly when columns are added to the target table after the type is registered. Because the driver only inserts the columns mapped by the POCO, any new columns with `DEFAULT` (or other default expressions) are filled in by the server automatically. No code changes or re-registration are needed.
+
 ---
 
 ### Reading data {#reading-data}
@@ -565,6 +570,65 @@ var reader = await client.ExecuteReaderAsync(
 :::tip
 If you're specifying a custom `QueryId`, ensure it is unique for every call. A random GUID is a good choice.
 :::
+
+---
+
+### Custom parameter type mapping {#parameter-type-mapping}
+
+When using `@`-style parameters (e.g., `WHERE id = @id`), the driver automatically infers the ClickHouse type from the .NET value type. For example, `int` maps to `Int32`, and `DateTime` maps to `DateTime`.
+
+To override these defaults, set `ParameterTypeResolver` on `ClickHouseClientSettings`. This is useful when you want all `DateTime` parameters to use `DateTime64(3)` for millisecond precision, or all decimals to use a specific scale, without setting `ClickHouseType` on every individual parameter.
+
+**Using `DictionaryParameterTypeResolver` for simple type mappings:**
+
+```csharp
+using ClickHouse.Driver.ADO.Parameters;
+
+var settings = new ClickHouseClientSettings("Host=localhost")
+{
+    ParameterTypeResolver = new DictionaryParameterTypeResolver(new Dictionary<Type, string>
+    {
+        [typeof(DateTime)] = "DateTime64(3)",
+        [typeof(decimal)] = "Decimal64(4)",
+    }),
+};
+using var client = new ClickHouseClient(settings);
+
+var parameters = new ClickHouseParameterCollection();
+parameters.AddParameter("dt", DateTime.UtcNow);     // Mapped to DateTime64(3)
+parameters.AddParameter("amount", 99.1234m);         // Mapped to Decimal64(4)
+
+await client.ExecuteReaderAsync("SELECT @dt, @amount", parameters);
+```
+
+**Custom `IParameterTypeResolver` for advanced scenarios:**
+
+For value-aware or name-based resolution, implement the `IParameterTypeResolver` interface directly. Return `null` to fall through to the default inference:
+
+```csharp
+public class SmartDecimalResolver : IParameterTypeResolver
+{
+    public string ResolveType(Type clrType, object value, string parameterName)
+    {
+        if (clrType != typeof(decimal))
+            return null; // Fall through to default
+
+        var scale = (decimal.GetBits((decimal)value)[3] >> 16) & 0x7F;
+        return scale <= 4 ? $"Decimal64({scale})" : $"Decimal128({scale})";
+    }
+}
+```
+
+**Type resolution precedence:**
+
+The resolver is one step in a precedence chain. From highest to lowest priority:
+
+1. Explicit `ClickHouseType` set on the parameter
+2. SQL type hint from `{name:Type}` syntax in the query
+3. `IParameterTypeResolver` (from `ClickHouseClientSettings.ParameterTypeResolver`)
+4. Built-in type inference (`TypeConverter.ToClickHouseType`)
+
+The resolver also works with the ADO.NET `ClickHouseConnection` path — the settings are inherited by connections created from the client.
 
 ---
 
