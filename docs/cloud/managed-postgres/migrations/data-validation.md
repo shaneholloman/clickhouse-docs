@@ -11,7 +11,7 @@ import PrivatePreviewBadge from '@theme/badges/PrivatePreviewBadge';
 
 <PrivatePreviewBadge />
 
-### Comparing counts of all tables {#data-validation-counts}
+## Comparing counts of all tables {#data-validation-counts}
 A simple way to validate the correctness of your data after migration is to compare the counts of all tables in the source and target databases. You can do this by running the following query on both databases:
 ```sql
 SELECT table_name, 
