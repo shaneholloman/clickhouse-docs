@@ -12,16 +12,16 @@ doc_type: 'changelog'
 
 #### 不兼容变更 \{#backward-incompatible-change\}
 
+* 升级后再降级可能会导致数据丢失。将数据类型的序列化版本传递到嵌套数据类型中。例如，String 的序列化版本 `with_size_stream` 之前仅应用于顶层 String 列和 Tuple 元素。现在，它会应用于任何嵌套类型 (如 `Array`/`Map`/`Variant`/`JSON`/etc.) 中的任意 String 类型。这种行为由 MergeTree 设置 `propagate_types_serialization_versions_to_nested_types` 控制，且该设置现已默认启用。此修改后，新创建的数据分区片段无法被旧版本读取，但旧 parts 仍可在新版本中正常读取。**升级是安全的，但降级则不安全——如果您在升级到 26.3 后需要回滚，则 26.3 在包含嵌套类型的列中写入的数据将无法读取！** 详情请参见 [#101429](https://github.com/ClickHouse/ClickHouse/issues/101429) 。[#94859](https://github.com/ClickHouse/ClickHouse/pull/94859) ([Pavel Kruglov](https://github.com/Avogar)).
 * 移除 `hypothesis` 跳过索引类型。这是一项冷门的 Experimental 功能，实际用途有限。现在，使用 `INDEX ... TYPE hypothesis` 创建表会报错。[#96874](https://github.com/ClickHouse/ClickHouse/pull/96874) ([Alexey Milovidov](https://github.com/alexey-milovidov)) 。
 * 移除处于 Experimental 阶段的 `detectProgrammingLanguage` 函数。[#99567](https://github.com/ClickHouse/ClickHouse/pull/99567) ([Alexey Milovidov](https://github.com/alexey-milovidov)) 。
-* 修复 `NOT` 运算符的优先级以符合 SQL 标准：`NOT` 现在的优先级低于 `IS NULL`、`BETWEEN`、`LIKE` 和算术运算符。例如，`NOT (x) IS NULL` 现在会被解析为 `NOT (x IS NULL)`，而不是 `(NOT x) IS NULL`。这可能会改变依赖此前 (非标准) 行为的查询结果。[#97680](https://github.com/ClickHouse/ClickHouse/pull/97680) ([Alexey Milovidov](https://github.com/alexey-milovidov)) 。
+* 修复 `NOT` 运算符的优先级以符合 SQL 标准：`NOT` 现在的优先级低于 `IS NULL`、`BETWEEN`、`LIKE` 和算术运算符。例如，`NOT (x) IS NULL` 现在会被解析为 `NOT (x IS NULL)`，而不是 `(NOT x) IS NULL`。这可能会改变依赖此前 (非标准) 行为的查询结果。[#97680](https://github.com/ClickHouse/ClickHouse/pull/97680) ([Alexey Milovidov](https://github.com/alexey-milovidov)).
 * 修正了普通投影的元数据，使具有多列排序键的投影能够被正确识别。这是在 [#90429](https://github.com/ClickHouse/ClickHouse/issues/90429) 的基础上进一步完善的。[#91352](https://github.com/ClickHouse/ClickHouse/pull/91352) ([Amos Bird](https://github.com/amosbird)) 。
-* 将数据类型的序列化版本传递到嵌套数据类型中。例如，String 的序列化版本 `with_size_stream` 之前仅应用于顶层 String 列和 Tuple 元素。现在，它会应用于任何嵌套类型 (如 Array/Map/Variant/JSON 等) 中的任意 String 类型。这种行为由 MergeTree 设置 `propagate_types_serialization_versions_to_nested_types` 控制，且该设置现已默认启用。此修改后，新创建的数据分区片段无法被旧版本读取，但旧 parts 仍可在新版本中正常读取。这意味着升级是安全的，但降级则不安全。[#94859](https://github.com/ClickHouse/ClickHouse/pull/94859) ([Pavel Kruglov](https://github.com/Avogar)) 。
 * 修复了跳过索引文件未遵循 replace&#95;long&#95;file&#95;name&#95;to&#95;hash 设置的问题；该问题会导致出现 &quot;File name too long&quot; 错误，并使名称较长的索引无法正常读取。现在，当跳过索引文件名超过 max&#95;file&#95;name&#95;length 时，会像列文件一样对文件名进行哈希处理。这一更改向后兼容 (新服务器可读取旧 parts) ，但降级 (或滚动升级期间使用旧服务器) 可能导致名称较长的索引被忽略。[#97128](https://github.com/ClickHouse/ClickHouse/pull/97128) ([Raúl Marín](https://github.com/Algunenano)).
-* 默认启用异步插入。ClickHouse 现在会默认将所有小型插入按批次处理。此设置在 compatibility 中配置。如果您设置 `compatibility=<version less than 26.2>`，则默认值将恢复为之前的值，即 `false`。您可以在多个层级启用或禁用异步插入：在用户 profile 配置中、在会话级别、查询级别，或在 MergeTree 表级别。[#97590](https://github.com/ClickHouse/ClickHouse/pull/97590) ([Sema Checherinda](https://github.com/CheSema)) 。
+* 默认启用异步插入。ClickHouse 现在会默认将所有小型插入按批次处理。此设置在 compatibility 中配置。如果您设置 `compatibility=<version less than 26.2>`，则默认值将恢复为之前的值，即 `false`。您可以在多个层级启用或禁用异步插入：在用户 profile 配置中、在会话级别、查询级别，或在 MergeTree 表级别。[#97590](https://github.com/ClickHouse/ClickHouse/pull/97590) ([Sema Checherinda](https://github.com/CheSema))。
 * 将 `mysql_datatypes_support_level` 的默认值从空改为 `decimal,datetime64,date2Date32`，默认启用将 MySQL `DATE` 正确映射到 `Date32`、将 `DECIMAL`/`NUMERIC` 映射到 `Decimal`，以及将带精度的 `DATETIME`/`TIMESTAMP` 映射到 `DateTime64`。此前，MySQL `DATE` 列会被映射到 `Date`，而后者无法表示 1970-01-01 之前的日期，从而导致数据损坏。[#97716](https://github.com/ClickHouse/ClickHouse/pull/97716) ([Alexey Milovidov](https://github.com/alexey-milovidov)).
-* 由于正则表达式较慢，`mergeTreeAnalyzeIndexes{,UUID}` 现支持接受 part 名称数组，而不是 regexp (*Experimental 功能*) 。[#98474](https://github.com/ClickHouse/ClickHouse/pull/98474) ([Azat Khuzhin](https://github.com/azat)).
-* 将可执行用户定义函数的默认 `stderr_reaction` 从 `throw` 修改为 `log_last`。对于向 stderr 写入警告的 UDF，在退出代码为 0 时将不再报错。退出代码异常现在会包含 stderr 的内容。[#99232](https://github.com/ClickHouse/ClickHouse/pull/99232) ([Xu Jia](https://github.com/XuJia0210)).
+* 由于正则表达式较慢，`mergeTreeAnalyzeIndexes{,UUID}` 现支持接受 part 名称数组，而不是 regexp (*Experimental 功能*)。[#98474](https://github.com/ClickHouse/ClickHouse/pull/98474) ([Azat Khuzhin](https://github.com/azat)).
+* 将可执行用户定义函数的默认 `stderr_reaction` 从 `throw` 修改为 `log_last`。UDFs 在向 stderr 写入警告且退出代码为 0 时将不再失败。退出代码异常现在会包含 stderr 的内容。[#99232](https://github.com/ClickHouse/ClickHouse/pull/99232) ([Xu Jia](https://github.com/XuJia0210)).
 
 #### 新特性 \{#new-feature\}
 
@@ -38,16 +38,16 @@ doc_type: 'changelog'
 * 新增设置 `use_partition_pruning` 及其别名 `use_partition_key`。将其设为 `false` 以禁用基于分区键的分区剪枝。[#97888](https://github.com/ClickHouse/ClickHouse/pull/97888) ([Nihal Z. Miaji](https://github.com/nihalzp)).
 * 支持对 Iceberg 表执行 `ALTER TABLE ... EXECUTE expire_snapshots('<timestamp>')`。[#97904](https://github.com/ClickHouse/ClickHouse/pull/97904) ([murphy-4o](https://github.com/murphy-4o))。[#99130](https://github.com/ClickHouse/ClickHouse/pull/99130)
 * 允许 `<protocols>` 中每个 `type=http` 条目指定自定义的 `<handlers>` 键，使其指向单独的 `<http_handlers_*>` 配置节，从而为各端口启用不同的 HTTP 路由规则。[#98414](https://github.com/ClickHouse/ClickHouse/pull/98414) ([Amos Bird](https://github.com/amosbird)).
-* 为 `EXPLAIN` 添加 `pretty=1` 设置以输出树状缩进格式，并添加 `compact=1` 以折叠 `Expression` 步骤，让查询计划更易读。[#98500](https://github.com/ClickHouse/ClickHouse/pull/98500) ([Kirill Kopnev](https://github.com/Fgrtue)) 。
+* 为 `EXPLAIN` 添加 `pretty=1` 设置以输出树状缩进格式，并添加 `compact=1` 以折叠 `Expression` 步骤，让查询计划更易读。[#98500](https://github.com/ClickHouse/ClickHouse/pull/98500) ([Kirill Kopnev](https://github.com/Fgrtue))。
 * 新增 `restore_access_entities_with_current_grants` 服务器设置。启用后，从备份中恢复的用户/角色，其授权会被限制在执行恢复操作的用户有权授予的范围内 (语义与 `GRANT CURRENT GRANTS` 相同) ，而不会因 `ACCESS_DENIED` 而失败。[#98795](https://github.com/ClickHouse/ClickHouse/pull/98795) ([pufit](https://github.com/pufit)).
 * 新增 `caseFoldUTF8` 和 `removeDiacriticsUTF8` 函数，用于 Unicode 大小写折叠和去除变音符号。[#98973](https://github.com/ClickHouse/ClickHouse/pull/98973) ([George Larionov](https://github.com/george-larionov)).
 * 新增 `normalizeUTF8NFKCCasefold` 字符串函数，用于执行 NFKC&#95;Casefold Unicode 规范化，将 NFKC 规范化与大小写折叠结合起来。[#99276](https://github.com/ClickHouse/ClickHouse/pull/99276) ([George Larionov](https://github.com/george-larionov)) 。
-* 为全文索引和 `tokens` 函数新增 `unicodeWord` 分词器。它按 Unicode 单词边界规则拆分文本：ASCII 单词可包含连接字符 (下划线、冒号、点号、单引号) ，而非 ASCII 的 Unicode 字符则会被拆分为单字符标记。[#99357](https://github.com/ClickHouse/ClickHouse/pull/99357) ([Amos Bird](https://github.com/amosbird)) 。
+* 为全文索引和 `tokens` 函数新增 `asciiCJK` 分词器。它按 Unicode 单词边界规则拆分文本：ASCII 单词可包含连接字符 (下划线、冒号、点号、单引号) ，而非 ASCII 的 Unicode 字符则会被拆分为单字符标记。[#99357](https://github.com/ClickHouse/ClickHouse/pull/99357) ([Amos Bird](https://github.com/amosbird)) 。
 * 新增 `max_skip_unavailable_shards_num` 和 `max_skip_unavailable_shards_ratio` 设置，用于限制在启用 `skip_unavailable_shards` 时可静默跳过的分片数。如果不可用分片的数量或占比超过配置的阈值，则会抛出异常，而不是静默返回不完整的结果。[#99369](https://github.com/ClickHouse/ClickHouse/pull/99369) ([Alexey Milovidov](https://github.com/alexey-milovidov)).
 * 现在，用户可以在子查询表达式中使用 `SOME` 关键字。其行为与 `ANY` 完全一致。[#99842](https://github.com/ClickHouse/ClickHouse/pull/99842) ([Artem Kytkin](https://github.com/Vinceent)).
 * 新增 `output_format_trim_fixed_string` 设置，用于在文本输出格式中去除 `FixedString` 值末尾的空字节。[#97558](https://github.com/ClickHouse/ClickHouse/pull/97558) ([NeedmeFordev](https://github.com/spider-yamet)) 。
 * 支持在 FROM 子句中使用加括号的表连接表达式，例如 `SELECT * FROM (t1 CROSS JOIN t2)`。[#97650](https://github.com/ClickHouse/ClickHouse/pull/97650) ([Alexey Milovidov](https://github.com/alexey-milovidov)) 。
-* 实现函数 `toDaysInMonth`：返回指定日期所在月份的天数。[#99227](https://github.com/ClickHouse/ClickHouse/pull/99227) ([Vitaly Baranov](https://github.com/vitlibar)) 。
+* 实现函数 `toDaysInMonth`：返回指定日期所在月份的天数。[#99227](https://github.com/ClickHouse/ClickHouse/pull/99227) ([Vitaly Baranov](https://github.com/vitlibar))。
 
 #### Experimental 功能 \{#experimental-feature\}
 
