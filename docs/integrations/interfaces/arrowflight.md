@@ -41,7 +41,7 @@ Upon startup, a log message confirms the interface is active:
 {} <Information> Application: Arrow Flight compatibility protocol: 0.0.0.0:9090
 ```
 
-## TLS Configuration {#tls-configuration}
+## TLS configuration {#tls-configuration}
 
 To enable TLS for the Arrow Flight interface, configure the following settings:
 
