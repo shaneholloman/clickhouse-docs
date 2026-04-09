@@ -1,6 +1,6 @@
 ---
 slug: /cloud/managed-postgres/migrations/data-validation
-sidebar_label: 'Logical replication'
+sidebar_label: 'Data validation'
 title: 'Validate data correctness after migration'
 description: 'Learn how to validate the correctness of your data after migrating to ClickHouse Managed Postgres'
 keywords: ['postgres', 'postgresql', 'logical replication', 'migration', 'data transfer', 'managed postgres']
