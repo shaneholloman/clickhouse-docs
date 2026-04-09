@@ -495,7 +495,7 @@ Unlike the `object[]` overload, `InsertBinaryAsync<T>` does not accept an explic
 If `ColumnTypes` is set in `InsertOptions`, they will override the POCO attributes.
 :::
 
-#### Schema evolution
+#### Schema evolution {#poco-insert-schema-evolution}
 
 POCO inserts work seamlessly when columns are added to the target table after the type is registered. Because the driver only inserts the columns mapped by the POCO, any new columns with `DEFAULT` (or other default expressions) are filled in by the server automatically. No code changes or re-registration are needed.
 
