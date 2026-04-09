@@ -97,7 +97,6 @@ generate_rss() {
     <link>${SITE_URL}</link>
     <description>Latest updates and features in ClickHouse Cloud</description>
     <language>en-us</language>
-    <lastBuildDate>$(date -R 2>/dev/null || date "+%a, %d %b %Y %H:%M:%S %z")</lastBuildDate>
     <atom:link href="${FEED_URL}" rel="self" type="application/rss+xml" />
 ${entries}
   </channel>

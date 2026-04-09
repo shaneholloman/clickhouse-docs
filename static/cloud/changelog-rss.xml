@@ -5,7 +5,6 @@
     <link>https://clickhouse.com/docs/cloud/whats-new/cloud</link>
     <description>Latest updates and features in ClickHouse Cloud</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 09 Apr 2026 21:00:53 +0200</lastBuildDate>
     <atom:link href="https://clickhouse.com/docs/cloud/changelog-rss.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ClickHouse Cloud - April 3, 2026</title>
