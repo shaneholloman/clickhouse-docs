@@ -104,30 +104,30 @@ Once a service is encrypted with TDE, customers may update the key to enable CME
     <summary>Enable CMEK with Azure KMS</summary>
 
 1. In ClickHouse Cloud, select the encrypted service
-2. Click on the Settings on the left
-3. At the bottom of the screen, expand the Network security information
+2. Click on `Settings` on the left
+3. At the bottom of the screen, expand `Network security information`
 4. Copy the `Cross Tenant App Client ID` - you will need this in the next step
-5. Sign into your Azure subscription and use the following command via the Azure CLI to create a new service principal; replace `{azure_cross_tenant_app_client_id}` with the value you copied in step 2 \
+5. Sign into your Azure subscription and use the following command via the Azure CLI to create a new service principal; replace `{azure_cross_tenant_app_client_id}` with the value you copied in the previous step \
     `az ad sp create --id {azure_cross_tenant_app_client_id}` 
-6. Copy the Name of the new service principal created - you will need this in a future step
-6. [Create an Azure Key Vault](https://learn.microsoft.com/en-us/azure/key-vault/general/quick-create-portal)
-7. [Create a Key Vault key in Azure](https://learn.microsoft.com/en-us/azure/key-vault/keys/quick-create-portal)
-8. From the Key Vault key, select `Access control (IAM)` on the left
-9. Select `Role assignments` from the top menu
-10. Click `Add` then `Add role assignment` from the top menu
-11. Select the `Key Vault Crypto User` role, then click `Next`
-12. Leave the default selections on the `Add role assignment` screen and click `+Select members`
-13. Paste the service principal name you copied in step 6 (it starts with CH-TDE), select the service principal and click `Select`
-14. Click `Next` then `Review + assign`
-15. Return to your Azure Key Vault and copy the following values:
+6. Copy the `Name` of the new service principal created - you will need this in a future step
+7. [Create an Azure Key Vault](https://learn.microsoft.com/en-us/azure/key-vault/general/quick-create-portal)
+8. [Create a Key Vault key in Azure](https://learn.microsoft.com/en-us/azure/key-vault/keys/quick-create-portal)
+9. From the Key Vault key, select `Access control (IAM)` on the left
+10. Select `Role assignments` from the top menu
+11. Click `Add` then `Add role assignment` from the top menu
+12. Select the `Key Vault Crypto User` role, then click `Next`
+13. Leave the default selections on the `Add role assignment` screen and click `+Select members`
+14. Paste the service principal name you copied in step 6 (it starts with CH-TDE), select the service principal and click `Select`
+15. Click `Next` then `Review + assign`
+16. Return to your Azure Key Vault and copy the following values:
     - From the Overview page, copy your Vault URI
     - From the Overview page, copy your Directory ID
     - From the Keys page, copy your key Name
-16. Return to your service settings in ClickHouse Cloud and paste the values from step 15 in the following fields:
+17. Return to your service settings in ClickHouse Cloud and paste the values from step 16 in the following fields:
     - Key ID > paste your key Name
     - Key Vault URI > paste your Vault URI
     - Key Tenant ID > paste your Directory ID
-17. Click Rotate KMS, wait a few minutes as this will result in a rolling restart and verify your service is running
+18. Click Rotate KMS, wait a few minutes as this will result in a rolling restart and verify your service is running
 
 </details>
 
