@@ -795,3 +795,12 @@ SYSTEM WAIT VIEW [db.]name
 ```sql
 SYSTEM CANCEL VIEW [db.]name
 ```
+
+
+## SYSTEM FLUSH OBJECT STORAGE QUEUE \{#flush-object-storage-queue\}
+
+阻塞执行，直到指定文件被给定的 [S3Queue](../../engines/table-engines/integrations/s3queue.md) 或 [AzureQueue](../../engines/table-engines/integrations/azure-queue.md) 表处理完成，或永久失败。如果该文件已处理完成，则立即返回。如果该文件已永久失败 (即所有重试均已耗尽) ，则会引发错误。
+
+```sql
+SYSTEM FLUSH OBJECT STORAGE QUEUE [db.]table_name PATH 'path'
+```

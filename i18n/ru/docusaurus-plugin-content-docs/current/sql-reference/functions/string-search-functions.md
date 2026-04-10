@@ -735,6 +735,63 @@ SELECT count() FROM log WHERE hasAnyTokens(mapValues(attributes), ['192.0.0.1', 
 └─────────┘
 ```
 
+## hasPhrase \{#hasPhrase\}
+
+Добавлено в: v26.4.0
+
+Проверяет, содержит ли haystack все токены из фразы, идущие подряд.
+
+Перед поиском функция токенизирует аргументы `input` и `phrase` с помощью токенизатора, указанного в необязательном третьем аргументе.
+Если токенизатор не указан, по умолчанию используется токенизатор `splitByNonAlpha`.
+
+В отличие от [`hasToken`](#hasToken), [`hasAnyTokens`](#hasAnyTokens) и [`hasAllTokens`](#hasAllTokens), `hasPhrase` требует, чтобы токены шли в том же порядке
+и без промежуточных токенов. Например, `hasPhrase('the quick brown fox', 'quick fox')` возвращает 0,
+потому что &quot;brown&quot; находится между &quot;quick&quot; и &quot;fox&quot;.
+
+**Синтаксис**
+
+```sql
+hasPhrase(input, phrase[, tokenizer])
+```
+
+**Псевдонимы**: `matchPhrase`
+
+**Аргументы**
+
+* `input` — Входной столбец. [`String`](/sql-reference/data-types/string) или [`FixedString`](/sql-reference/data-types/fixedstring)
+* `phrase` — Искомая фраза. [`const String`](/sql-reference/data-types/string)
+* `tokenizer` — Токенизатор, который следует использовать. Необязателен; по умолчанию — `splitByNonAlpha`. [`const String`](/sql-reference/data-types/string)
+
+**Возвращаемое значение**
+
+Возвращает `1`, если фраза найдена как последовательность идущих подряд токенов, в противном случае — `0`. [`UInt8`](/sql-reference/data-types/int-uint)
+
+**Примеры**
+
+**Совпадение фразы**
+
+```sql title=Query
+SELECT hasPhrase('the quick brown fox jumps', 'quick brown')
+```
+
+```response title=Response
+┌─hasPhrase('the quick brown fox jumps', 'quick brown')─┐
+│                                                      1 │
+└────────────────────────────────────────────────────────┘
+```
+
+**Несмежные токены**
+
+```sql title=Query
+SELECT hasPhrase('the quick brown fox jumps', 'quick fox')
+```
+
+```response title=Response
+┌─hasPhrase('the quick brown fox jumps', 'quick fox')─┐
+│                                                    0 │
+└──────────────────────────────────────────────────────┘
+```
+
 ## hasSubsequence \{#hasSubsequence\}
 
 Впервые появилась в: v23.7.0

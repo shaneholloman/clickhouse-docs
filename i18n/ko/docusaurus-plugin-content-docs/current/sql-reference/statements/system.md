@@ -805,3 +805,12 @@ SYSTEM WAIT VIEW [db.]name
 ```sql
 SYSTEM CANCEL VIEW [db.]name
 ```
+
+
+## SYSTEM FLUSH OBJECT STORAGE QUEUE \{#flush-object-storage-queue\}
+
+지정된 [S3Queue](../../engines/table-engines/integrations/s3queue.md) 또는 [AzureQueue](../../engines/table-engines/integrations/azure-queue.md) 테이블에서 해당 파일이 처리되거나 영구적인 실패 상태가 될 때까지 대기합니다. 파일이 이미 처리된 경우 즉시 반환합니다. 파일이 영구적으로 실패한 경우(모든 재시도를 모두 소진한 경우) 오류를 발생시킵니다.
+
+```sql
+SYSTEM FLUSH OBJECT STORAGE QUEUE [db.]table_name PATH 'path'
+```

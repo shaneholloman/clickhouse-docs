@@ -3647,6 +3647,60 @@ arraySymmetricDifference([1, 2], [1, 2], [1, 3]) AS non_empty_symmetric_differen
 ```
 
 
+## arrayTranspose \{#arrayTranspose\}
+
+導入バージョン: v26.4.0
+
+二次元配列を転置します。
+
+すべての内部配列は同じ長さである必要があります。
+
+**構文**
+
+```sql
+arrayTranspose(arr)
+```
+
+**引数**
+
+* `arr` — 転置する二次元配列。すべての内部配列の長さは同じである必要があります。[`Array(Array(T))`](/sql-reference/data-types/array)
+
+**戻り値**
+
+結果の `[i][j]` 要素が入力の `[j][i]` 要素に対応する、転置後の二次元配列。[`Array(Array(T))`](/sql-reference/data-types/array)
+
+**例**
+
+**正方行列**
+
+```sql title=Query
+SELECT arrayTranspose([[1, 2], [3, 4]])
+```
+
+```response title=Response
+[[1, 3], [2, 4]]
+```
+
+**非正方行列**
+
+```sql title=Query
+SELECT arrayTranspose([[1, 2, 3], [4, 5, 6]])
+```
+
+```response title=Response
+[[1, 4], [2, 5], [3, 6]]
+```
+
+**文字列の要素**
+
+```sql title=Query
+SELECT arrayTranspose([['a', 'b'], ['c', 'd']])
+```
+
+```response title=Response
+[['a', 'c'], ['b', 'd']]
+```
+
 ## arrayUnion \{#arrayUnion\}
 
 導入バージョン: v24.10.0

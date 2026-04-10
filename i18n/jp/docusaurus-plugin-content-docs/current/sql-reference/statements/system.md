@@ -796,3 +796,12 @@ SYSTEM WAIT VIEW [db.]name
 ```sql
 SYSTEM CANCEL VIEW [db.]name
 ```
+
+
+## SYSTEM FLUSH OBJECT STORAGE QUEUE \{#flush-object-storage-queue\}
+
+指定されたファイルが、指定された [S3Queue](../../engines/table-engines/integrations/s3queue.md) または [AzureQueue](../../engines/table-engines/integrations/azure-queue.md) テーブルによって処理されるか、恒久的な失敗状態になるまで待機します。ファイルがすでに処理済みの場合は、ただちに戻ります。ファイルが恒久的に失敗している場合 (すべての再試行を使い果たした場合) は、エラーを返します。
+
+```sql
+SYSTEM FLUSH OBJECT STORAGE QUEUE [db.]table_name PATH 'path'
+```
