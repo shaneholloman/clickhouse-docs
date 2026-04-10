@@ -3274,6 +3274,16 @@ FORMAT PrettyCompactMonoBlock
 
 在分布式查询计划中移除不必要的 exchange 操作。若需调试，可将其禁用。
 
+## distributed_plan_prefer_replicas_over_workers \{#distributed_plan_prefer_replicas_over_workers\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "0"},{"label": "用于将分布式计划序列化到副本的新设置"}]}]} />
+
+将分布式查询计划序列化后交由副本执行。
+
 ## distributed_product_mode \{#distributed_product_mode\}
 
 <SettingsInfoBlock type="DistributedProductMode" default_value="deny" />

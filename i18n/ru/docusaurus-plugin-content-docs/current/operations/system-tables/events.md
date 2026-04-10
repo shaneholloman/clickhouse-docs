@@ -4594,6 +4594,10 @@ Number of queries to be interpreted and potentially executed. Does not include q
 
 Количество гранул индекса, для которых прямое чтение из текстового индекса использовалось в качестве подсказки, но было отброшено из-за низкой селективности.
 
+### TextIndexDiscardPatternScan \{#textindexdiscardpatternscan\}
+
+Количество случаев, когда сканирование по словарю на основе шаблона в текстовом индексе было отменено, поскольку число списков вхождений для чтения превысило пороговое значение.
+
 ### TextIndexHeaderCacheHits \{#textindexheadercachehits\}
 
 Количество случаев, когда заголовок был найден в кэше.

@@ -3273,6 +3273,16 @@ distributed shuffle-hash-join におけるデフォルトのバケット数。
 
 分散クエリプランから不要な exchange を削除します。デバッグ目的で無効化します。
 
+## distributed_plan_prefer_replicas_over_workers \{#distributed_plan_prefer_replicas_over_workers\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "0"},{"label": "レプリカで実行するために分散クエリプランをシリアル化する新しい設定"}]}]} />
+
+レプリカで実行するために、分散クエリプランをシリアル化します。
+
 ## distributed_product_mode \{#distributed_product_mode\}
 
 <SettingsInfoBlock type="DistributedProductMode" default_value="deny" />

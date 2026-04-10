@@ -4593,6 +4593,10 @@ OS のカーネルモードで CPU 命令を実行している処理スレッド
 
 テキスト索引からの直接読み取りがヒントとして追加されたものの、選択性が低いため破棄された索引 granules の数。
 
+### TextIndexDiscardPatternScan \{#textindexdiscardpatternscan\}
+
+テキスト索引において、読み込むポスティングリスト数が閾値を超えたため、パターンベースの辞書スキャンが破棄された回数。
+
 ### TextIndexHeaderCacheHits \{#textindexheadercachehits\}
 
 ヘッダーがキャッシュ内で見つかった回数。
