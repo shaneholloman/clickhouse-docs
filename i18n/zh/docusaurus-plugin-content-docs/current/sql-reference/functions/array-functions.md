@@ -3645,6 +3645,60 @@ arraySymmetricDifference([1, 2], [1, 2], [1, 3]) AS non_empty_symmetric_differen
 ```
 
 
+## arrayTranspose \{#arrayTranspose\}
+
+引入版本：v26.4.0
+
+对二维数组进行转置。
+
+所有内层数组的长度都必须相同。
+
+**语法**
+
+```sql
+arrayTranspose(arr)
+```
+
+**参数**
+
+* `arr` — 要进行转置的二维数组。所有内层数组的长度必须相同。[`Array(Array(T))`](/sql-reference/data-types/array)
+
+**返回值**
+
+转置后的二维数组，其中结果中的元素 `[i][j]` 等于输入中的元素 `[j][i]`。[`Array(Array(T))`](/sql-reference/data-types/array)
+
+**示例**
+
+**方阵**
+
+```sql title=Query
+SELECT arrayTranspose([[1, 2], [3, 4]])
+```
+
+```response title=Response
+[[1, 3], [2, 4]]
+```
+
+**非方阵**
+
+```sql title=Query
+SELECT arrayTranspose([[1, 2, 3], [4, 5, 6]])
+```
+
+```response title=Response
+[[1, 4], [2, 5], [3, 6]]
+```
+
+**字符串类型元素**
+
+```sql title=Query
+SELECT arrayTranspose([['a', 'b'], ['c', 'd']])
+```
+
+```response title=Response
+[['a', 'c'], ['b', 'd']]
+```
+
 ## arrayUnion \{#arrayUnion\}
 
 引入版本：v24.10.0

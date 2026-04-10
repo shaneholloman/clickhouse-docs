@@ -3643,6 +3643,60 @@ arraySymmetricDifference([1, 2], [1, 2], [1, 3]) AS non_empty_symmetric_differen
 ```
 
 
+## arrayTranspose \{#arrayTranspose\}
+
+도입 버전: v26.4.0
+
+2차원 배열을 전치합니다.
+
+모든 내부 배열의 길이는 동일해야 합니다.
+
+**구문**
+
+```sql
+arrayTranspose(arr)
+```
+
+**인수**
+
+* `arr` — 전치할 2차원 배열입니다. 모든 내부 배열은 길이가 같아야 합니다. [`Array(Array(T))`](/sql-reference/data-types/array)
+
+**반환 값**
+
+결과의 `[i][j]` 요소가 입력의 `[j][i]` 요소와 같은 전치된 2차원 배열을 반환합니다. [`Array(Array(T))`](/sql-reference/data-types/array)
+
+**예시**
+
+**정방 행렬**
+
+```sql title=Query
+SELECT arrayTranspose([[1, 2], [3, 4]])
+```
+
+```response title=Response
+[[1, 3], [2, 4]]
+```
+
+**직사각 행렬**
+
+```sql title=Query
+SELECT arrayTranspose([[1, 2, 3], [4, 5, 6]])
+```
+
+```response title=Response
+[[1, 4], [2, 5], [3, 6]]
+```
+
+**문자열 원소**
+
+```sql title=Query
+SELECT arrayTranspose([['a', 'b'], ['c', 'd']])
+```
+
+```response title=Response
+[['a', 'c'], ['b', 'd']]
+```
+
 ## arrayUnion \{#arrayUnion\}
 
 도입 버전: v24.10.0

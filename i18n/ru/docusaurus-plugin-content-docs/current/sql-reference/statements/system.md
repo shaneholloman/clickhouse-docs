@@ -796,3 +796,12 @@ SYSTEM WAIT VIEW [db.]name
 ```sql
 SYSTEM CANCEL VIEW [db.]name
 ```
+
+
+## SYSTEM FLUSH OBJECT STORAGE QUEUE \{#flush-object-storage-queue\}
+
+Блокирует выполнение до тех пор, пока указанный файл не будет обработан или не завершится необратимой ошибкой в указанной таблице [S3Queue](../../engines/table-engines/integrations/s3queue.md) или [AzureQueue](../../engines/table-engines/integrations/azure-queue.md). Если файл уже обработан, управление возвращается немедленно. Выдаёт ошибку, если обработка файла завершилась необратимой ошибкой (все повторные попытки исчерпаны).
+
+```sql
+SYSTEM FLUSH OBJECT STORAGE QUEUE [db.]table_name PATH 'path'
+```
