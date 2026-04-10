@@ -4593,6 +4593,10 @@ sleep 함수(`sleep`, `sleepEachRow`)에 설정된 대기 시간입니다.
 
 텍스트 인덱스에서 직접 읽기가 힌트로 추가되었으나 선택도가 낮아 제외된 인덱스 그래뉼 수입니다.
 
+### TextIndexDiscardPatternScan \{#textindexdiscardpatternscan\}
+
+텍스트 인덱스에서 패턴 기반 딕셔너리 스캔을 수행할 때 읽어야 하는 포스팅 리스트 수가 임곗값을 초과해 해당 스캔이 중단된 횟수입니다.
+
 ### TextIndexHeaderCacheHits \{#textindexheadercachehits\}
 
 헤더가 캐시에서 발견된 횟수입니다.

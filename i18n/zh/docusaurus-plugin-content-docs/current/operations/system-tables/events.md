@@ -4593,6 +4593,10 @@ sleep 函数 (sleep、sleepEachRow) 的调用次数。
 
 将直接从文本索引读取作为提示加入、但因选择性过低而被丢弃的索引粒度块数量。
 
+### TextIndexDiscardPatternScan \{#textindexdiscardpatternscan\}
+
+因需读取的倒排列表数量超过阈值而放弃文本索引中基于模式的字典扫描的次数。
+
 ### TextIndexHeaderCacheHits \{#textindexheadercachehits\}
 
 头部在缓存中命中的次数。

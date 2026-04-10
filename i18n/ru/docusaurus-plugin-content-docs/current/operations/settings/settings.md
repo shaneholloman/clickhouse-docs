@@ -3280,6 +3280,16 @@ FORMAT PrettyCompactMonoBlock
 
 Удаляет лишние операции обмена данными в распределённом плане запроса. Отключите для отладки.
 
+## distributed_plan_prefer_replicas_over_workers \{#distributed_plan_prefer_replicas_over_workers\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "0"},{"label": "Новая настройка для сериализации распределённого плана запроса для выполнения на репликах"}]}]} />
+
+Сериализует распределённый план запроса для выполнения на репликах.
+
 ## distributed_product_mode \{#distributed_product_mode\}
 
 <SettingsInfoBlock type="DistributedProductMode" default_value="deny" />
