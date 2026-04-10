@@ -17,11 +17,11 @@ import step_6 from '@site/static/images/cloud/guides/control_plane/manage_custom
 
 This guide is intended for users with the Admin role in ClickHouse Cloud.
 
-ClickHouse Cloud customers may select from pre-defined system roles or create custom roles to assign to users. For more information on system roles and their associated permissions, please review [Console roles and permissions](/cloud/security/console-roles). This guide provides details for managing custom roles.
+ClickHouse Cloud customers may select from pre-defined system roles or create custom roles to assign to users. For more information on system roles and their associated permissions, review [Console roles and permissions](/cloud/security/console-roles). This guide provides details for managing custom roles.
 
 ## Create custom roles {#create-custom-role}
 
-Custom roles can contain a combination of organization, service and database permissions. Permissions may be applied to all or a subset of services and databases.
+Custom roles can contain a combination of organization, service, and database permissions. Permissions may be applied to all or a subset of services and databases.
 
 <VerticalStepper headerLevel="h3">
 
@@ -51,10 +51,10 @@ Enter a descriptive role name. This will be the name you will see when assigning
 
 ### Click `Allow` and select permission scope {#scope-permissions}
 
-Click the `Allow` button and select from Organization, Service and/or Database permissions. For a description of all permissions, see [Console roles and permissions](/cloud/security/console-roles).
+Click the `Allow` button and select from Organization, Service, and/or Database permissions. For a description of all permissions, see [Console roles and permissions](/cloud/security/console-roles).
 
 :::tip
-Ensure users that will log into the console have a minimum of Organization > Access organization permissions.
+Ensure users who will log into the console have a minimum of Organization > Access organization permissions.
 :::
 
 <Image img={step_5} size="md"/>
@@ -69,7 +69,7 @@ Review permissions assigned to your new role before finalizing. Click `Create ro
 
 ## Update custom roles {#update-custom-role}
 
-Custom roles may be updated after they are created. Users will lose any permissions removed from the role and will gain any permissions added.
+Custom roles may be updated after they're created. Users will lose any permissions removed from the role and will gain any permissions added.
 
 :::tip
 User permissions are additive. If a user has permission to perform an operation as part of multiple roles, they may not immediately lose access if permission is removed from only one role.
@@ -84,14 +84,14 @@ User permissions are additive. If a user has permission to perform an operation 
 
 ## Delete custom roles {#delete-custom-role}
 
-Custom roles may be deleted at any time. 
+Custom roles may be deleted at any time.
 
 :::warning
-You must have at least one user in the organization with administrative permissions. If deleting the role will remove administrative permissions from the last user, you will not be able to delete the role. To resolve this, assign at least one user the Admin system role before deleting the custom role.
+You must have at least one user in the organization with administrative permissions. If deleting the role removes administrative permissions from the last user, you can't delete it. To resolve this, assign at least one user the Admin system role before deleting the custom role.
 :::
 
 1. Access organization settings and select `Users and roles`
 2. Select the `Roles` tab
 3. Select the three dots next to the role you would like to delete
-4. Review the users and API keys that will lose access when the role is removed, adjust assignments as needed
+4. Review the users and API keys that will lose access when the role is removed. Adjust assignments as needed.
 5. Select `Delete role` to complete the process

@@ -17,7 +17,7 @@ import step_6 from '@site/static/images/cloud/guides/sql_console/service_level_a
 import step_7 from '@site/static/images/cloud/guides/sql_console/service_level_access/7_service_settings.png'
 
 :::warning
-This setting is deprecated and has been replaced with a new setting on the role creation screen in organizations that have migrated to custom roles. For more information, see [Manage cloud users](/docs/cloud/security/manage-cloud-users).
+This setting is deprecated and has been replaced with a new setting on the role creation screen in organizations that have migrated to custom roles. For more information, see [Manage cloud users](/cloud/security/manage-cloud-users).
 :::
 
 # Configuring SQL console role assignments

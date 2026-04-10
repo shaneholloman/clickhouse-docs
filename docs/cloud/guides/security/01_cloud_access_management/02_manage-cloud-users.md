@@ -23,7 +23,7 @@ This guide is intended for users with the Admin role in ClickHouse Cloud.
 
 ### Invite users {#invite-users}
 
-Administrators may invite multiple users at a time and assign one or more roles at the time of invitation. 
+Administrators may invite multiple users at a time and assign one or more roles at the time of invitation.
 
 <VerticalStepper headerLevel="h3">
 
@@ -39,7 +39,7 @@ Click the `Invite members` button in the upper left corner.
 
 <Image img={step_2} size="lg"/>
 
-### Enter the email address of new members and assign role(s) {#add-email-and-roles}
+### Enter the email address of new members and assign roles {#add-email-and-roles}
 
 Enter email addresses at the top of the invitation screen. Select one or more roles to assign the users.
 
@@ -57,10 +57,10 @@ Click `Send invites` at the bottom of the screen. Users will receive an email fr
 
 <EnterprisePlanFeatureBadge feature="SAML SSO"/>
 
-If your organization is configured for [SAML SSO](/cloud/security/saml-setup) follow these steps to add users to your organization.
+If your organization is configured for [SAML SSO](/cloud/security/saml-setup), follow these steps to add users to your organization.
 
-1. Add users to your SAML application in your identity provider, the users won't appear in ClickHouse until they have logged in once
-2. When the user logs in to ClickHouse Cloud they will automatically be assigned default role selected in your SAML configuration
+1. Add users to your SAML application in your identity provider. The users won't appear in ClickHouse until they have logged in once.
+2. When the user logs in to ClickHouse Cloud, they will automatically be assigned the default role selected in your SAML configuration.
 3. Follow the instructions in the `Manage user role assignments` below to grant permissions
 
 ### Enforcing SAML-only authentication {#enforce-saml}
@@ -81,13 +81,13 @@ From the services page, select the name of your organization. Select the `Users 
 
 ### Select the user to update and select Edit {#select-user-to-update}
 
-Select the menu item at the end of the row for the user that you which to modify access for. Select `edit` from the popup menu.
+Select the menu item at the end of the row for the user that you wish to modify access for. Select `edit` from the popup menu.
 
 <Image img={step_5} size="lg"/>
 
 ### Update permissions {#update-permissions}
 
-Click in the `Roles` box to expand the menu. Select the check boxes to add or remove role(s) from the user. Refer to [Console roles and permissions](/cloud/security/console-roles) for a listing of roles and associated permissions.
+Click in the `Roles` box to expand the menu. Select the check boxes to add or remove roles from the user. Refer to [Console roles and permissions](/cloud/security/console-roles) for a listing of roles and associated permissions.
 
 <Image img={step_6} size="lg"/>
 
