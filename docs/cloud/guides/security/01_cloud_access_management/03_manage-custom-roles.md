@@ -67,7 +67,6 @@ Review permissions assigned to your new role before finalizing. Click `Create ro
 
 </VerticalStepper>
 
-
 ## Update custom roles {#update-custom-role}
 
 Custom roles may be updated after they are created. Users will lose any permissions removed from the role and will gain any permissions added.
@@ -82,7 +81,6 @@ User permissions are additive. If a user has permission to perform an operation 
 4. Select `Edit`
 5. Modify the permissions
 6. Select `Edit role`
-
 
 ## Delete custom roles {#delete-custom-role}
 

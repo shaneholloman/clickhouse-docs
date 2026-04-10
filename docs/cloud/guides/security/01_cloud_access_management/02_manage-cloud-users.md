@@ -89,7 +89,6 @@ Select the menu item at the end of the row for the user that you which to modify
 
 Click in the `Roles` box to expand the menu. Select the check boxes to add or remove role(s) from the user. Refer to [Console roles and permissions](/cloud/security/console-roles) for a listing of roles and associated permissions.
 
-
 <Image img={step_6} size="lg"/>
 
 ### Save your changes {#save-changes}
