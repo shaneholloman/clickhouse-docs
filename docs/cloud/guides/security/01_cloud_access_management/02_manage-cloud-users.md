@@ -45,7 +45,7 @@ Enter email addresses at the top of the invitation screen. Select one or more ro
 
 <Image img={step_3} size="lg"/>
 
-### Click `Send invites`
+### Click `Send invites` {#send-invites}
 
 Click `Send invites` at the bottom of the screen. Users will receive an email from which they can join the organization. For more information on accepting invitations, see [Manage my account](/cloud/security/manage-my-account).
 
