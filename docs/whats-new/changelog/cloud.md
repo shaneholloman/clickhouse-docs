@@ -10,6 +10,6 @@ keywords: ['ClickHouse Cloud', 'cloud changelog', 'cloud updates', 'cloud featur
 
 # Cloud Changelog
 
-import CloudChangelog from '@site/docs/cloud/reference/01_changelog/01_changelog.md';
+import CloudChangelog from '@site/docs/cloud/reference/01_changelog/01_cloud_changelog/index.md';
 
 <CloudChangelog />
