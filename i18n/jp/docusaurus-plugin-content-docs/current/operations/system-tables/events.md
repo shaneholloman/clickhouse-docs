@@ -2261,10 +2261,6 @@ get リクエスト数
 
 Keeper のレイテンシ
 
-### KeeperListRecursiveRequest \{#keeperlistrecursiverequest\}
-
-get children の再帰リクエスト数
-
 ### KeeperListRequest \{#keeperlistrequest\}
 
 一覧取得リクエスト数
@@ -4908,10 +4904,6 @@ ZooKeeper との接続が確立された回数。
 ### ZooKeeperList \{#zookeeperlist\}
 
 ZooKeeper に対する &#39;list&#39; (getChildren) リクエストの数。
-
-### ZooKeeperListRecursive \{#zookeeperlistrecursive\}
-
-ZooKeeper に対する &#39;listRecursive&#39; リクエストの数。
 
 ### ZooKeeperMulti \{#zookeepermulti\}
 
