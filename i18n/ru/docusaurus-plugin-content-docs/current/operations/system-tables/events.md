@@ -1806,6 +1806,10 @@ SELECT * FROM system.events LIMIT 5
 
 Время, затраченное на фильтрацию частей по первичному ключу.
 
+### FilteringMarksWithPrimaryKeyProcessedMarks \{#filteringmarkswithprimarykeyprocessedmarks\}
+
+Общее количество меток, обработанных при анализе первичного ключа.
+
 ### FilteringMarksWithSecondaryKeysMicroseconds \{#filteringmarkswithsecondarykeysmicroseconds\}
 
 Время, затраченное на фильтрацию частей с помощью skip indexes.

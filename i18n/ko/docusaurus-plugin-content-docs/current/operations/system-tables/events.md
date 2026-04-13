@@ -1805,6 +1805,10 @@ filterPartsByVirtualColumns 함수에서 소요된 총 시간입니다.
 
 기본 키(PK)로 파트를 필터링하는 데 걸린 시간입니다.
 
+### FilteringMarksWithPrimaryKeyProcessedMarks \{#filteringmarkswithprimarykeyprocessedmarks\}
+
+PK 분석 과정에서 처리된 총 마크 수입니다.
+
 ### FilteringMarksWithSecondaryKeysMicroseconds \{#filteringmarkswithsecondarykeysmicroseconds\}
 
 스킵 인덱스를 사용해 파트를 필터링하는 데 소요된 시간입니다.

@@ -10428,6 +10428,30 @@ a   Tuple(
 
 Использовать виртуальную строку при чтении в порядке первичного ключа или его монотонной функции. Полезно при поиске по нескольким частям таблицы, так как затрагиваются только соответствующие части.
 
+## read_in_order_use_virtual_row_per_block \{#read_in_order_use_virtual_row_per_block\}
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory
+  rows={[
+  {
+    id: "row-1",
+    items: [
+      { label: "26.4" },
+      { label: "0" },
+      {
+        label:
+          "Выводить виртуальную строку после чтения каждого блока при упорядоченном чтении, чтобы источники в MergingSortedTransform можно было переприоритизировать чаще."
+      }
+    ]
+  }
+]}
+/>
+
+Если параметр включён вместе с `read_in_order_use_virtual_row`, после чтения каждого блока выводится виртуальная строка (а не только в начале каждой части).
+Это позволяет `MergingSortedTransform` чаще переприоритизировать источники, что полезно, когда нижестоящие фильтры отбрасывают много строк, а данные распределены по частям неравномерно.
+Обратите внимание, что при этом отключаются оптимизация `read_in_order_use_buffering` и предварительное слияние (`read_in_order_two_level_merge_threshold`) при чтении.
+
 ## read_overflow_mode \{#read_overflow_mode\}
 
 <SettingsInfoBlock type="OverflowMode" default_value="throw" />
