@@ -10400,6 +10400,30 @@ read_from_filesystem_cache_if_exists_otherwise_bypass_cache와 유사하게, 수
 
 기본 키 또는 그 단조 함수의 순서로 읽을 때 가상 행을 사용합니다. 여러 파트에서 조회할 때 관련된 파트만 읽게 되어 유용합니다.
 
+## read_in_order_use_virtual_row_per_block \{#read_in_order_use_virtual_row_per_block\}
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory
+  rows={[
+  {
+    id: "row-1",
+    items: [
+      { label: "26.4" },
+      { label: "0" },
+      {
+        label:
+          "`read_in_order_use_virtual_row`와 함께 활성화하면, 순서대로 읽는 동안 각 파트의 시작 시점뿐 아니라 각 블록을 읽은 후에도 가상 행을 출력하여 MergingSortedTransform에서 소스 우선순위를 더 자주 재조정할 수 있습니다."
+      }
+    ]
+  }
+]}
+/>
+
+`read_in_order_use_virtual_row`와 함께 활성화하면 각 블록을 읽은 후마다 가상 행을 출력합니다(각 파트의 시작 시점에만 출력하는 것이 아닙니다).
+이렇게 하면 `MergingSortedTransform`가 소스 우선순위를 더 자주 재조정할 수 있으므로, 다운스트림 필터가 많은 행을 걸러내고 데이터가 파트 전반에 고르지 않게 분산되어 있을 때 유용합니다.
+이 설정을 사용하면 읽기 시 `read_in_order_use_buffering` 최적화와 사전 병합(`read_in_order_two_level_merge_threshold`)이 비활성화된다는 점에 유의하십시오.
+
 ## read_overflow_mode \{#read_overflow_mode\}
 
 <SettingsInfoBlock type="OverflowMode" default_value="throw" />

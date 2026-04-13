@@ -10389,6 +10389,30 @@ Cloud 默认值：`3000000000`。
 
 在按主键或其单调函数的顺序读取时使用虚拟行。在跨多个分区片段进行搜索时很有用，因为只会访问相关的分区片段。
 
+## read_in_order_use_virtual_row_per_block \{#read_in_order_use_virtual_row_per_block\}
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory
+  rows={[
+  {
+    id: "row-1",
+    items: [
+      { label: "26.4" },
+      { label: "0" },
+      {
+        label:
+          "在按顺序读取期间于每个块后发出虚拟行，以便在 MergingSortedTransform 中更频繁地重新调整源优先级。"
+      }
+    ]
+  }
+]}
+/>
+
+当与 `read_in_order_use_virtual_row` 同时启用时，会在每次读取完一个块后发出一个虚拟行 (而不仅是在每个 part 开头) 。
+这样可使 `MergingSortedTransform` 更频繁地重新调整源优先级；当下游筛选器会丢弃大量行，且数据在各个 parts 之间分布不均时，这一点尤其有用。
+请注意，这会禁用读取时的 `read_in_order_use_buffering` 优化以及预合并 (`read_in_order_two_level_merge_threshold`) 。
+
 ## read_overflow_mode \{#read_overflow_mode\}
 
 <SettingsInfoBlock type="OverflowMode" default_value="throw" />

@@ -1805,6 +1805,10 @@ filterPartsByVirtualColumns 函数耗费的总时间。
 
 通过主键过滤分区片段所花费的时间。
 
+### 使用主键过滤时处理的标记数 \{#filteringmarkswithprimarykeyprocessedmarks\}
+
+主键分析期间处理的标记总数。
+
 ### 使用二级键过滤 marks 的耗时 (微秒)  \{#filteringmarkswithsecondarykeysmicroseconds\}
 
 通过 skip 索引过滤分区片段所花费的时间。

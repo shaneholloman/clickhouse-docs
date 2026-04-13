@@ -1805,6 +1805,10 @@ filterPartsByVirtualColumns 関数で消費された合計時間。
 
 PK によるパーツのフィルタリングに要した時間。
 
+### FilteringMarksWithPrimaryKeyProcessedMarks \{#filteringmarkswithprimarykeyprocessedmarks\}
+
+PK 分析時に処理されたマークの総数。
+
 ### FilteringMarksWithSecondaryKeysMicroseconds \{#filteringmarkswithsecondarykeysmicroseconds\}
 
 スキップ索引によるパーツのフィルタリングに費やされた時間。
