@@ -2257,6 +2257,10 @@ Get 请求数
 
 Keeper 延迟
 
+### KeeperListRecursiveRequest \{#keeperlistrecursiverequest\}
+
+递归获取子节点的请求数
+
 ### KeeperListRequest \{#keeperlistrequest\}
 
 列表请求数
@@ -4900,6 +4904,10 @@ ZooKeeper 的“getACL”请求数量。
 ### ZooKeeperList \{#zookeeperlist\}
 
 向 ZooKeeper 发出的 `list` (getChildren) 请求数。
+
+### ZooKeeperListRecursive \{#zookeeperlistrecursive\}
+
+向 ZooKeeper 发送的 &#39;listRecursive&#39; 请求数。
 
 ### ZooKeeperMulti \{#zookeepermulti\}
 

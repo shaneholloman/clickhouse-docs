@@ -2738,13 +2738,13 @@ SELECT arrayRandomSample([[1, 2], [3, 4], [5, 6]], 2) as res;
 **구문**
 
 ```sql
-arrayReduce(agg_f, arr1 [, arr2, ... , arrN)])
+arrayReduce(agg_f, arr1[, arr2, ... , arrN])
 ```
 
 **인수**
 
 * `agg_f` — 상수여야 하는 집계 함수 이름입니다. [`String`](/sql-reference/data-types/string)
-* `arr1 [, arr2, ... , arrN)]` — `agg_f`의 인수에 해당하는 N개의 배열입니다. [`Array(T)`](/sql-reference/data-types/array)
+* `arr1[, arr2, ... , arrN]` — `agg_f`의 인수에 해당하는 N개의 배열입니다. [`Array(T)`](/sql-reference/data-types/array)
 
 **반환값**
 
@@ -2790,7 +2790,6 @@ SELECT arrayReduce('uniqUpTo(3)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 └─────────────────────────────────────────────────────────────┘
 ```
 
-
 ## arrayReduceInRanges \{#arrayReduceInRanges\}
 
 도입 버전: v20.4.0
@@ -2801,14 +2800,14 @@ SELECT arrayReduce('uniqUpTo(3)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 **구문**
 
 ```sql
-arrayReduceInRanges(agg_f, ranges, arr1 [, arr2, ... ,arrN)])
+arrayReduceInRanges(agg_f, ranges, arr1[, arr2, ... ,arrN])
 ```
 
 **인수**
 
 * `agg_f` — 사용할 집계 함수의 이름입니다. [`String`](/sql-reference/data-types/string)
 * `ranges` — 집계를 수행할 구간입니다. `(i, r)` 튜플의 배열로, 집계를 시작할 인덱스 `i`와 집계를 수행할 구간 `r`을 포함합니다. [`Array(T)`](/sql-reference/data-types/array) 또는 [`Tuple(T)`](/sql-reference/data-types/tuple)
-* `arr1 [, arr2, ... ,arrN)]` — 집계 함수의 인수로 전달되는 N개의 배열입니다. [`Array(T)`](/sql-reference/data-types/array)
+* `arr1[, arr2, ... ,arrN]` — 집계 함수의 인수로 전달되는 N개의 배열입니다. [`Array(T)`](/sql-reference/data-types/array)
 
 **반환 값**
 
@@ -2831,7 +2830,6 @@ SELECT arrayReduceInRanges(
 │ [1234500,234000,34560,4567] │
 └─────────────────────────────┘
 ```
-
 
 ## arrayRemove \{#arrayRemove\}
 
