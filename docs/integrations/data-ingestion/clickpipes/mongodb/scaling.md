@@ -1,6 +1,6 @@
 ---
 title: 'Scaling MongoDB ClickPipes via OpenAPI'
-description: 'Doc for scaling MongoDB ClickPipes via OpenAPI'
+description: 'How to scale MongoDB ClickPipes via OpenAPI'
 slug: /integrations/clickpipes/mongodb/scaling
 sidebar_label: 'Scaling'
 doc_type: 'guide'

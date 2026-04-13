@@ -1,6 +1,6 @@
 ---
 title: 'Scaling MySQL ClickPipes via OpenAPI'
-description: 'Doc for scaling MySQL ClickPipes via OpenAPI'
+description: 'How to scale MySQL ClickPipes via OpenAPI'
 slug: /integrations/clickpipes/mysql/scaling
 sidebar_label: 'Scaling'
 doc_type: 'guide'
