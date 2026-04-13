@@ -1527,7 +1527,7 @@ SELECT arrayFold(
 
 ## arrayIntersect \{#arrayIntersect\}
 
-Впервые появилась в версии: v1.1.0
+Добавлена в версии: v1.1.0
 
 Принимает несколько массивов и возвращает массив с элементами, которые присутствуют во всех исходных массивах. Результат содержит только уникальные значения.
 
@@ -1556,11 +1556,10 @@ arrayIntersect([1, 2], [1, 3], [1, 4]) AS non_empty_intersection
 ```
 
 ```response title=Response
-┌─non_empty_intersection─┬─empty_intersection─┐
-│ []                     │ [1]                │
-└────────────────────────┴────────────────────┘
+┌─empty_intersection─┬─non_empty_intersection─┐
+│ []                 │ [1]                    │
+└────────────────────┴────────────────────────┘
 ```
-
 
 ## arrayJaccardIndex \{#arrayJaccardIndex\}
 

@@ -1541,7 +1541,7 @@ arrayIntersect(arr, arr1, ..., arrN)
 
 * `arrN` — 新しい配列を作成するための N 個の配列。[`Array(T)`](/sql-reference/data-types/array)。
 
-**返される値**
+**戻り値**
 
 N 個すべての配列に含まれる要素だけからなる重複のない配列を返します。[`Array(T)`](/sql-reference/data-types/array)。
 
@@ -1556,11 +1556,10 @@ arrayIntersect([1, 2], [1, 3], [1, 4]) AS non_empty_intersection
 ```
 
 ```response title=Response
-┌─non_empty_intersection─┬─empty_intersection─┐
-│ []                     │ [1]                │
-└────────────────────────┴────────────────────┘
+┌─empty_intersection─┬─non_empty_intersection─┐
+│ []                 │ [1]                    │
+└────────────────────┴────────────────────────┘
 ```
-
 
 ## arrayJaccardIndex \{#arrayJaccardIndex\}
 
