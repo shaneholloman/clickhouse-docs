@@ -1524,7 +1524,7 @@ SELECT arrayFold(
 
 도입 버전: v1.1.0
 
-여러 배열을 입력으로 받아 모든 원본 배열에 공통으로 존재하는 요소들로 이루어진 배열을 반환합니다. 결과에는 중복되지 않는 값만 포함됩니다.
+여러 배열을 입력으로 받아 모든 소스 배열에 공통으로 존재하는 요소들로 이루어진 배열을 반환합니다. 결과에는 중복되지 않는 값만 포함됩니다.
 
 **구문**
 
@@ -1551,11 +1551,10 @@ arrayIntersect([1, 2], [1, 3], [1, 4]) AS non_empty_intersection
 ```
 
 ```response title=Response
-┌─non_empty_intersection─┬─empty_intersection─┐
-│ []                     │ [1]                │
-└────────────────────────┴────────────────────┘
+┌─empty_intersection─┬─non_empty_intersection─┐
+│ []                 │ [1]                    │
+└────────────────────┴────────────────────────┘
 ```
-
 
 ## arrayJaccardIndex \{#arrayJaccardIndex\}
 
