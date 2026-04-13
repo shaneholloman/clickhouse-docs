@@ -110,13 +110,13 @@ To include dependency packages and any additional local files (such as wheel fil
 zip is_business_hours.zip main.py requirements.txt
 ```
 
-You can reference the local bundled path base directory in your Python code using `os.path.abspath(__file__)`. This returns the absolute path to the directory where your `main.py` is located within the ZIP archive, allowing you to access other bundled files:
+You can reference the local bundled path base directory in your Python code using `os.path.dirname(os.path.abspath(__file__))`. This returns the absolute path to the directory where your `main.py` is located within the ZIP archive, allowing you to access other bundled files:
 
 ```python
 import os
 
 # Get the base directory of the bundled files
-base_dir = os.path.abspath(__file__)
+base_dir = os.path.dirname(os.path.abspath(__file__))
 config_path = os.path.join(base_dir, 'config.json')
 ```
 
