@@ -50,14 +50,15 @@ For advance testing before production upgrades, use the Fast or Regular channel 
      changelog_link: 'https://clickhouse.com/docs/changelogs/26.2',
      version: '26.2',
      fast_start_date: '2026-04-03',
-     fast_end_date: 'TBD',
-     regular_start_date: 'TBD',
+     fast_end_date: '2026-04-14',
+     regular_start_date: '2026-05-06',
      regular_end_date: 'TBD',
      slow_start_date: 'TBD',
      slow_end_date: 'TBD',
      fast_progress: 'green',
      regular_progress: 'green',
-     slow_progress: 'green'
+     slow_progress: 'green',
+     fast_delay_note: 'Services with upgrade windows will be upgraded starting 2026-04-15.',
     },
     {
      changelog_link: 'https://clickhouse.com/docs/changelogs/25.12',
