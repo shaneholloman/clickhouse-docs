@@ -51,7 +51,7 @@ For advance testing before production upgrades, use the Fast or Regular channel 
      version: '26.2',
      fast_start_date: '2026-04-03',
      fast_end_date: '2026-04-14',
-     regular_start_date: '2026-04-15',
+     regular_start_date: '2026-05-04',
      regular_end_date: 'TBD',
      slow_start_date: 'TBD',
      slow_end_date: 'TBD',
@@ -59,7 +59,6 @@ For advance testing before production upgrades, use the Fast or Regular channel 
      regular_progress: 'green',
      slow_progress: 'green',
      fast_delay_note: 'Services with upgrade windows will be upgraded starting 2026-04-15.',
-     regular_delay_note: 'Regular channel rollout starts earlier than the standard 2-week window following fast channel completion.',
     },
     {
      changelog_link: 'https://clickhouse.com/docs/changelogs/25.12',
