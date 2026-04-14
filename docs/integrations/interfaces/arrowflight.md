@@ -110,6 +110,10 @@ The Arrow Flight interface supports ClickHouse sessions through custom gRPC meta
 | `x-clickhouse-session-check` | Set to `1` to check if the session exists without creating one. |
 | `x-clickhouse-session-close` | Set to `1` to close the session after the request completes. Requires `enable_arrow_close_session` to be `true` in the server config. |
 
+:::note
+Because Arrow Flight uses gRPC over HTTP/2, metadata header names are case-sensitive and must be specified in lowercase exactly as shown (e.g., `x-clickhouse-session-id`, not `X-ClickHouse-Session-Id`). This is required by [RFC 9113, Section 8.2](https://www.rfc-editor.org/rfc/rfc9113#section-8.2), which mandates that HTTP/2 field names contain only lowercase characters. This differs from HTTP/1.1 where header names are case-insensitive.
+:::
+
 Sessions allow setting persistent ClickHouse settings via the `SetSessionOptions` action (see [DoAction](#doaction)).
 
 ## Server Configuration Reference {#configuration-reference}
