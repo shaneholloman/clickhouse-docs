@@ -2261,10 +2261,6 @@ get 요청 수
 
 Keeper 지연 시간
 
-### KeeperListRecursiveRequest \{#keeperlistrecursiverequest\}
-
-재귀적 get children 요청 수
-
 ### KeeperListRequest \{#keeperlistrequest\}
 
 목록 요청 수
@@ -4908,10 +4904,6 @@ ZooKeeper와의 연결이 수립된 횟수입니다.
 ### ZooKeeperList \{#zookeeperlist\}
 
 ZooKeeper로 전송된 &#39;list&#39; (getChildren) 요청 수입니다.
-
-### ZooKeeperListRecursive \{#zookeeperlistrecursive\}
-
-ZooKeeper로 전송된 &#39;listRecursive&#39; 요청 수입니다.
 
 ### ZooKeeperMulti \{#zookeepermulti\}
 

@@ -2262,10 +2262,6 @@ SELECT * FROM system.events LIMIT 5
 
 Задержка Keeper
 
-### KeeperListRecursiveRequest \{#keeperlistrecursiverequest\}
-
-Количество рекурсивных запросов на получение дочерних узлов
-
 ### KeeperListRequest \{#keeperlistrequest\}
 
 Количество запросов на получение списка
@@ -4909,10 +4905,6 @@ Number of queries to be interpreted and potentially executed. Does not include q
 ### ZooKeeperList \{#zookeeperlist\}
 
 Количество запросов `list` (getChildren) к ZooKeeper.
-
-### ZooKeeperListRecursive \{#zookeeperlistrecursive\}
-
-Количество запросов `listRecursive` к ZooKeeper.
 
 ### ZooKeeperMulti \{#zookeepermulti\}
 
