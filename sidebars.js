@@ -781,6 +781,7 @@ const sidebars = {
                 'integrations/data-ingestion/clickpipes/mysql/table_resync',
                 'integrations/data-ingestion/clickpipes/mysql/resync',
                 'integrations/data-ingestion/clickpipes/mysql/controlling_sync',
+                'integrations/data-ingestion/clickpipes/mysql/scaling',
               ],
             },
             {
@@ -819,6 +820,7 @@ const sidebars = {
                 'integrations/data-ingestion/clickpipes/mongodb/table_resync',
                 'integrations/data-ingestion/clickpipes/mongodb/resync',
                 'integrations/data-ingestion/clickpipes/mongodb/controlling_sync',
+                'integrations/data-ingestion/clickpipes/mongodb/scaling',
               ],
             },
             {

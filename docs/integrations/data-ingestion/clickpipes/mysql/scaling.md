@@ -1,10 +1,10 @@
 ---
-title: 'Scaling DB ClickPipes via OpenAPI'
-description: 'How to scale Postgres ClickPipes via OpenAPI'
-slug: /integrations/clickpipes/postgres/scaling
+title: 'Scaling MySQL ClickPipes via OpenAPI'
+description: 'How to scale MySQL ClickPipes via OpenAPI'
+slug: /integrations/clickpipes/mysql/scaling
 sidebar_label: 'Scaling'
 doc_type: 'guide'
-keywords: ['clickpipes', 'postgresql', 'cdc', 'data ingestion', 'real-time sync']
+keywords: ['clickpipes', 'mysql', 'cdc', 'data ingestion', 'real-time sync', 'scaling']
 integration:
   - support_level: 'core'
   - category: 'clickpipes'
@@ -21,10 +21,10 @@ Scaling API may be useful for:
 
 Before attempting to scale up, consider:
 - Ensuring the source DB has sufficient available capacity
-- First adjusting [initial load parallelism and partitioning](/integrations/clickpipes/postgres/parallel_initial_load) when creating a ClickPipe
-- Checking for [long-running transactions](/integrations/clickpipes/postgres/sync_control#transactions) on the source that could be causing CDC delays
+- First adjusting [initial load parallelism and partitioning](/integrations/clickpipes/mysql/parallel_initial_load) when creating a ClickPipe
+- Checking for [long-running transactions](/integrations/clickpipes/mysql/sync_control#transactions) on the source that could be causing CDC delays
 
-**Increasing the scale will proportionally increase your ClickPipes compute costs.** If you're scaling up just for the initial loads, it's important to scale down after the snapshot is finished to avoid unexpected charges. For more details on pricing, see [Postgres CDC Pricing](/cloud/reference/billing/clickpipes).
+**Increasing the scale will proportionally increase your ClickPipes compute costs.** If you're scaling up just for the initial loads, it's important to scale down after the snapshot is finished to avoid unexpected charges. For more details on pricing, see [ClickPipes pricing](/cloud/reference/billing/clickpipes).
 
 ## Prerequisites for this process {#prerequisites}
 
