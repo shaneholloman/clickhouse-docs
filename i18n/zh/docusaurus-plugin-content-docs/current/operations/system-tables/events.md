@@ -284,7 +284,7 @@ Azure Blob 存储 API 的 Upload 调用次数
 
 ### AzureWriteMicroseconds \{#azurewritemicroseconds\}
 
-等待 Azure 读取请求的总耗时。
+等待 Azure 写入请求的总耗时。
 
 ### AzureWriteRequestsCount \{#azurewriterequestscount\}
 
@@ -2260,6 +2260,10 @@ Get 请求数
 ### KeeperLatency \{#keeperlatency\}
 
 Keeper 延迟
+
+### KeeperListRecursiveRequest \{#keeperlistrecursiverequest\}
+
+递归获取子节点的请求数量
 
 ### KeeperListRequest \{#keeperlistrequest\}
 
@@ -4904,6 +4908,10 @@ ZooKeeper 的“getACL”请求数量。
 ### ZooKeeperList \{#zookeeperlist\}
 
 向 ZooKeeper 发出的 `list` (getChildren) 请求数。
+
+### ZooKeeperListRecursive \{#zookeeperlistrecursive\}
+
+发送到 ZooKeeper 的 `listRecursive` 请求数。
 
 ### ZooKeeperMulti \{#zookeepermulti\}
 

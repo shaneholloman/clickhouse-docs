@@ -285,7 +285,7 @@ SELECT * FROM system.events LIMIT 5
 
 ### AzureWriteMicroseconds \{#azurewritemicroseconds\}
 
-Суммарное время ожидания запросов на чтение в Azure.
+Суммарное время ожидания запросов на запись в Azure.
 
 ### AzureWriteRequestsCount \{#azurewriterequestscount\}
 
@@ -2261,6 +2261,10 @@ SELECT * FROM system.events LIMIT 5
 ### KeeperLatency \{#keeperlatency\}
 
 Задержка Keeper
+
+### KeeperListRecursiveRequest \{#keeperlistrecursiverequest\}
+
+Количество рекурсивных запросов на получение дочерних узлов
 
 ### KeeperListRequest \{#keeperlistrequest\}
 
@@ -4905,6 +4909,10 @@ Number of queries to be interpreted and potentially executed. Does not include q
 ### ZooKeeperList \{#zookeeperlist\}
 
 Количество запросов `list` (getChildren) к ZooKeeper.
+
+### ZooKeeperListRecursive \{#zookeeperlistrecursive\}
+
+Количество запросов `listRecursive` к ZooKeeper.
 
 ### ZooKeeperMulti \{#zookeepermulti\}
 

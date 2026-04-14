@@ -284,7 +284,7 @@ Azure Blob Storage API の Upload 呼び出し回数
 
 ### AzureWriteMicroseconds \{#azurewritemicroseconds\}
 
-Azure 読み取りリクエストの待機に費やす合計時間。
+Azure 書き込みリクエストの待機に費やす合計時間。
 
 ### AzureWriteRequestsCount \{#azurewriterequestscount\}
 
@@ -2260,6 +2260,10 @@ get リクエスト数
 ### KeeperLatency \{#keeperlatency\}
 
 Keeper のレイテンシ
+
+### KeeperListRecursiveRequest \{#keeperlistrecursiverequest\}
+
+子ノードの再帰取得リクエスト数
 
 ### KeeperListRequest \{#keeperlistrequest\}
 
@@ -4904,6 +4908,10 @@ ZooKeeper との接続が確立された回数。
 ### ZooKeeperList \{#zookeeperlist\}
 
 ZooKeeper に対する &#39;list&#39; (getChildren) リクエストの数。
+
+### ZooKeeperListRecursive \{#zookeeperlistrecursive\}
+
+ZooKeeper に対する `listRecursive` リクエストの数。
 
 ### ZooKeeperMulti \{#zookeepermulti\}
 

@@ -284,7 +284,7 @@ Azure Blob Storage API Upload 호출 횟수
 
 ### AzureWriteMicroseconds \{#azurewritemicroseconds\}
 
-Azure 읽기 요청을 대기하는 데 소요된 총 시간입니다.
+Azure 쓰기 요청을 대기하는 데 소요된 총 시간입니다.
 
 ### AzureWriteRequestsCount \{#azurewriterequestscount\}
 
@@ -2260,6 +2260,10 @@ get 요청 수
 ### Keeper 지연 시간 \{#keeperlatency\}
 
 Keeper 지연 시간
+
+### KeeperListRecursiveRequest \{#keeperlistrecursiverequest\}
+
+재귀적으로 수행된 get children 요청 수
 
 ### KeeperListRequest \{#keeperlistrequest\}
 
@@ -4904,6 +4908,10 @@ ZooKeeper와의 연결이 수립된 횟수입니다.
 ### ZooKeeperList \{#zookeeperlist\}
 
 ZooKeeper로 전송된 &#39;list&#39; (getChildren) 요청 수입니다.
+
+### ZooKeeperListRecursive \{#zookeeperlistrecursive\}
+
+ZooKeeper의 &#39;listRecursive&#39; 요청 수입니다.
 
 ### ZooKeeperMulti \{#zookeepermulti\}
 
