@@ -368,7 +368,7 @@ The Arrow Flight interface is compatible with any client or tool that supports t
 
 If a native ClickHouse connector is available for your tool (e.g., JDBC, ODBC, native protocol), prefer using it unless Arrow Flight is specifically required for performance or format compatibility.
 
-## Client-side ArrowFlight Features {#client-side}
+## Client-side ArrowFlight features {#client-side}
 
 ClickHouse can also act as a Flight client to read data from external Arrow Flight servers. See:
 
