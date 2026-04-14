@@ -83,7 +83,7 @@ For advance testing before production upgrades, use the Fast or Regular channel 
      regular_start_date: '2026-01-23',
      regular_end_date: '2026-03-10',
      slow_start_date: '2026-03-23',
-     slow_end_date: 'TBD',
+     slow_end_date: '2026-03-23',
      fast_progress: 'green',
      regular_progress: 'green',
      slow_progress: 'green',
