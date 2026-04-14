@@ -186,6 +186,7 @@ Host=localhost;set_max_threads=4;set_readonly=1;set_max_memory_usage=10000000000
 | UseSession | `bool?` | Override session behavior for this query |
 | SessionId | `string` | Session ID for this query (requires `UseSession = true`) |
 | BearerToken | `string` | Override authentication token for this query |
+| ParameterTypeResolver | `IParameterTypeResolver` | Override client-level resolver for `@`-style parameter type mapping; see [Custom parameter type mapping](#parameter-type-mapping) |
 | MaxExecutionTime | `TimeSpan?` | Server-side query timeout (passed as `max_execution_time` setting); server cancels query if exceeded |
 
 **Example:**
@@ -619,13 +620,15 @@ public class SmartDecimalResolver : IParameterTypeResolver
 }
 ```
 
+You can also set a resolver for a single query via `QueryOptions.ParameterTypeResolver`. When set, it takes precedence over the client-level resolver.
+
 **Type resolution precedence:**
 
 The resolver is one step in a precedence chain. From highest to lowest priority:
 
 1. Explicit `ClickHouseType` set on the parameter
 2. SQL type hint from `{name:Type}` syntax in the query
-3. `IParameterTypeResolver` (from `ClickHouseClientSettings.ParameterTypeResolver`)
+3. `IParameterTypeResolver` (from `QueryOptions.ParameterTypeResolver`, falling back to `ClickHouseClientSettings.ParameterTypeResolver`)
 4. Built-in type inference (`TypeConverter.ToClickHouseType`)
 
 The resolver also works with the ADO.NET `ClickHouseConnection` path — the settings are inherited by connections created from the client.
