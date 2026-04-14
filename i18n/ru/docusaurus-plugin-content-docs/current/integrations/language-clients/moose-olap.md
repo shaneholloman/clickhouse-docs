@@ -14,7 +14,7 @@ import CommunityMaintainedBadge from '@theme/badges/CommunityMaintained';
 
 <CommunityMaintainedBadge/>
 
-[Moose OLAP](https://docs.fiveonefour.com/moose/olap) — это основной модуль [Moose Stack](https://docs.fiveonefour.com/moose), открытого набора инструментов для разработчиков, предназначенного для создания аналитических backend-систем реального времени на TypeScript и Python. 
+[Moose OLAP](https://docs.fiveonefour.com/moosestack/olap) — это основной модуль [Moose Stack](https://docs.fiveonefour.com/moosestack), открытого набора инструментов для разработчиков, предназначенного для создания аналитических backend-систем реального времени на TypeScript и Python. 
 
 Moose OLAP предоставляет удобные для разработчиков абстракции и ORM-подобную функциональность, изначально разработанную для ClickHouse.
 
@@ -29,7 +29,7 @@ Moose OLAP предоставляет удобные для разработчи
 
 ## Начало работы менее чем за 5 минут \{#getting-started\}
 
-Самые актуальные и подробные руководства по установке и началу работы см. в [документации Moose Stack](https://docs.fiveonefour.com/moose/getting-started/from-clickhouse).
+Самые актуальные и подробные руководства по установке и началу работы см. в [документации Moose Stack](https://docs.fiveonefour.com/moosestack/getting-started/from-clickhouse).
 
 Или следуйте этому руководству, чтобы запустить Moose OLAP на уже развернутом ClickHouse или ClickHouse Cloud менее чем за 5 минут.
 
@@ -133,9 +133,9 @@ moose seed --connection-string https://explorer:@play.clickhouse.com:443/?databa
 
 Теперь, когда ваши таблицы определены в коде, вы получаете те же преимущества, что и с моделями данных ORM в веб-приложениях, — строгую типизацию и автодополнение при построении API и материализованных представлений поверх ваших аналитических данных. В качестве следующего шага вы можете:
 
-* Построить REST API с помощью [Moose API](https://docs.fiveonefour.com/moose/apis)
-* Организовать приём или преобразование данных с помощью [Moose Workflows](https://docs.fiveonefour.com/moose/workflows) или [Moose Streaming](https://docs.fiveonefour.com/moose/workflows)
-* Рассмотреть переход в продакшн с [Moose Build](https://docs.fiveonefour.com/moose/deploying/summary) и [Moose Migrate](https://docs.fiveonefour.com/moose/migrate)
+* Построить REST API с помощью [Moose API](https://docs.fiveonefour.com/moosestack/apis)
+* Организовать приём или преобразование данных с помощью [Moose Workflows](https://docs.fiveonefour.com/moosestack/workflows) или [Moose Streaming](https://docs.fiveonefour.com/moosestack/workflows)
+* Рассмотреть переход в продакшн с [Moose Build](https://docs.fiveonefour.com/moosestack/deploying) и [Moose Migrate](https://docs.fiveonefour.com/moosestack/migrate)
 
 </VerticalStepper>
 

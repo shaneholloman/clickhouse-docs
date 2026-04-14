@@ -15,7 +15,7 @@ doc_type: 'reference'
 
 ### Python \{#python\}
 
-- [Moose OLAP](https://docs.fiveonefour.com/moose/olap)
+- [Moose OLAP](https://docs.fiveonefour.com/moosestack/olap)
 - [infi.clickhouse_orm](https://github.com/Infinidat/infi.clickhouse_orm)
 - [clickhouse-driver](https://github.com/mymarilyn/clickhouse-driver)
 - [clickhouse-client](https://github.com/yurial/clickhouse-client)
@@ -53,7 +53,7 @@ doc_type: 'reference'
 
 ### Node.js \{#nodejs\}
 
-- [Moose OLAP](https://docs.fiveonefour.com/moose/olap)
+- [Moose OLAP](https://docs.fiveonefour.com/moosestack/olap)
 - [clickhouse (Node.js)](https://github.com/TimonKK/clickhouse)
 - [node-clickhouse](https://github.com/apla/node-clickhouse)
 - [nestjs-clickhouse](https://github.com/depyronick/nestjs-clickhouse)
