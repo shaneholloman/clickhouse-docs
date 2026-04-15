@@ -2,9 +2,9 @@
 sidebar_label: 'Driver API'
 sidebar_position: 2
 keywords: ['clickhouse', 'python', 'driver', 'api', 'client']
-description: 'ClickHouse Connect Driver API'
+description: 'ClickHouse Connect driver API'
 slug: /integrations/language-clients/python/driver-api
-title: 'ClickHouse Connect Driver API'
+title: 'ClickHouse Connect driver API'
 doc_type: 'reference'
 ---
 
@@ -253,7 +253,7 @@ ClickHouse Connect Client `query*` and `command` methods accept an optional `par
 
 #### Server-side binding {#server-side-binding}
 
-ClickHouse supports [server side binding](/interfaces/cli.md#cli-queries-with-parameters) for most query values, where the bound value is sent separate from the query as an HTTP query parameter. ClickHouse Connect will add the appropriate query parameters if it detects a binding expression of the form `{<name>:<datatype>}`. For server side binding, the `parameters` argument should be a Python dictionary.
+ClickHouse supports [server side binding](/interfaces/client#cli-queries-with-parameters) for most query values, where the bound value is sent separate from the query as an HTTP query parameter. ClickHouse Connect will add the appropriate query parameters if it detects a binding expression of the form `{<name>:<datatype>}`. For server side binding, the `parameters` argument should be a Python dictionary.
 
 - Server-side binding with Python dictionary, DateTime value, and string value
 

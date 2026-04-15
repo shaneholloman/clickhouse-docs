@@ -445,7 +445,8 @@ SELECT extractGroups(s, '< ([\\w\\-]+): ([^\\r\\n]+)');
 Перед поиском функция выполняет токенизацию
 
 * аргумента `input` (всегда) и
-* аргумент `needle` (если он задан как [String](../../sql-reference/data-types/string.md)), используя токенизатор, указанный для текстового индекса.
+* аргумент `needle` (если он задан как [String](../../sql-reference/data-types/string.md)),
+  используя токенизатор, указанный для текстового индекса.
   Если для столбца не определён текстовый индекс, вместо него используется токенизатор `splitByNonAlpha`.
   Если аргумент `needle` имеет тип [Array(String)](../../sql-reference/data-types/array.md), каждый элемент массива рассматривается как токен — дополнительная токенизация не выполняется.
 
@@ -464,7 +465,7 @@ hasAllTokens(input, needles)
 
 * `input` — входной столбец. [`String`](/sql-reference/data-types/string) или [`FixedString`](/sql-reference/data-types/fixedstring) или [`Array(String)`](/sql-reference/data-types/array) или [`Array(FixedString)`](/sql-reference/data-types/array)
 * `needles` — токены для поиска. [`String`](/sql-reference/data-types/string) или [`Array(String)`](/sql-reference/data-types/array)
-* `tokenizer` — токенизатор, который следует использовать. Допустимые значения: `splitByNonAlpha`, `ngrams`, `splitByString`, `array` и `sparseGrams`. Необязательный параметр, если явно не задан, по умолчанию используется `splitByNonAlpha`. [`const String`](/sql-reference/data-types/string)
+* `tokenizer` — токенизатор, который следует использовать. Допустимые значения: `splitByNonAlpha`, `splitByString`, `asciiCJK`, `ngrams`, `sparseGrams` и `array`. Необязательный параметр, если явно не задан, по умолчанию используется `splitByNonAlpha`. [`const String`](/sql-reference/data-types/string)
 
 **Возвращаемое значение**
 
@@ -576,7 +577,7 @@ SELECT count() FROM log WHERE hasAllTokens(mapKeys(attributes), ['address', 'log
 └─────────┘
 ```
 
-**Пример использования mapValues**
+**Пример с функцией mapValues**
 
 ```sql title=Query
 SELECT count() FROM log WHERE hasAllTokens(mapValues(attributes), ['192.0.0.1', 'DEBUG']);
@@ -622,7 +623,7 @@ hasAnyTokens(input, needles)
 
 * `input` — Входной столбец. [`String`](/sql-reference/data-types/string) или [`FixedString`](/sql-reference/data-types/fixedstring) или [`Nullable(String)`](/sql-reference/data-types/nullable) или [`Nullable(FixedString)`](/sql-reference/data-types/nullable) или [`Array(String)`](/sql-reference/data-types/array) или [`Array(FixedString)`](/sql-reference/data-types/array) или [`Array(Nullable(String))`](/sql-reference/data-types/array) или [`Array(Nullable(FixedString))`](/sql-reference/data-types/array)
 * `needles` — Токены, которые нужно найти. [`String`](/sql-reference/data-types/string) или [`Array(String)`](/sql-reference/data-types/array)
-* `tokenizer` — Токенизатор, который будет использоваться. Допустимые аргументы: `splitByNonAlpha`, `ngrams`, `splitByString`, `array` и `sparseGrams`. Необязательный параметр: если явно не задан, по умолчанию используется `splitByNonAlpha`. [`const String`](/sql-reference/data-types/string)
+* `tokenizer` — Токенизатор, который будет использоваться. Допустимые аргументы: `splitByNonAlpha`, `splitByString`, `asciiCJK`, `ngrams`, `sparseGrams` и `array`. Необязательный параметр: если явно не задан, по умолчанию используется `splitByNonAlpha`. [`const String`](/sql-reference/data-types/string)
 
 **Возвращаемое значение**
 
@@ -652,7 +653,7 @@ SELECT count() FROM table WHERE hasAnyTokens(msg, 'a\\d()');
 └─────────┘
 ```
 
-**Укажите значения для поиска в массиве «как есть» (без токенизации)**
+**Укажите needle для поиска в массиве «как есть» (без токенизации)**
 
 ```sql title=Query
 SELECT count() FROM table WHERE hasAnyTokens(msg, ['a', 'd']);
@@ -664,7 +665,7 @@ SELECT count() FROM table WHERE hasAnyTokens(msg, ['a', 'd']);
 └─────────┘
 ```
 
-**Сгенерируйте искомые значения с помощью функции `tokens`**
+**Сгенерируйте искомые токены с помощью функции `tokens`**
 
 ```sql title=Query
 SELECT count() FROM table WHERE hasAnyTokens(msg, tokens('a()d', 'splitByString', ['()', '\\']));
@@ -732,6 +733,63 @@ SELECT count() FROM log WHERE hasAnyTokens(mapValues(attributes), ['192.0.0.1', 
 ┌─count()─┐
 │       2 │
 └─────────┘
+```
+
+## hasPhrase \{#hasPhrase\}
+
+Добавлено в: v26.4.0
+
+Проверяет, содержит ли haystack все токены из фразы, идущие подряд.
+
+Перед поиском функция токенизирует аргументы `input` и `phrase` с помощью токенизатора, указанного в необязательном третьем аргументе.
+Если токенизатор не указан, по умолчанию используется токенизатор `splitByNonAlpha`.
+
+В отличие от [`hasToken`](#hasToken), [`hasAnyTokens`](#hasAnyTokens) и [`hasAllTokens`](#hasAllTokens), `hasPhrase` требует, чтобы токены шли в том же порядке
+и без промежуточных токенов. Например, `hasPhrase('the quick brown fox', 'quick fox')` возвращает 0,
+потому что &quot;brown&quot; находится между &quot;quick&quot; и &quot;fox&quot;.
+
+**Синтаксис**
+
+```sql
+hasPhrase(input, phrase[, tokenizer])
+```
+
+**Псевдонимы**: `matchPhrase`
+
+**Аргументы**
+
+* `input` — Входной столбец. [`String`](/sql-reference/data-types/string) или [`FixedString`](/sql-reference/data-types/fixedstring)
+* `phrase` — Искомая фраза. [`const String`](/sql-reference/data-types/string)
+* `tokenizer` — Токенизатор, который следует использовать. Необязателен; по умолчанию — `splitByNonAlpha`. [`const String`](/sql-reference/data-types/string)
+
+**Возвращаемое значение**
+
+Возвращает `1`, если фраза найдена как последовательность идущих подряд токенов, в противном случае — `0`. [`UInt8`](/sql-reference/data-types/int-uint)
+
+**Примеры**
+
+**Совпадение фразы**
+
+```sql title=Query
+SELECT hasPhrase('the quick brown fox jumps', 'quick brown')
+```
+
+```response title=Response
+┌─hasPhrase('the quick brown fox jumps', 'quick brown')─┐
+│                                                      1 │
+└────────────────────────────────────────────────────────┘
+```
+
+**Несмежные токены**
+
+```sql title=Query
+SELECT hasPhrase('the quick brown fox jumps', 'quick fox')
+```
+
+```response title=Response
+┌─hasPhrase('the quick brown fox jumps', 'quick fox')─┐
+│                                                    0 │
+└──────────────────────────────────────────────────────┘
 ```
 
 ## hasSubsequence \{#hasSubsequence\}
@@ -1009,6 +1067,57 @@ SELECT hasTokenOrNull('apple banana cherry', 'ban ana');
 ┌─hasTokenOrNu⋯ 'ban ana')─┐
 │                     ᴺᵁᴸᴸ │
 └──────────────────────────┘
+```
+
+## highlight \{#highlight\}
+
+Добавлено в: v26.4.0
+
+Выделяет вхождения поисковых запросов в текстовой строке, оборачивая их в HTML-теги.
+
+Функция выполняет сопоставление без учета регистра для ASCII. Если несколько поисковых запросов перекрываются или находятся рядом в тексте, совпадающие области объединяются в один выделенный фрагмент.
+
+**Синтаксис**
+
+```sql
+highlight(haystack, needles[, open_tag, close_tag])
+```
+
+**Аргументы**
+
+* `haystack` — Текст, в котором выполняется поиск. [`String`](/sql-reference/data-types/string) или [`FixedString`](/sql-reference/data-types/fixedstring)
+* `needles` — Массив поисковых строк, которые нужно выделить. [`const Array(String)`](/sql-reference/data-types/array)
+* `open_tag` — Открывающий тег, вставляемый перед каждым совпадением. По умолчанию: `<em>`. [`const String`](/sql-reference/data-types/string)
+* `close_tag` — Закрывающий тег, вставляемый после каждого совпадения. По умолчанию: `</em>`. [`const String`](/sql-reference/data-types/string)
+
+**Возвращаемое значение**
+
+Возвращает исходный текст, в котором совпавшие строки заключены в указанные теги. [`String`](/sql-reference/data-types/string)
+
+**Примеры**
+
+**Базовое выделение**
+
+```sql title=Query
+SELECT highlight('The quick brown fox', ['quick', 'fox'])
+```
+
+```response title=Response
+┌─highlight('The quick brown fox', ['quick', 'fox'])─┐
+│ The <em>quick</em> brown <em>fox</em>              │
+└────────────────────────────────────────────────────┘
+```
+
+**Пользовательские теги**
+
+```sql title=Query
+SELECT highlight('Hello World', ['hello'], '<b>', '</b>')
+```
+
+```response title=Response
+┌─highlight('Hello World', ['hello'], '<b>', '</b>')─┐
+│ <b>Hello</b> World                                 │
+└────────────────────────────────────────────────────┘
 ```
 
 ## ilike \{#ilike\}

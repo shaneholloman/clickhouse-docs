@@ -4,7 +4,7 @@ sidebar_position: 6
 keywords: ['clickhouse', 'cs', 'c#', '.net', 'dotnet', 'csharp', 'client', 'driver', 'connect', 'integrate']
 slug: /integrations/csharp
 description: 'The official C# client for connecting to ClickHouse.'
-title: 'ClickHouse C# Driver'
+title: 'ClickHouse C# driver'
 doc_type: 'guide'
 integration:
   - support_level: 'core'
@@ -103,6 +103,7 @@ Below is a full list of all the settings, their default values, and their effect
 | UseCustomDecimals | `bool` | `true` | `UseCustomDecimals` | Use `ClickHouseDecimal` for arbitrary precision; if false, uses .NET `decimal` (128-bit limit) |
 | ReadStringsAsByteArrays | `bool` | `false` | `ReadStringsAsByteArrays` | Read `String` and `FixedString` columns as `byte[]` instead of `string`; useful for binary data |
 | UseFormDataParameters | `bool` | `false` | `UseFormDataParameters` | Send parameters as form data instead of URL query string |
+| ParameterTypeResolver | `IParameterTypeResolver` | `null` | — | Custom resolver for `@`-style parameter type mapping; see [Custom parameter type mapping](#parameter-type-mapping) |
 | JsonReadMode | `JsonReadMode` | `Binary` | `JsonReadMode` | How JSON data is returned: `Binary` (returns `JsonObject`) or `String` (returns raw JSON string) |
 | JsonWriteMode | `JsonWriteMode` | `String` | `JsonWriteMode` | How JSON data is sent: `String` (serializes via `JsonSerializer`, accepts all inputs) or `Binary` (registered POCOs only with type hints) |
 
@@ -185,6 +186,7 @@ Host=localhost;set_max_threads=4;set_readonly=1;set_max_memory_usage=10000000000
 | UseSession | `bool?` | Override session behavior for this query |
 | SessionId | `string` | Session ID for this query (requires `UseSession = true`) |
 | BearerToken | `string` | Override authentication token for this query |
+| ParameterTypeResolver | `IParameterTypeResolver` | Override client-level resolver for `@`-style parameter type mapping; see [Custom parameter type mapping](#parameter-type-mapping) |
 | MaxExecutionTime | `TimeSpan?` | Server-side query timeout (passed as `max_execution_time` setting); server cancels query if exceeded |
 
 **Example:**
@@ -220,6 +222,8 @@ var reader = await client.ExecuteReaderAsync(
 | BatchSize | `int` | 100,000 | Number of rows per batch |
 | MaxDegreeOfParallelism | `int` | 1 | Number of parallel batch uploads |
 | Format | `RowBinaryFormat` | `RowBinary` | Binary format: `RowBinary` or `RowBinaryWithDefaults` |
+| ColumnTypes | `IReadOnlyDictionary<string, string>` | `null` | Column name → ClickHouse type string. Skips the schema probe query when set. |
+| UseSchemaCache | `bool` | `false` | Cache full table schema per (database, table) for the client's lifetime. |
 
 All `QueryOptions` properties are also available on `InsertOptions`.
 
@@ -240,6 +244,48 @@ long rowsInserted = await client.InsertBinaryAsync(
     insertOptions
 );
 ```
+
+#### Skipping the schema probe query {#skip-schema-query}
+
+By default, `InsertBinaryAsync` sends a `SELECT ... WHERE 1=0` query before each insert to discover column types. For high-throughput scenarios, you can eliminate this overhead with two options:
+
+**Option 1: Provide column types explicitly**
+
+When you know the table schema at compile time, pass it directly via `ColumnTypes`. No schema query is sent at all:
+
+```csharp
+var options = new InsertOptions
+{
+    ColumnTypes = new Dictionary<string, string>
+    {
+        ["id"] = "UInt64",
+        ["name"] = "Nullable(String)",
+        ["score"] = "Float32",
+    },
+};
+
+await client.InsertBinaryAsync("my_table", ["id", "name", "score"], rows, options);
+```
+
+**Option 2: Cache the schema**
+
+When you insert into the same table repeatedly, set `UseSchemaCache = true` to query the schema once and reuse it for subsequent inserts on the same `ClickHouseClient` instance:
+
+```csharp
+var options = new InsertOptions { UseSchemaCache = true };
+
+// First call fetches schema from the server
+await client.InsertBinaryAsync("my_table", columns, batch1, options);
+
+// Second call reuses cached schema — no extra round-trip
+await client.InsertBinaryAsync("my_table", columns, batch2, options);
+```
+
+:::note
+* `ColumnTypes` takes priority over `UseSchemaCache`. If both are set, the explicit types are used.
+* The schema cache does not detect `ALTER TABLE` changes. If you modify the table schema, create a new `ClickHouseClient` or avoid `UseSchemaCache` for that table.
+* The cache is scoped to the `ClickHouseClient` instance and keyed by (database, table). Different column subsets on the same table share a single cached schema.
+:::
 
 ## ClickHouseClient {#clickhouse-client}
 
@@ -381,10 +427,78 @@ var options = new InsertOptions
 ```
 
 :::note
-* The client automatically fetches table structure via `SELECT * FROM <table> WHERE 1=0` before inserting. Provided values must match the target column types.
+* The client automatically fetches table structure via `SELECT * FROM <table> WHERE 1=0` before inserting. Provided values must match the target column types. To skip this query, use [`InsertOptions.ColumnTypes` or `InsertOptions.UseSchemaCache`](#skip-schema-query).
 * When `MaxDegreeOfParallelism > 1`, batches are uploaded in parallel. Sessions are not compatible with parallel insertion; either disable sessions or set `MaxDegreeOfParallelism = 1`.
 * Use `RowBinaryFormat.RowBinaryWithDefaults` in `InsertOptions.Format` if you want the server to apply DEFAULT values for columns not provided.
 :::
+
+#### POCO inserts {#poco-insert}
+
+Instead of constructing `object[]` arrays, you can insert strongly-typed POCO objects directly. Register the type once, then pass `IEnumerable<T>`:
+
+```csharp
+// Define a POCO matching your table columns
+public class SensorReading
+{
+    public ulong Id { get; set; }
+    public string SensorName { get; set; }
+    public double Value { get; set; }
+    public DateTime Timestamp { get; set; }
+}
+
+// Register the type (once per client lifetime)
+client.RegisterBinaryInsertType<SensorReading>();
+
+// Insert directly — column names are derived from property names
+var readings = Enumerable.Range(0, 100_000)
+    .Select(i => new SensorReading
+    {
+        Id = (ulong)i,
+        SensorName = $"sensor_{i % 10}",
+        Value = Random.Shared.NextDouble() * 100,
+        Timestamp = DateTime.UtcNow,
+    });
+
+long rowsInserted = await client.InsertBinaryAsync("sensors", readings);
+```
+
+By default, all public readable properties are mapped to columns using strict case-sensitive name matching. You can customize the mapping with attributes:
+
+```csharp
+public class Event
+{
+    [ClickHouseColumn(Name = "event_id")]     // Map to a differently-named column
+    public ulong Id { get; set; }
+
+    [ClickHouseColumn(Type = "LowCardinality(String)")]  // Explicit ClickHouse type
+    public string Category { get; set; }
+
+    public string Payload { get; set; }
+
+    [ClickHouseNotMapped]                     // Exclude from insert
+    public string InternalTag { get; set; }
+}
+```
+
+| Attribute | Purpose |
+|-----------|---------|
+| `[ClickHouseColumn(Name = "...")]` | Override the target column name |
+| `[ClickHouseColumn(Type = "...")]` | Declare the ClickHouse type explicitly |
+| `[ClickHouseNotMapped]` | Exclude the property from the insert |
+
+When **all** mapped properties specify an explicit `Type`, the schema probe query is skipped entirely. When only some properties have explicit types, the driver falls back to the schema probe for the full column set.
+
+`InsertBinaryAsync<T>` supports the same `InsertOptions` (batching, parallelism, schema caching) as the `object[]` overload.
+
+:::note
+Unlike the `object[]` overload, `InsertBinaryAsync<T>` does not accept an explicit column list. Columns are determined by the registered type's mapped properties. To control which columns are inserted, use `[ClickHouseNotMapped]` to exclude properties or `[ClickHouseColumn(Name = "...")]` to rename them.
+
+If `ColumnTypes` is set in `InsertOptions`, they will override the POCO attributes.
+:::
+
+#### Schema evolution {#poco-insert-schema-evolution}
+
+POCO inserts work seamlessly when columns are added to the target table after the type is registered. Because the driver only inserts the columns mapped by the POCO, any new columns with `DEFAULT` (or other default expressions) are filled in by the server automatically. No code changes or re-registration are needed.
 
 ---
 
@@ -457,6 +571,67 @@ var reader = await client.ExecuteReaderAsync(
 :::tip
 If you're specifying a custom `QueryId`, ensure it is unique for every call. A random GUID is a good choice.
 :::
+
+---
+
+### Custom parameter type mapping {#parameter-type-mapping}
+
+When using `@`-style parameters (e.g., `WHERE id = @id`), the driver automatically infers the ClickHouse type from the .NET value type. For example, `int` maps to `Int32`, and `DateTime` maps to `DateTime`.
+
+To override these defaults, set `ParameterTypeResolver` on `ClickHouseClientSettings`. This is useful when you want all `DateTime` parameters to use `DateTime64(3)` for millisecond precision, or all decimals to use a specific scale, without setting `ClickHouseType` on every individual parameter.
+
+**Using `DictionaryParameterTypeResolver` for simple type mappings:**
+
+```csharp
+using ClickHouse.Driver.ADO.Parameters;
+
+var settings = new ClickHouseClientSettings("Host=localhost")
+{
+    ParameterTypeResolver = new DictionaryParameterTypeResolver(new Dictionary<Type, string>
+    {
+        [typeof(DateTime)] = "DateTime64(3)",
+        [typeof(decimal)] = "Decimal64(4)",
+    }),
+};
+using var client = new ClickHouseClient(settings);
+
+var parameters = new ClickHouseParameterCollection();
+parameters.AddParameter("dt", DateTime.UtcNow);     // Mapped to DateTime64(3)
+parameters.AddParameter("amount", 99.1234m);         // Mapped to Decimal64(4)
+
+await client.ExecuteReaderAsync("SELECT @dt, @amount", parameters);
+```
+
+**Custom `IParameterTypeResolver` for advanced scenarios:**
+
+For value-aware or name-based resolution, implement the `IParameterTypeResolver` interface directly. Return `null` to fall through to the default inference:
+
+```csharp
+public class SmartDecimalResolver : IParameterTypeResolver
+{
+    public string ResolveType(Type clrType, object value, string parameterName)
+    {
+        if (clrType != typeof(decimal))
+            return null; // Fall through to default
+
+        var scale = (decimal.GetBits((decimal)value)[3] >> 16) & 0x7F;
+        return scale <= 4 ? $"Decimal64({scale})" : $"Decimal128({scale})";
+    }
+}
+```
+
+You can also set a resolver for a single query via `QueryOptions.ParameterTypeResolver`. When set, it takes precedence over the client-level resolver.
+
+**Type resolution precedence:**
+
+The resolver is one step in a precedence chain. From highest to lowest priority:
+
+1. Explicit `ClickHouseType` set on the parameter
+2. SQL type hint from `{name:Type}` syntax in the query
+3. `IParameterTypeResolver` (from `QueryOptions.ParameterTypeResolver`, falling back to `ClickHouseClientSettings.ParameterTypeResolver`)
+4. Built-in type inference (`TypeConverter.ToClickHouseType`)
+
+The resolver also works with the ADO.NET `ClickHouseConnection` path — the settings are inherited by connections created from the client.
 
 ---
 
@@ -1634,7 +1809,7 @@ See the [Dapper example](https://github.com/ClickHouse/clickhouse-cs/blob/main/e
 
 #### Dapper.Contrib {#dapper-contrib}
 
-`GetAll<T>()` and `Get<T>(id)` work. `Insert<T>()` does not — it generates SQL Server syntax (`SCOPE_IDENTITY`, square brackets). It is recommended to use the `ClickHouseClient` native `InsertBinaryAsync` method instead.
+`GetAll<T>()` and `Get<T>(id)` work. `Insert<T>()` does not — it generates SQL Server syntax (`SCOPE_IDENTITY`, `[]`). It is recommended to use the `ClickHouseClient` native `InsertBinaryAsync` method instead.
 
 ```csharp
 [Table("test.users")]
@@ -1717,9 +1892,347 @@ var options = new BulkCopyOptions
 await table.BulkCopyAsync(options, products);
 ```
 
-### Entity framework core {#orm-support-ef-core}
+### Entity Framework Core {#orm-support-ef-core}
 
-Entity Framework Core is currently not supported.
+The official Entity Framework Core provider for ClickHouse. Map C# classes to ClickHouse tables, query with LINQ, and insert data via `SaveChanges` — all using familiar EF Core patterns.
+
+- **NuGet**: [`ClickHouse.EntityFrameworkCore`](https://www.nuget.org/packages/ClickHouse.EntityFrameworkCore)
+- **Source**: [GitHub](https://github.com/ClickHouse/ClickHouse.EntityFrameworkCore)
+
+:::note
+This provider is in early development. It supports **read-only queries** and **inserts**. UPDATE, DELETE, migrations, JOINs, and subqueries are not yet implemented.
+:::
+
+#### Installation {#ef-core-installation}
+
+```bash
+dotnet add package ClickHouse.EntityFrameworkCore
+```
+
+Requires .NET 10.0 and EF Core 10.
+
+#### Quick start {#ef-core-quick-start}
+
+Define your entity and `DbContext`, then query with LINQ:
+
+```csharp
+using Microsoft.EntityFrameworkCore;
+
+public class PageView
+{
+    public long Id { get; set; }
+    public string Path { get; set; }
+    public DateOnly Date { get; set; }
+    public string UserAgent { get; set; }
+}
+
+public class AnalyticsContext : DbContext
+{
+    public DbSet<PageView> PageViews { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseClickHouse("Host=localhost;Database=analytics");
+}
+
+// Query
+await using var ctx = new AnalyticsContext();
+
+var topPages = await ctx.PageViews
+    .Where(v => v.Date >= new DateOnly(2024, 1, 1))
+    .GroupBy(v => v.Path)
+    .Select(g => new { Path = g.Key, Views = g.Count() })
+    .OrderByDescending(x => x.Views)
+    .Take(10)
+    .ToListAsync();
+```
+
+#### Supported types {#ef-core-types}
+
+| Category | ClickHouse Types | CLR Types |
+|---|---|---|
+| **Integers** | `Int8`–`Int64`, `UInt8`–`UInt64` | `sbyte`, `short`, `int`, `long`, `byte`, `ushort`, `uint`, `ulong` |
+| **Big integers** | `Int128`, `Int256`, `UInt128`, `UInt256` | `BigInteger` |
+| **Floats** | `Float32`, `Float64`, `BFloat16` | `float`, `double` |
+| **Decimals** | `Decimal(P,S)`, `Decimal32(S)`, `Decimal64(S)`, `Decimal128(S)` | `decimal` or `ClickHouseDecimal` |
+| **Bool** | `Bool` | `bool` |
+| **Strings** | `String`, `FixedString(N)` | `string` |
+| **Enums** | `Enum8(...)`, `Enum16(...)` | `string` or C# `enum` |
+| **Date/time** | `Date`, `Date32`, `DateTime`, `DateTime64(P, 'TZ')` | `DateOnly`, `DateTime` |
+| **Time** | `Time`, `Time64(N)` | `TimeSpan` |
+| **UUID** | `UUID` | `Guid` |
+| **Network** | `IPv4`, `IPv6` | `IPAddress` |
+| **Arrays** | `Array(T)` | `T[]` or `List<T>` |
+| **Maps** | `Map(K, V)` | `Dictionary<K,V>` |
+| **Tuples** | `Tuple(T1, ...)` | `Tuple<...>` or `ValueTuple<...>` |
+| **Variant** | `Variant(T1, T2, ...)` | `object` |
+| **Dynamic** | `Dynamic` | `object` |
+| **JSON** | `Json` | `JsonNode` or `string` |
+| **Geographic** | `Point`, `Ring`, `LineString`, `Polygon`, `MultiLineString`, `MultiPolygon`, `Geometry` | `Tuple<double,double>` and arrays thereof; `object` for Geometry |
+| **Wrappers** | `Nullable(T)`, `LowCardinality(T)` | Unwrapped automatically |
+
+Use `ClickHouseDecimal` (from `ClickHouse.Driver.Numerics`) instead of `decimal` when you need the full precision of `Decimal128`/`Decimal256` columns — .NET `decimal` is limited to 28–29 significant digits.
+
+#### Supported LINQ operations {#ef-core-linq}
+
+**Queries:** `Where`, `OrderBy`, `Take`, `Skip`, `Select`, `First`, `Single`, `Any`, `Count`, `Distinct`, `AsNoTracking`
+
+**GROUP BY & Aggregates:** `GroupBy` with `Count`, `LongCount`, `Sum`, `Average`, `Min`, `Max` — including `HAVING` (`.Where()` after `.GroupBy()`), multiple aggregates in a single projection, and `OrderBy` on aggregate results.
+
+**String methods:** `Contains`, `StartsWith`, `EndsWith`, `IndexOf`, `Replace`, `Substring`, `Trim`/`TrimStart`/`TrimEnd`, `ToLower`, `ToUpper`, `Length`, `IsNullOrEmpty`, `Concat` (and `+` operator)
+
+**Math functions:** Standard `Math` and `MathF` methods are translated to their ClickHouse equivalents, including arithmetic, logarithmic, trigonometric, and utility functions.
+
+#### Inserting data {#ef-core-insert}
+
+`SaveChanges` uses the driver's native `InsertBinaryAsync` API — RowBinary encoding with GZip compression, far more efficient than parameterized SQL:
+
+```csharp
+await using var ctx = new AnalyticsContext();
+
+ctx.PageViews.Add(new PageView
+{
+    Id = 1,
+    Path = "/home",
+    Date = new DateOnly(2024, 6, 15),
+    UserAgent = "Mozilla/5.0"
+});
+
+await ctx.SaveChangesAsync();
+```
+
+Entities transition from `Added` to `Unchanged` after save, just like any other EF Core provider.
+
+**Batch size** is configurable (default 1000):
+
+```csharp
+optionsBuilder.UseClickHouse("Host=localhost", o => o.MaxBatchSize(5000));
+```
+
+#### Bulk insert {#ef-core-bulk-insert}
+
+For high-throughput loads, use `BulkInsertAsync` instead of `SaveChanges`. This is an extension method on `DbContext` that bypasses EF Core's change tracker, identity resolution, and state management entirely — it calls the driver's `InsertBinaryAsync` directly with RowBinary encoding and GZip compression.
+
+This makes it suitable for loading large datasets where you don't need entity tracking after insert:
+
+```csharp
+var events = Enumerable.Range(0, 100_000)
+    .Select(i => new PageView
+    {
+        Id = i,
+        Path = $"/page/{i}",
+        Date = DateOnly.FromDateTime(DateTime.Today)
+    });
+
+long rowsInserted = await ctx.BulkInsertAsync(events);
+```
+
+The input can be any `IEnumerable<T>` — it streams through the entities without loading them all into memory. The return value is the number of rows inserted. Entities are **not** attached to the `DbContext` after insert, so there is no `Added` → `Unchanged` state transition.
+
+#### Enums {#ef-core-enums}
+
+ClickHouse `Enum8`/`Enum16` columns can be mapped as `string` properties or as C# `enum` types. When using C# enums, the provider automatically converts between the enum and its string representation:
+
+```csharp
+public enum Status { Active, Inactive, Pending }
+
+public class User
+{
+    public long Id { get; set; }
+    public Status Status { get; set; }
+}
+
+// Query with enum values
+var active = await ctx.Users
+    .Where(u => u.Status == Status.Active)
+    .ToListAsync();
+```
+
+#### Custom type conversions {#ef-core-value-converters}
+
+EF Core's `ValueConverter` system lets you map custom types to types the provider already supports. The provider never sees your custom type — EF Core converts at the boundary.
+
+**Per-property conversion:**
+
+```csharp
+public class Money
+{
+    public decimal Amount { get; set; }
+    public string Currency { get; set; }
+}
+
+public class Order
+{
+    public long Id { get; set; }
+    public Money Price { get; set; }
+}
+
+// In OnModelCreating:
+modelBuilder.Entity<Order>()
+    .Property(o => o.Price)
+    .HasConversion(
+        m => $"{m.Amount}|{m.Currency}",
+        s => new Money
+        {
+            Amount = decimal.Parse(s.Split('|')[0]),
+            Currency = s.Split('|')[1]
+        })
+    .HasColumnType("String");
+```
+
+**Reusable converter class:**
+
+```csharp
+public class MoneyConverter : ValueConverter<Money, string>
+{
+    public MoneyConverter() : base(
+        m => $"{m.Amount}|{m.Currency}",
+        s => Parse(s)) { }
+
+    private static Money Parse(string s)
+    {
+        var parts = s.Split('|');
+        return new Money { Amount = decimal.Parse(parts[0]), Currency = parts[1] };
+    }
+}
+
+// Apply to a single property:
+.HasConversion<MoneyConverter>()
+
+// Or apply to all properties of a type via conventions:
+protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+{
+    configurationBuilder.Properties<Money>()
+        .HaveConversion<MoneyConverter>();
+}
+```
+
+#### Column type annotations {#ef-core-column-types}
+
+For scalar types like `string`, `int`, `DateTime`, etc., the provider infers the ClickHouse type automatically. For parameterized types and wrappers, you need to specify the ClickHouse type explicitly.
+
+**Using data annotations (attributes):**
+
+```csharp
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
+[Table("sensor_readings")]
+public class SensorReading
+{
+    public long Id { get; set; }
+
+    [Column(TypeName = "Array(String)")]
+    public string[] Tags { get; set; }
+
+    [Column(TypeName = "Map(String, String)")]
+    public Dictionary<string, string> Metadata { get; set; }
+
+    [Column(TypeName = "Nullable(Float64)")]
+    public double? Value { get; set; }
+
+    [Column(TypeName = "Decimal128(18)")]
+    public decimal HighPrecision { get; set; }
+}
+```
+
+**Using the fluent API in `OnModelCreating`:**
+
+```csharp
+modelBuilder.Entity<SensorReading>(e =>
+{
+    e.ToTable("sensor_readings");
+    e.Property(x => x.Tags).HasColumnType("Array(String)");
+    e.Property(x => x.Metadata).HasColumnType("Map(String, String)");
+    e.Property(x => x.Value).HasColumnType("Nullable(Float64)");
+    e.Property(x => x.Category).HasColumnType("LowCardinality(String)");
+    e.Property(x => x.HighPrecision).HasColumnType("Decimal128(18)");
+});
+```
+
+Nested wrappers like `Array(Nullable(Int32))` and `LowCardinality(Nullable(String))` are supported — the provider unwraps `Nullable` and `LowCardinality` automatically at every nesting level.
+
+#### Variant and Dynamic columns {#ef-core-variant-dynamic}
+
+ClickHouse `Variant(T1, T2, ...)` and `Dynamic` columns map to `object` in .NET. Since `object` is too generic for automatic type inference, you must declare the store type explicitly via `.HasColumnType()`:
+
+```csharp
+public class Event
+{
+    public long Id { get; set; }
+    public object? Payload { get; set; }
+}
+
+// In OnModelCreating:
+entity.Property(e => e.Payload).HasColumnType("Variant(String, UInt64, Array(UInt64))");
+// or:
+entity.Property(e => e.Payload).HasColumnType("Dynamic");
+```
+
+When reading, the value is automatically deserialized to the corresponding .NET type for the stored discriminator (e.g. `string`, `ulong`, `ulong[]`).
+
+#### JSON columns {#ef-core-json}
+
+The provider supports ClickHouse's `Json` column type, mapping to `System.Text.Json.Nodes.JsonNode` (primary) or `string` (via automatic `ValueConverter`):
+
+```csharp
+using System.Text.Json.Nodes;
+
+public class Event
+{
+    public long Id { get; set; }
+    public JsonNode? Data { get; set; }
+}
+
+// In OnModelCreating:
+entity.Property(e => e.Data).HasColumnType("Json");
+```
+
+Reading and writing JSON works through both `SaveChanges` and `BulkInsertAsync`:
+
+```csharp
+ctx.Events.Add(new Event
+{
+    Id = 1,
+    Data = JsonNode.Parse("""{"action": "click", "x": 100, "y": 200}""")
+});
+await ctx.SaveChangesAsync();
+
+var ev = await ctx.Events.Where(e => e.Id == 1).SingleAsync();
+string action = ev.Data!["action"]!.GetValue<string>(); // "click"
+```
+
+If you prefer raw JSON strings, map the property as `string` with a `Json` column type — the provider applies a `ValueConverter` automatically:
+
+```csharp
+public class Event
+{
+    public long Id { get; set; }
+    public string? Data { get; set; }  // raw JSON string
+}
+
+entity.Property(e => e.Data).HasColumnType("Json");
+```
+
+:::note
+- **No JSON path translation** — `entity.Data["name"]` in LINQ does not translate to ClickHouse's `data.name` SQL syntax. Filter on non-JSON columns and inspect JSON in memory.
+- **NULL semantics** — ClickHouse's JSON type returns `{}` (empty object) for NULL values rather than SQL NULL.
+- **Integer precision** — ClickHouse JSON stores all integers as `Int64`. When reading via `JsonNode`, use `GetValue<long>()` rather than `GetValue<int>()`.
+:::
+
+#### Limitations {#ef-core-limitations}
+
+| Feature | Status |
+|---|---|
+| SELECT / WHERE / ORDER BY / GROUP BY | Supported |
+| INSERT via `SaveChanges` / `BulkInsertAsync` | Supported |
+| UPDATE / DELETE | Not supported (ClickHouse mutations are async, not OLTP-compatible) |
+| Migrations | Not supported |
+| JOINs, subqueries, set operations | Not supported |
+| Transactions | No-op (ClickHouse does not support ACID transactions) |
+| Server-generated values (auto-increment) | Not supported |
+| Nested types | Not supported |
+| JSON path query translation (`.Data["key"]` in LINQ) | Not supported |
+| Owned entities as JSON (`.ToJson()`) | Not supported |
 
 ## Limitations {#limitations}
 

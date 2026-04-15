@@ -171,6 +171,72 @@ SELECT arrayAll(x, y -> x=y, [1, 2, 3], [1, 1, 1])
 ```
 
 
+## arrayAutocorrelation \{#arrayAutocorrelation\}
+
+도입 버전: v26.4.0
+
+배열의 자기상관을 계산합니다.
+`max_lag`가 지정되면 `[0, max_lag)` 범위의 지연에 대해서만 상관관계를 계산합니다.
+`max_lag`가 지정되지 않으면 가능한 모든 지연에 대해 계산합니다.
+
+**구문**
+
+```sql
+arrayAutocorrelation(arr, [max_lag])
+```
+
+**인수**
+
+* `arr` — 숫자 배열입니다. [`Array(T)`](/sql-reference/data-types/array)
+* `max_lag` — 선택 사항입니다. 계산할 최대 지연 수입니다. 0 이상의 정수여야 합니다. [`Integer`](/sql-reference/data-types/int-uint)
+
+**반환값**
+
+Float64 배열을 반환합니다. 분산이 0이면 NaN을 반환합니다. [`Array(Float64)`](/sql-reference/data-types/array)
+
+**예시**
+
+**선형**
+
+```sql title=Query
+SELECT arrayAutocorrelation([1, 2, 3, 4, 5]);
+```
+
+```response title=Response
+[1, 0.4, -0.1, -0.4, -0.4]
+```
+
+**대칭**
+
+```sql title=Query
+SELECT arrayAutocorrelation([10, 20, 10]);
+```
+
+```response title=Response
+[1, -0.6666666666666669, 0.16666666666666674]
+```
+
+**상수**
+
+```sql title=Query
+SELECT arrayAutocorrelation([5, 5, 5]);
+```
+
+```response title=Response
+[nan, nan, nan]
+```
+
+**제한됨**
+
+```sql title=Query
+SELECT arrayAutocorrelation([1, 2, 3, 4, 5], 2);
+```
+
+```response title=Response
+[1, 0.4]
+```
+
+
 ## arrayAvg \{#arrayAvg\}
 
 도입 버전: v21.1.0
@@ -1458,7 +1524,7 @@ SELECT arrayFold(
 
 도입 버전: v1.1.0
 
-여러 배열을 입력으로 받아 모든 원본 배열에 공통으로 존재하는 요소들로 이루어진 배열을 반환합니다. 결과에는 중복되지 않는 값만 포함됩니다.
+여러 배열을 입력으로 받아 모든 소스 배열에 공통으로 존재하는 요소들로 이루어진 배열을 반환합니다. 결과에는 중복되지 않는 값만 포함됩니다.
 
 **구문**
 
@@ -1485,11 +1551,10 @@ arrayIntersect([1, 2], [1, 3], [1, 4]) AS non_empty_intersection
 ```
 
 ```response title=Response
-┌─non_empty_intersection─┬─empty_intersection─┐
-│ []                     │ [1]                │
-└────────────────────────┴────────────────────┘
+┌─empty_intersection─┬─non_empty_intersection─┐
+│ []                 │ [1]                    │
+└────────────────────┴────────────────────────┘
 ```
-
 
 ## arrayJaccardIndex \{#arrayJaccardIndex\}
 
@@ -2673,13 +2738,13 @@ SELECT arrayRandomSample([[1, 2], [3, 4], [5, 6]], 2) as res;
 **구문**
 
 ```sql
-arrayReduce(agg_f, arr1 [, arr2, ... , arrN)])
+arrayReduce(agg_f, arr1[, arr2, ... , arrN])
 ```
 
 **인수**
 
 * `agg_f` — 상수여야 하는 집계 함수 이름입니다. [`String`](/sql-reference/data-types/string)
-* `arr1 [, arr2, ... , arrN)]` — `agg_f`의 인수에 해당하는 N개의 배열입니다. [`Array(T)`](/sql-reference/data-types/array)
+* `arr1[, arr2, ... , arrN]` — `agg_f`의 인수에 해당하는 N개의 배열입니다. [`Array(T)`](/sql-reference/data-types/array)
 
 **반환값**
 
@@ -2725,7 +2790,6 @@ SELECT arrayReduce('uniqUpTo(3)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 └─────────────────────────────────────────────────────────────┘
 ```
 
-
 ## arrayReduceInRanges \{#arrayReduceInRanges\}
 
 도입 버전: v20.4.0
@@ -2736,14 +2800,14 @@ SELECT arrayReduce('uniqUpTo(3)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 **구문**
 
 ```sql
-arrayReduceInRanges(agg_f, ranges, arr1 [, arr2, ... ,arrN)])
+arrayReduceInRanges(agg_f, ranges, arr1[, arr2, ... ,arrN])
 ```
 
 **인수**
 
 * `agg_f` — 사용할 집계 함수의 이름입니다. [`String`](/sql-reference/data-types/string)
 * `ranges` — 집계를 수행할 구간입니다. `(i, r)` 튜플의 배열로, 집계를 시작할 인덱스 `i`와 집계를 수행할 구간 `r`을 포함합니다. [`Array(T)`](/sql-reference/data-types/array) 또는 [`Tuple(T)`](/sql-reference/data-types/tuple)
-* `arr1 [, arr2, ... ,arrN)]` — 집계 함수의 인수로 전달되는 N개의 배열입니다. [`Array(T)`](/sql-reference/data-types/array)
+* `arr1[, arr2, ... ,arrN]` — 집계 함수의 인수로 전달되는 N개의 배열입니다. [`Array(T)`](/sql-reference/data-types/array)
 
 **반환 값**
 
@@ -2766,7 +2830,6 @@ SELECT arrayReduceInRanges(
 │ [1234500,234000,34560,4567] │
 └─────────────────────────────┘
 ```
-
 
 ## arrayRemove \{#arrayRemove\}
 
@@ -3576,6 +3639,60 @@ arraySymmetricDifference([1, 2], [1, 2], [1, 3]) AS non_empty_symmetric_differen
 └────────────────────────────┴────────────────────────────────┘
 ```
 
+
+## arrayTranspose \{#arrayTranspose\}
+
+도입 버전: v26.4.0
+
+2차원 배열을 전치합니다.
+
+모든 내부 배열의 길이는 동일해야 합니다.
+
+**구문**
+
+```sql
+arrayTranspose(arr)
+```
+
+**인수**
+
+* `arr` — 전치할 2차원 배열입니다. 모든 내부 배열은 길이가 같아야 합니다. [`Array(Array(T))`](/sql-reference/data-types/array)
+
+**반환 값**
+
+결과의 `[i][j]` 요소가 입력의 `[j][i]` 요소와 같은 전치된 2차원 배열을 반환합니다. [`Array(Array(T))`](/sql-reference/data-types/array)
+
+**예시**
+
+**정방 행렬**
+
+```sql title=Query
+SELECT arrayTranspose([[1, 2], [3, 4]])
+```
+
+```response title=Response
+[[1, 3], [2, 4]]
+```
+
+**직사각 행렬**
+
+```sql title=Query
+SELECT arrayTranspose([[1, 2, 3], [4, 5, 6]])
+```
+
+```response title=Response
+[[1, 4], [2, 5], [3, 6]]
+```
+
+**문자열 원소**
+
+```sql title=Query
+SELECT arrayTranspose([['a', 'b'], ['c', 'd']])
+```
+
+```response title=Response
+[['a', 'c'], ['b', 'd']]
+```
 
 ## arrayUnion \{#arrayUnion\}
 

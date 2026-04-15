@@ -1,10 +1,10 @@
 ---
 description: 'Documentation for the HTTP interface in ClickHouse, which provides REST
   API access to ClickHouse from any platform and programming language'
-sidebar_label: 'HTTP Interface'
+sidebar_label: 'HTTP interface'
 sidebar_position: 15
 slug: /interfaces/http
-title: 'HTTP Interface'
+title: 'HTTP interface'
 doc_type: 'reference'
 ---
 
@@ -611,7 +611,7 @@ __exception__
 
 ## Queries with parameters {#cli-queries-with-parameters}
 
-You can create a query with parameters and pass values for them from the corresponding HTTP request parameters. For more information, see [Queries with Parameters for CLI](../../interfaces/cli.md#cli-queries-with-parameters).
+You can create a query with parameters and pass values for them from the corresponding HTTP request parameters. For more information, see [Queries with Parameters for CLI](/interfaces/client#cli-queries-with-parameters).
 
 ### Example {#example-3}
 

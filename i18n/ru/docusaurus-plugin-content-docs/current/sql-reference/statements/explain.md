@@ -193,9 +193,11 @@ QUERY id: 0
 * `sorting` — Печатает описание сортировки для каждого шага плана, который выдаёт отсортированный результат. По умолчанию: 0.
 * `keep_logical_steps` — Сохраняет логические шаги плана для JOIN вместо преобразования их в физические реализации JOIN. По умолчанию: 0.
 * `json` — Печатает шаги плана запроса как строку в формате [JSON](/interfaces/formats/JSON). По умолчанию: 0. Рекомендуется использовать формат [TabSeparatedRaw (TSVRaw)](/interfaces/formats/TabSeparatedRaw), чтобы избежать лишнего экранирования.
-* `input_headers` - Печатает входные заголовки для шага. По умолчанию: 0. В основном полезно только разработчикам для отладки проблем, связанных с несоответствием входных и выходных заголовков.
-* `column_structure` - Дополнительно печатает структуру столбцов в заголовках, помимо их имени и типа. По умолчанию: 0. В основном полезно только разработчикам для отладки проблем, связанных с несоответствием входных и выходных заголовков.
+* `input_headers` — Печатает входные заголовки для шага. По умолчанию: 0. В основном полезно только разработчикам для отладки проблем, связанных с несоответствием входных и выходных заголовков.
+* `column_structure` — Дополнительно печатает структуру столбцов в заголовках, помимо их имени и типа. По умолчанию: 0. В основном полезно только разработчикам для отладки проблем, связанных с несоответствием входных и выходных заголовков.
 * `distributed` — Показывает планы запросов, выполняемые на удалённых узлах для distributed таблиц или параллельных реплик. По умолчанию: 0.
+* `compact` — Если параметр включён, скрывает из плана шаги выражений и подробную информацию о действиях (входы, функции, псевдонимы и позиции вывода). Действует только при `actions = 1`. По умолчанию: 0.
+* `pretty` — Печатает дерево плана с использованием символов рисования линий (├──, └──, │) вместо отступов для визуализации иерархии. Также форматирует свойства шага JOIN в одной строке. По умолчанию: 0.
 
 Когда `json=1`, имена шагов будут содержать дополнительный суффикс с уникальным идентификатором шага.
 
@@ -269,14 +271,14 @@ EXPLAIN json = 1, description = 0 SELECT 1 UNION ALL SELECT 2 FORMAT TSVRaw;
 }
 ```
 
-При значении `header` = 1 ключ `Header` добавляется к шагу в виде массива столбцов.
+
+Если `header` = 1, к шагу добавляется ключ `Header`, содержащий массив столбцов.
 
 Пример:
 
 ```sql
 EXPLAIN json = 1, description = 0, header = 1 SELECT 1, 2 + dummy;
 ```
-
 
 ```json
 [
@@ -311,7 +313,7 @@ EXPLAIN json = 1, description = 0, header = 1 SELECT 1, 2 + dummy;
 ]
 ```
 
-Если `indexes` = 1, добавляется ключ `Indexes`. Он содержит массив использованных индексов. Каждый индекс описывается как JSON с ключом `Type` (строка `MinMax`, `Partition`, `PrimaryKey` или `Skip`) и дополнительными (необязательными) ключами:
+Если `indexes` = 1, добавляется ключ `Indexes`. Он содержит массив использованных индексов. Каждый индекс описывается как JSON с ключом `Type` (строка `Partition Min-Max`, `Partition`, `Statistics`, `PrimaryKey` или `Skip`) и дополнительными (необязательными) ключами:
 
 * `Name` — имя индекса (в настоящее время используется только для индексов `Skip`).
 * `Keys` — массив столбцов, используемых индексом.
@@ -327,7 +329,7 @@ EXPLAIN json = 1, description = 0, header = 1 SELECT 1, 2 + dummy;
 "Node Type": "ReadFromMergeTree",
 "Indexes": [
   {
-    "Type": "MinMax",
+    "Type": "Partition Min-Max",
     "Keys": ["y"],
     "Condition": "(y in [1, +inf))",
     "Parts": 4/5,
@@ -378,6 +380,7 @@ EXPLAIN json = 1, description = 0, header = 1 SELECT 1, 2 + dummy;
 
 Пример:
 
+
 ```json
 "Node Type": "ReadFromMergeTree",
 "Projections": [
@@ -405,7 +408,6 @@ EXPLAIN json = 1, description = 0, header = 1 SELECT 1, 2 + dummy;
   }
 ]
 ```
-
 
 Если `actions` = 1, добавляемые ключи зависят от типа шага.
 
@@ -466,6 +468,23 @@ EXPLAIN json = 1, actions = 1, description = 0 SELECT 1 FORMAT TSVRaw;
 ]
 ```
 
+При `compact = 1` каждый шаг `Expression` убирается. Кроме того, если установлено `actions = 1`, строки `Actions` и `Positions` скрываются, и остаются только описания шагов:
+
+```sql
+EXPLAIN actions = 1, compact = 1 SELECT sum(number) FROM numbers(10) GROUP BY number % 4 FORMAT Raw;
+```
+
+```text
+Aggregating
+Keys: modulo(__table1.number, 4_UInt8)
+Aggregates:
+    sum(__table1.number)
+      Function: sum(UInt64) → UInt64
+      Arguments: __table1.number
+Skip merging: 0
+  ReadFromSystemNumbers
+```
+
 При `distributed` = 1 вывод включает не только локальный план запроса, но и планы запросов, которые будут выполняться на удалённых узлах. Это полезно для анализа и отладки распределённых запросов.
 
 Пример с distributed таблицей:
@@ -509,6 +528,77 @@ Expression ((Project names + Projection))
 ```
 
 В обоих примерах план запроса показывает полный процесс выполнения, включая локальные и удалённые этапы.
+
+При `pretty` = 1 дерево плана отображается с помощью символов псевдографики вместо отступов, а для ключевых шагов выводится дополнительная информация:
+
+* **Выходные столбцы запроса** выводятся в верхней части плана.
+* **Шаги источника** (например, `ReadFromMergeTree`) показывают свои выходные столбцы.
+* **Шаги соединения** показывают соединение в математической нотации, оценочное количество строк в результате,
+  а также то, какие выходные столбцы приходят с левой и с правой стороны. Для
+  обозначения разных типов соединения используются следующие символы:
+
+| Символ                 | Тип соединения          |
+| ---------------------- | ----------------------- |
+| `⋈`                    | Внутреннее соединение   |
+| `⟕`                    | Левое соединение        |
+| `⟖`                    | Правое соединение       |
+| `⟗`                    | Полное соединение       |
+| `⋉`                    | Левое semi соединение   |
+| `⋊`                    | Правое semi соединение  |
+| `⋉` with strikethrough | Левое anti соединение   |
+| `⋊` with strikethrough | Правое anti соединение  |
+| `×`                    | Перекрёстное соединение |
+
+Например, `t1 ⟕ t2` означает левое соединение между таблицами `t1` и `t2`.
+Число в скобках после имени таблицы (например, `t1[100]`) указывает на оценочное количество строк,
+если доступна статистика таблицы.
+
+Настройка `pretty` хорошо работает вместе с `compact = 1`, который скрывает шаги `Expression` и
+подробную информацию о действиях, делая план более удобным для чтения.
+
+```sql
+EXPLAIN pretty = 1 SELECT sum(number) FROM numbers(10) GROUP BY number % 4 FORMAT Raw;
+```
+
+```text
+Expression ((Project names + Projection))
+└──Aggregating
+   └──Expression ((Before GROUP BY + Change column names to column identifiers))
+      └──ReadFromSystemNumbers
+```
+
+Более подробный пример с соединением:
+
+```sql
+CREATE TABLE t1 (id UInt64, value String) ENGINE = MergeTree ORDER BY id;
+CREATE TABLE t2 (id UInt64, value String) ENGINE = MergeTree ORDER BY id;
+INSERT INTO t1 SELECT number, toString(number) FROM numbers(100);
+INSERT INTO t2 SELECT number, toString(number) FROM numbers(100);
+
+EXPLAIN actions = 1, compact = 1, pretty = 1
+SELECT * FROM t1 INNER JOIN t2 ON t1.id = t2.id FORMAT Raw;
+```
+
+```text
+Output: id, value, t2.id, t2.value
+
+Join (JOIN FillRightFirst)
+│  t1[100] ⋈ t2[100]
+│  Type: inner | Strictness: all | Algorithm: ConcurrentHashJoin
+│  Result rows: 100
+│  Join conditions: [(__table1.id) = (__table2.id)]
+│  Output:
+│    Left:  id, value
+│    Right: id, value
+├──ReadFromMergeTree (default.t1)
+│     Read type: Default
+│     Parts: 1 | Granules: 1
+│     Output: id, value
+└──ReadFromMergeTree (default.t2)
+      Read type: Default
+      Parts: 1 | Granules: 1
+      Output: id, value
+```
 
 ### EXPLAIN PIPELINE \{#explain-pipeline\}
 

@@ -171,6 +171,72 @@ SELECT arrayAll(x, y -> x=y, [1, 2, 3], [1, 1, 1])
 ```
 
 
+## arrayAutocorrelation \{#arrayAutocorrelation\}
+
+引入版本：v26.4.0
+
+计算数组的自相关。
+如果提供了 `max_lag`，则仅计算 `[0, max_lag)` 范围内的滞后值对应的相关性。
+如果未提供 `max_lag`，则计算所有可能滞后值的相关性。
+
+**语法**
+
+```sql
+arrayAutocorrelation(arr, [max_lag])
+```
+
+**参数**
+
+* `arr` — 数值数组。[`Array(T)`](/sql-reference/data-types/array)
+* `max_lag` — 可选。要计算的最大滞后数。必须是非负整数。[`Integer`](/sql-reference/data-types/int-uint)
+
+**返回值**
+
+返回 `Float64` 数组。如果方差为 0，则返回 NaN。[`Array(Float64)`](/sql-reference/data-types/array)
+
+**示例**
+
+**线性**
+
+```sql title=Query
+SELECT arrayAutocorrelation([1, 2, 3, 4, 5]);
+```
+
+```response title=Response
+[1, 0.4, -0.1, -0.4, -0.4]
+```
+
+**对称**
+
+```sql title=Query
+SELECT arrayAutocorrelation([10, 20, 10]);
+```
+
+```response title=Response
+[1, -0.6666666666666669, 0.16666666666666674]
+```
+
+**常量**
+
+```sql title=Query
+SELECT arrayAutocorrelation([5, 5, 5]);
+```
+
+```response title=Response
+[nan, nan, nan]
+```
+
+**受限**
+
+```sql title=Query
+SELECT arrayAutocorrelation([1, 2, 3, 4, 5], 2);
+```
+
+```response title=Response
+[1, 0.4]
+```
+
+
 ## arrayAvg \{#arrayAvg\}
 
 自 v21.1.0 版本引入
@@ -1487,11 +1553,10 @@ arrayIntersect([1, 2], [1, 3], [1, 4]) AS non_empty_intersection
 ```
 
 ```response title=Response
-┌─non_empty_intersection─┬─empty_intersection─┐
-│ []                     │ [1]                │
-└────────────────────────┴────────────────────┘
+┌─empty_intersection─┬─non_empty_intersection─┐
+│ []                 │ [1]                    │
+└────────────────────┴────────────────────────┘
 ```
-
 
 ## arrayJaccardIndex \{#arrayJaccardIndex\}
 
@@ -2675,13 +2740,13 @@ SELECT arrayRandomSample([[1, 2], [3, 4], [5, 6]], 2) as res;
 **语法**
 
 ```sql
-arrayReduce(agg_f, arr1 [, arr2, ... , arrN)])
+arrayReduce(agg_f, arr1[, arr2, ... , arrN])
 ```
 
 **参数**
 
 * `agg_f` — 聚合函数的名称，应为常量。[`String`](/sql-reference/data-types/string)
-* `arr1 [, arr2, ... , arrN)]` — 与 `agg_f` 的参数相对应的 N 个数组。[`Array(T)`](/sql-reference/data-types/array)
+* `arr1[, arr2, ... , arrN]` — 与 `agg_f` 的参数相对应的 N 个数组。[`Array(T)`](/sql-reference/data-types/array)
 
 **返回值**
 
@@ -2727,7 +2792,6 @@ SELECT arrayReduce('uniqUpTo(3)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 └─────────────────────────────────────────────────────────────┘
 ```
 
-
 ## arrayReduceInRanges \{#arrayReduceInRanges\}
 
 引入版本：v20.4.0
@@ -2738,14 +2802,14 @@ SELECT arrayReduce('uniqUpTo(3)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 **语法**
 
 ```sql
-arrayReduceInRanges(agg_f, ranges, arr1 [, arr2, ... ,arrN)])
+arrayReduceInRanges(agg_f, ranges, arr1[, arr2, ... ,arrN])
 ```
 
 **参数**
 
 * `agg_f` — 要使用的聚合函数名称。[`String`](/sql-reference/data-types/string)
 * `ranges` — 要进行聚合的范围。是一个由元组 `(i, r)` 组成的数组，每个元组包含起始位置的索引 `i`，以及执行聚合的范围 `r`。[`Array(T)`](/sql-reference/data-types/array) 或 [`Tuple(T)`](/sql-reference/data-types/tuple)
-* `arr1 [, arr2, ... ,arrN)]` — 作为聚合函数参数的 N 个数组。[`Array(T)`](/sql-reference/data-types/array)
+* `arr1[, arr2, ... ,arrN]` — 作为聚合函数参数的 N 个数组。[`Array(T)`](/sql-reference/data-types/array)
 
 **返回值**
 
@@ -2768,7 +2832,6 @@ SELECT arrayReduceInRanges(
 │ [1234500,234000,34560,4567] │
 └─────────────────────────────┘
 ```
-
 
 ## arrayRemove \{#arrayRemove\}
 
@@ -3578,6 +3641,60 @@ arraySymmetricDifference([1, 2], [1, 2], [1, 3]) AS non_empty_symmetric_differen
 └────────────────────────────┴────────────────────────────────┘
 ```
 
+
+## arrayTranspose \{#arrayTranspose\}
+
+引入版本：v26.4.0
+
+对二维数组进行转置。
+
+所有内层数组的长度都必须相同。
+
+**语法**
+
+```sql
+arrayTranspose(arr)
+```
+
+**参数**
+
+* `arr` — 要进行转置的二维数组。所有内层数组的长度必须相同。[`Array(Array(T))`](/sql-reference/data-types/array)
+
+**返回值**
+
+转置后的二维数组，其中结果中的元素 `[i][j]` 等于输入中的元素 `[j][i]`。[`Array(Array(T))`](/sql-reference/data-types/array)
+
+**示例**
+
+**方阵**
+
+```sql title=Query
+SELECT arrayTranspose([[1, 2], [3, 4]])
+```
+
+```response title=Response
+[[1, 3], [2, 4]]
+```
+
+**非方阵**
+
+```sql title=Query
+SELECT arrayTranspose([[1, 2, 3], [4, 5, 6]])
+```
+
+```response title=Response
+[[1, 4], [2, 5], [3, 6]]
+```
+
+**字符串类型元素**
+
+```sql title=Query
+SELECT arrayTranspose([['a', 'b'], ['c', 'd']])
+```
+
+```response title=Response
+[['a', 'c'], ['b', 'd']]
+```
 
 ## arrayUnion \{#arrayUnion\}
 

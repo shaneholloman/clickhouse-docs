@@ -26,7 +26,7 @@ Yes. Your source Postgres and destination ClickHouse have independent retention.
 
 ### How can I enrich data as it flows from Postgres to ClickHouse? {#data-enrichment}
 
-Use [materialized views](/materialized-view) on top of your CDC destination tables. Materialized views in ClickHouse act as insert triggers, so each row replicated from Postgres can be transformed, joined with lookup tables, or enriched with additional columns before being written to a final target table.
+Use [materialized views](/materialized-views) on top of your CDC destination tables. Materialized views in ClickHouse act as insert triggers, so each row replicated from Postgres can be transformed, joined with lookup tables, or enriched with additional columns before being written to a final target table.
 
 ### Can I replicate from multiple Postgres instances into one or more ClickHouse services? {#multi-region-multi-source}
 
@@ -277,7 +277,6 @@ max_slot_wal_keep_size = 200GB
 It is a recoverable, completely non-fatal error. ClickPipes will automatically attempt to reconnect and resume the replication process.
 
 It can happen for a few reasons:
-- **Low wal_sender_timeout:** Make sure `wal_sender_timeout` is 5 minutes or higher. This setting controls how long the server waits for a response from the client before closing the connection. If the timeout is too low, it can lead to premature disconnections.
 - **Network Issues:** Temporary network disruptions can cause the connection to drop.
 - **Postgres Server Restart:** If the Postgres server is restarted or crashes, the connection will be lost.
 

@@ -160,38 +160,6 @@ SELECT detectLanguageUnknown('Ich bleibe für ein paar Tage.')
 de
 ```
 
-## detectProgrammingLanguage \{#detectProgrammingLanguage\}
-
-導入バージョン: v22.2.0
-
-指定されたソースコードのスニペットからプログラミング言語を判定します。
-
-**構文**
-
-```sql
-detectProgrammingLanguage('source_code')
-```
-
-**引数**
-
-* `source_code` — 解析対象となるソースコードの文字列表現。[`String`](/sql-reference/data-types/string)
-
-**戻り値**
-
-プログラミング言語を表す[`String`](/sql-reference/data-types/string)を返します。
-
-**例**
-
-**C++ コードの検出**
-
-```sql title=Query
-SELECT detectProgrammingLanguage('#include <iostream>')
-```
-
-```response title=Response
-C++
-```
-
 ## detectTonality \{#detectTonality\}
 
 導入バージョン: v22.2.0
@@ -236,8 +204,7 @@ SELECT
 導入バージョン: v21.9.0
 
 指定された単語のレンマ化を実行します。
-この関数の実行には Dictionary が必要で、[GitHub](https://github.com/vpodpecan/lemmagen3/tree/master/src/lemmagen3/models) から取得できます。ローカルファイルから Dictionary を読み込む方法の詳細については、ページ [「Defining Dictionaries」](/docs/sql-reference/
-+statements/create/dictionary/sources/local-file) を参照してください。
+この関数の実行には Dictionary が必要で、[GitHub](https://github.com/vpodpecan/lemmagen3/tree/master/src/lemmagen3/models) から取得できます。ローカルファイルから Dictionary を読み込む方法の詳細については、ページ [「Defining Dictionaries」](/sql-reference/statements/create/dictionary/sources/local-file) を参照してください。
 
 **構文**
 
@@ -270,34 +237,67 @@ wolf
 
 導入バージョン: v21.9.0
 
-与えられた単語に対してステミング処理を行います。
+Snowball アルゴリズムを使用して、単語または単語の配列にステミングを実行します。
+各入力文字列は小文字の単語 1 つである必要があり、空白を含む文字列を指定すると例外が発生します。
+大文字を渡した場合の結果は未定義です。
+スカラー入力 (FixedString を含む) の場合は String、配列入力の場合は Array(String) を返します。
+String および FixedString の Nullable と LowCardinality の各型をサポートします。
 
 **構文**
 
 ```sql
-stem(lang, word)
+stem(word, language)
 ```
 
 **引数**
 
-* `lang` — ルールを適用する言語。2文字の ISO 639-1 コードを使用します。[`String`](/sql-reference/data-types/string)
-* `word` — ステミング対象となる小文字の単語。[`String`](/sql-reference/data-types/string)
+* `word` — ステミングする単一の小文字の単語 (または単語の配列) 。小文字である必要があります。大文字を含む場合、結果は未定義です。String、FixedString、Array(String)、Array(FixedString)、Array(Nullable(String))、または Array(Nullable(FixedString)) を受け付けます。 [`String`](/sql-reference/data-types/string) or [`FixedString`](/sql-reference/data-types/fixedstring) or [`Array(String)`](/sql-reference/data-types/array) or [`Array(FixedString)`](/sql-reference/data-types/array)
+* `language` — ステミング規則を適用する言語。2 文字の ISO 639-1 コード (例: &#39;en&#39;、&#39;de&#39;、&#39;fr&#39;) を使用してください。https://en.wikipedia.org/wiki/List&#95;of&#95;ISO&#95;639&#95;language&#95;codes を参照してください。 [`String`](/sql-reference/data-types/string)
 
-**返される値**
+**戻り値**
 
-単語のステミング後の形を返します。型は [`String`](/sql-reference/data-types/string) です。
+単語の語幹化後の形式 (String) 、または語幹化後の単語の配列 (Array(String)) 。 [`String`](/sql-reference/data-types/string) or [`Array(String)`](/sql-reference/data-types/array)
 
-**使用例**
+**例**
 
-**英語でのステミング**
+**単一の単語を語幹化する**
 
 ```sql title=Query
-SELECT arrayMap(x -> stem('en', x),
-['I', 'think', 'it', 'is', 'a', 'blessing', 'in', 'disguise']) AS res
+SELECT stem('blessing', 'en') AS res
 ```
 
 ```response title=Response
-['I','think','it','is','a','bless','in','disguis']
+bless
+```
+
+**単語配列に対するステミング**
+
+```sql title=Query
+SELECT stem(['blessing', 'disguise'], 'en') AS res
+```
+
+```response title=Response
+['bless','disguis']
+```
+
+**FixedString に対するステミング**
+
+```sql title=Query
+SELECT stem(toFixedString('blessing', 10), 'en') AS res
+```
+
+```response title=Response
+bless
+```
+
+**Nullable な単語のステミング**
+
+```sql title=Query
+SELECT stem(toNullable('blessing'), 'en') AS res
+```
+
+```response title=Response
+bless
 ```
 
 ## synonyms \{#synonyms\}

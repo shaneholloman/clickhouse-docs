@@ -160,38 +160,6 @@ SELECT detectLanguageUnknown('Ich bleibe für ein paar Tage.')
 de
 ```
 
-## detectProgrammingLanguage \{#detectProgrammingLanguage\}
-
-引入版本：v22.2.0
-
-根据给定的源代码片段判断其所使用的编程语言。
-
-**语法**
-
-```sql
-detectProgrammingLanguage('source_code')
-```
-
-**参数**
-
-* `source_code` — 要分析的源代码的字符串表示形式。[`String`](/sql-reference/data-types/string)
-
-**返回值**
-
-返回表示编程语言的 [`String`](/sql-reference/data-types/string)
-
-**示例**
-
-**C++ 代码检测**
-
-```sql title=Query
-SELECT detectProgrammingLanguage('#include <iostream>')
-```
-
-```response title=Response
-C++
-```
-
 ## detectTonality \{#detectTonality\}
 
 引入版本：v22.2.0
@@ -236,8 +204,7 @@ SELECT
 引入版本：v21.9.0
 
 对给定单词执行词形还原。
-此函数需要字典才能工作，可以从 [GitHub](https://github.com/vpodpecan/lemmagen3/tree/master/src/lemmagen3/models) 获取。关于从本地文件加载字典的更多信息，请参阅页面 [&quot;Defining Dictionaries&quot;](/docs/sql-reference/
-+statements/create/dictionary/sources/local-file).
+此函数需要字典才能工作，可以从 [GitHub](https://github.com/vpodpecan/lemmagen3/tree/master/src/lemmagen3/models) 获取。关于从本地文件加载字典的更多信息，请参阅页面 [&quot;Defining Dictionaries&quot;](/sql-reference/statements/create/dictionary/sources/local-file).
 
 **语法**
 
@@ -268,36 +235,69 @@ wolf
 
 ## stem \{#stem\}
 
-自 v21.9.0 起引入
+引入版本：v21.9.0
 
-对给定单词执行词干提取。
+使用 Snowball 算法对单个单词或单词数组执行词干提取。
+每个输入字符串都必须是单个小写单词——包含空白字符的字符串会引发异常。
+传入大写字符会产生未定义的结果。
+对于标量输入 (包括 FixedString) ，返回 String；对于数组输入，返回 Array(String)。
+支持 String 和 FixedString 的 Nullable 和 LowCardinality 变体。
 
 **语法**
 
 ```sql
-stem(lang, word)
+stem(word, language)
 ```
 
 **参数**
 
-* `lang` — 应用规则所依据的语言。使用两个字母的 ISO 639-1 代码。[`String`](/sql-reference/data-types/string)
-* `word` — 需要进行词干提取的小写单词。[`String`](/sql-reference/data-types/string)
+* `word` — 要提取词干的单个小写单词 (或单词数组) 。必须使用小写——大写字符会产生未定义的结果。接受 String、FixedString、Array(String)、Array(FixedString)、Array(Nullable(String)) 或 Array(Nullable(FixedString))。[`String`](/sql-reference/data-types/string) 或 [`FixedString`](/sql-reference/data-types/fixedstring) 或 [`Array(String)`](/sql-reference/data-types/array) 或 [`Array(FixedString)`](/sql-reference/data-types/array)
+* `language` — 要应用其词干提取规则的语言。使用两个字母的 ISO 639-1 代码 (例如 &#39;en&#39;、&#39;de&#39;、&#39;fr&#39;) ，参见 https://en.wikipedia.org/wiki/List&#95;of&#95;ISO&#95;639&#95;language&#95;codes。[`String`](/sql-reference/data-types/string)
 
 **返回值**
 
-返回该单词的词干形式 [`String`](/sql-reference/data-types/string)
+单词的词干形式 (String) ，或由词干形式组成的数组 (Array(String)) 。[`String`](/sql-reference/data-types/string) 或 [`Array(String)`](/sql-reference/data-types/array)
 
 **示例**
 
-**英文词干提取**
+**对单个单词提取词干**
 
 ```sql title=Query
-SELECT arrayMap(x -> stem('en', x),
-['I', 'think', 'it', 'is', 'a', 'blessing', 'in', 'disguise']) AS res
+SELECT stem('blessing', 'en') AS res
 ```
 
 ```response title=Response
-['I','think','it','is','a','bless','in','disguis']
+bless
+```
+
+**对单词数组进行词干提取**
+
+```sql title=Query
+SELECT stem(['blessing', 'disguise'], 'en') AS res
+```
+
+```response title=Response
+['bless','disguis']
+```
+
+**FixedString 的词干提取**
+
+```sql title=Query
+SELECT stem(toFixedString('blessing', 10), 'en') AS res
+```
+
+```response title=Response
+bless
+```
+
+**Nullable 单词的词干提取**
+
+```sql title=Query
+SELECT stem(toNullable('blessing'), 'en') AS res
+```
+
+```response title=Response
+bless
 ```
 
 ## 同义词 (synonyms)  \{#synonyms\}

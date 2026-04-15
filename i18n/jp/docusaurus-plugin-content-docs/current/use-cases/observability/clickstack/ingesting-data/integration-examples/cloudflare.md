@@ -1,7 +1,7 @@
 ---
 slug: /use-cases/observability/clickstack/integrations/cloudflare-logs
-title: 'ClickStack で Cloudflare Logs を監視する'
-sidebar_label: 'Cloudflare Logs'
+title: 'ClickStackでCloudflareログを監視する'
+sidebar_label: 'Cloudflareログ'
 pagination_prev: null
 pagination_next: null
 description: 'S3 から継続的にログをインジェストするため、ClickPipes を使用して Cloudflare Logpush データを ClickStack に取り込む'
@@ -243,8 +243,6 @@ SELECT count() FROM cloudflare_http_logs;
 * HyperDX の時間範囲に対象のデータが含まれていることを確認します。デモ用データセットでは、**2026-02-23 00:00:00 - 2026-02-26 00:00:00** を使用します
 
 ## 次のステップ \{#next-steps\}
-
-Cloudflare のログが ClickStack に取り込まれるようになったら、次の作業を行います。
 
 * セキュリティイベント (WAF によるブロック、ボットトラフィックの急増、エラー率のしきい値) に対する[アラート](/use-cases/observability/clickstack/alerts)を設定します
 * データ量に応じて[データ保持ポリシー](/use-cases/observability/clickstack/ttl)を最適化します

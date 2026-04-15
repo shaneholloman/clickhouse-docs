@@ -185,6 +185,7 @@ exceptions:
   - PROXY
   - PUT
   - QPS
+  - RAFT
   - RAID
   - RAM
   - RBAC

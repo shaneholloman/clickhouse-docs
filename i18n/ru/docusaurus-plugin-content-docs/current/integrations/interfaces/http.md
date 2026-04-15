@@ -1,6 +1,6 @@
 ---
-description: 'Документация по HTTP-интерфейсу ClickHouse, который предоставляет
-  REST API-доступ к ClickHouse с любых платформ и языков программирования'
+description: 'Документация по HTTP-интерфейсу ClickHouse, который предоставляет REST
+  API-доступ к ClickHouse с любых платформ и языков программирования'
 sidebar_label: 'HTTP-интерфейс'
 sidebar_position: 15
 slug: /interfaces/http
@@ -631,7 +631,7 @@ __exception__
 
 ## Запросы с параметрами \{#cli-queries-with-parameters\}
 
-Вы можете создать запрос с параметрами и передать им значения через соответствующие параметры HTTP-запроса. Дополнительную информацию см. в разделе [Запросы с параметрами для CLI](../../interfaces/cli.md#cli-queries-with-parameters).
+Вы можете создать запрос с параметрами и передать им значения через соответствующие параметры HTTP-запроса. Дополнительную информацию см. в разделе [Запросы с параметрами для CLI](/interfaces/client#cli-queries-with-parameters).
 
 ### Пример \{#example-3\}
 

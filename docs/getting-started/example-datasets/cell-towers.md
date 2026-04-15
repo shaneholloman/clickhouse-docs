@@ -3,7 +3,7 @@ description: 'Learn how to load OpenCelliD data into ClickHouse, connect Apache 
   to ClickHouse and build a dashboard based on data'
 sidebar_label: 'Cell towers'
 slug: /getting-started/example-datasets/cell-towers
-title: 'Geo Data using the Cell Tower Dataset'
+title: 'Geo data using the cell tower dataset'
 keywords: ['cell tower data', 'geo data', 'OpenCelliD', 'geospatial dataset', 'getting started']
 doc_type: 'guide'
 ---
@@ -166,7 +166,7 @@ SELECT mcc, count() FROM cell_towers GROUP BY mcc ORDER BY count() DESC LIMIT 10
 
 Based on the above query and the [MCC list](https://en.wikipedia.org/wiki/Mobile_country_code), the countries with the most cell towers are: the USA, Germany, and Russia.
 
-You may want to create a [Dictionary](../../sql-reference/statements/create/dictionary/index.md) in ClickHouse to decode these values.
+You may want to create a [Dictionary](/sql-reference/statements/create/dictionary) in ClickHouse to decode these values.
 
 ## Use case: incorporate geo data {#use-case}
 

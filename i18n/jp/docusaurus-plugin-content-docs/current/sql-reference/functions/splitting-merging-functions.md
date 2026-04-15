@@ -558,7 +558,8 @@ SELECT splitByWhitespace('  1!  a,  b.  ');
 
 * `splitByNonAlpha` は、英数字以外の ASCII 文字で文字列を分割します (関数 [splitByNonAlpha](/sql-reference/functions/splitting-merging-functions.md/#splitByNonAlpha) も参照してください) 。
 * `splitByString(S)` は、ユーザー定義の区切り文字列 `S` に沿って文字列を分割します (関数 [splitByString](/sql-reference/functions/splitting-merging-functions.md/#splitByString) も参照してください) 。区切り文字はオプションのパラメータで指定でき、例えば `tokens(value, 'splitByString', [', ', '; ', '\n', '\\'])` のように指定します。各文字列は複数文字 (この例では `', '`) から構成されていてもかまいません。区切り文字リストを明示的に指定しない場合、デフォルトの区切り文字リストは単一の空白 `[' ']` です。
-* `ngrams(N)` は、文字列を同じ長さの `N`-gram に分割します (関数 [ngrams](/sql-reference/functions/splitting-merging-functions.md/#ngrams) も参照してください) 。ngram の長さは 1 から 8 の整数のオプションパラメータで指定でき、例えば `tokens(value, 'ngrams', 3)` のように指定します。ngram のデフォルトサイズは、明示的に指定しない場合、3 です。
+* `asciiCJK` は、Unicode の単語境界ルール (UAX #29 に類似) を使用して文字列をトークンに分割します。ASCII の英数字とアンダースコアは、コネクタ (文字に対する `:`、同種の文字に対する `.` および `'`) とともにトークンを構成します。ASCII 以外の Unicode 文字は、1 文字ずつのトークンになります。
+* `ngrams(N)` は、文字列を同じ長さの `N`-gram に分割します (関数 [ngrams](/sql-reference/functions/splitting-merging-functions.md/#ngrams) も参照してください) 。N-gram の長さは 1 から 8 の整数のオプションパラメータで指定でき、例えば `tokens(value, 'ngrams', 3)` のように指定します。N-gram のデフォルトサイズは、明示的に指定しない場合、3 です。
 * `sparseGrams(min_length, max_length, min_cutoff_length)` は、少なくとも `min_length` 文字、最大で (両端を含めて) `max_length` 文字の可変長 n-gram に文字列を分割します (関数 [sparseGrams](/sql-reference/functions/string-functions#sparseGrams) も参照してください) 。明示的に指定しない場合、`min_length` と `max_length` のデフォルト値はそれぞれ 3 と 100 です。パラメータ `min_cutoff_length` を指定した場合、その長さ以上の n-gram のみが返されます。`ngrams(N)` と比較すると、`sparseGrams` トークナイザーは可変長の N-gram を生成するため、元のテキストをより柔軟に表現できます。例えば、`tokens(value, 'sparseGrams', 3, 5, 4)` は内部的には入力文字列から 3, 4, 5-gram を生成しますが、返されるのは 4-gram と 5-gram のみです。
 * `array` はトークナイズを行わず、各行の値全体を 1 つのトークンとして扱います (関数 [array](/sql-reference/functions/array-functions.md/#array) も参照してください) 。
 
@@ -572,6 +573,7 @@ SELECT splitByWhitespace('  1!  a,  b.  ');
 tokens(value) -- 'splitByNonAlpha' tokenizer
 tokens(value, 'splitByNonAlpha')
 tokens(value, 'splitByString'[, separators])
+tokens(value, 'asciiCJK')
 tokens(value, 'ngrams'[, n])
 tokens(value, 'sparseGrams'[, min_length, max_length[, min_cutoff_length]])
 tokens(value, 'array')
@@ -580,8 +582,8 @@ tokens(value, 'array')
 **引数**
 
 * `value` — 入力文字列。[`String`](/sql-reference/data-types/string) または [`FixedString`](/sql-reference/data-types/fixedstring)
-* `tokenizer` — 使用するトークナイザー。有効な引数は `splitByNonAlpha`、`ngrams`、`splitByString`、`array`、`sparseGrams` です。省略可能で、明示的に指定しない場合は `splitByNonAlpha` がデフォルトになります。[`const String`](/sql-reference/data-types/string)
-* `n` — 引数 `tokenizer` が `ngrams` の場合にのみ有効: n-gram の長さを指定する省略可能なパラメータです。明示的に指定しない場合は `3` がデフォルトです。[`const UInt8`](/sql-reference/data-types/int-uint)
+* `tokenizer` — 使用するトークナイザー。有効な引数は `splitByNonAlpha`、`splitByString`、`asciiCJK`、`ngrams`、`sparseGrams`、`array` です。省略可能で、明示的に指定しない場合は `splitByNonAlpha` がデフォルトになります。[`const String`](/sql-reference/data-types/string)
+* `n` — 引数 `tokenizer` が `ngrams` の場合にのみ有効: N-gram の長さを指定する省略可能なパラメータです。明示的に指定しない場合は `3` がデフォルトです。[`const UInt8`](/sql-reference/data-types/int-uint)
 * `separators` — 引数 `tokenizer` が `split` の場合にのみ有効: 区切り文字列を指定する省略可能なパラメータです。明示的に指定しない場合は `[' ']` がデフォルトです。[`const Array(String)`](/sql-reference/data-types/array)
 * `min_length` — 引数 `tokenizer` が `sparseGrams` の場合にのみ有効: gram の最小長を指定する省略可能なパラメータで、デフォルトは 3 です。[`const UInt8`](/sql-reference/data-types/int-uint)
 * `max_length` — 引数 `tokenizer` が `sparseGrams` の場合にのみ有効: gram の最大長を指定する省略可能なパラメータで、デフォルトは 100 です。[`const UInt8`](/sql-reference/data-types/int-uint)
@@ -603,7 +605,7 @@ SELECT tokens('test1,;\\\\ test2,;\\\\ test3,;\\\\   test4') AS tokens;
 ['test1','test2','test3','test4']
 ```
 
-**Nグラムトークナイザー**
+**N-gramトークナイザー**
 
 ```sql title=Query
 SELECT tokens('abc def', 'ngrams', 3) AS tokens;
@@ -611,6 +613,56 @@ SELECT tokens('abc def', 'ngrams', 3) AS tokens;
 
 ```response title=Response
 ['abc','bc ','c d',' de','def']
+```
+
+## tokensForLikePattern \{#tokensForLikePattern\}
+
+導入バージョン: v26.3.0
+
+指定したトークナイザーを使用して、LIKE パターン文字列をトークンに分割します。
+
+`tokens` 関数とは異なり、この関数は LIKE パターンの構文的な意味
+(先頭および末尾のワイルドカード文字など) を認識し、トークナイザー固有の
+ルールを適用して、パターンマッチングに有用なトークンを抽出します。
+
+この関数は `tokens` 関数と同じ引数セットをサポートします。`tokenizer` の後に続く追加の
+引数は、選択したトークナイザーに応じて解釈されます
+(たとえば、`ngrams` の `n`、`splitByString` の `separators`、
+および `sparseGrams` の `min_length` / `max_length` [/ `min_cutoff_length`]) 。
+
+この関数は主にデバッグおよびテスト用途を目的としており、
+LIKE パターンに対するトークン化の挙動を分析するために内部的に使用されます。
+
+**構文**
+
+```sql
+tokensForLikePattern(value[, tokenizer[, tokenizer_specific_arguments...]])
+```
+
+**引数**
+
+* `value` — 入力文字列。[`String`](/sql-reference/data-types/string) または [`FixedString`](/sql-reference/data-types/fixedstring)
+* `tokenizer` — 使用するトークナイザー。有効な引数は `splitByNonAlpha`、`splitByString`、`asciiCJK`、`ngrams`、`sparseGrams`、`array` です。省略可能で、明示的に指定しない場合は `splitByNonAlpha` がデフォルトになります。[`const String`](/sql-reference/data-types/string)
+* `n` — 引数 `tokenizer` が `ngrams` の場合にのみ有効: N-gram の長さを指定する省略可能なパラメータです。明示的に指定しない場合は `3` がデフォルトです。[`const UInt8`](/sql-reference/data-types/int-uint)
+* `separators` — 引数 `tokenizer` が `split` の場合にのみ有効: 区切り文字列を指定する省略可能なパラメータです。明示的に指定しない場合は `[' ']` がデフォルトです。[`const Array(String)`](/sql-reference/data-types/array)
+* `min_length` — 引数 `tokenizer` が `sparseGrams` の場合にのみ有効: gram の最小長を指定する省略可能なパラメータで、デフォルトは 3 です。[`const UInt8`](/sql-reference/data-types/int-uint)
+* `max_length` — 引数 `tokenizer` が `sparseGrams` の場合にのみ有効: gram の最大長を指定する省略可能なパラメータで、デフォルトは 100 です。[`const UInt8`](/sql-reference/data-types/int-uint)
+* `min_cutoff_length` — 引数 `tokenizer` が `sparseGrams` の場合にのみ有効: 最小カットオフ長を指定する省略可能なパラメータです。[`const UInt8`](/sql-reference/data-types/int-uint)
+
+**戻り値**
+
+入力文字列から生成されたトークンの配列を返します。[`Array`](/sql-reference/data-types/array)
+
+**例**
+
+**デフォルトのトークナイザー**
+
+```sql title=Query
+SELECT tokensForLikePattern('%test1,test2,test3%') AS tokens;
+```
+
+```response title=Response
+['test2']
 ```
 
 {/*AUTOGENERATED_END*/ }

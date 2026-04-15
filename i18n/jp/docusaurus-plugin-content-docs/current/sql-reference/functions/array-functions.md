@@ -172,6 +172,72 @@ SELECT arrayAll(x, y -> x=y, [1, 2, 3], [1, 1, 1])
 ```
 
 
+## arrayAutocorrelation \{#arrayAutocorrelation\}
+
+導入バージョン: v26.4.0
+
+配列の自己相関を計算します。
+`max_lag` を指定した場合は、範囲 `[0, max_lag)` のラグについてのみ相関を計算します。
+`max_lag` を指定しない場合は、可能なすべてのラグについて計算します。
+
+**構文**
+
+```sql
+arrayAutocorrelation(arr, [max_lag])
+```
+
+**引数**
+
+* `arr` — 数値の配列。[`Array(T)`](/sql-reference/data-types/array)
+* `max_lag` — 省略可。計算するラグの最大数。0 以上の整数である必要があります。[`Integer`](/sql-reference/data-types/int-uint)
+
+**戻り値**
+
+Float64 の配列を返します。分散が 0 の場合は NaN を返します。[`Array(Float64)`](/sql-reference/data-types/array)
+
+**例**
+
+**線形**
+
+```sql title=Query
+SELECT arrayAutocorrelation([1, 2, 3, 4, 5]);
+```
+
+```response title=Response
+[1, 0.4, -0.1, -0.4, -0.4]
+```
+
+**対称的**
+
+```sql title=Query
+SELECT arrayAutocorrelation([10, 20, 10]);
+```
+
+```response title=Response
+[1, -0.6666666666666669, 0.16666666666666674]
+```
+
+**定数**
+
+```sql title=Query
+SELECT arrayAutocorrelation([5, 5, 5]);
+```
+
+```response title=Response
+[nan, nan, nan]
+```
+
+**限定的**
+
+```sql title=Query
+SELECT arrayAutocorrelation([1, 2, 3, 4, 5], 2);
+```
+
+```response title=Response
+[1, 0.4]
+```
+
+
 ## arrayAvg \{#arrayAvg\}
 
 導入バージョン: v21.1.0
@@ -1475,7 +1541,7 @@ arrayIntersect(arr, arr1, ..., arrN)
 
 * `arrN` — 新しい配列を作成するための N 個の配列。[`Array(T)`](/sql-reference/data-types/array)。
 
-**返される値**
+**戻り値**
 
 N 個すべての配列に含まれる要素だけからなる重複のない配列を返します。[`Array(T)`](/sql-reference/data-types/array)。
 
@@ -1490,11 +1556,10 @@ arrayIntersect([1, 2], [1, 3], [1, 4]) AS non_empty_intersection
 ```
 
 ```response title=Response
-┌─non_empty_intersection─┬─empty_intersection─┐
-│ []                     │ [1]                │
-└────────────────────────┴────────────────────┘
+┌─empty_intersection─┬─non_empty_intersection─┐
+│ []                 │ [1]                    │
+└────────────────────┴────────────────────────┘
 ```
-
 
 ## arrayJaccardIndex \{#arrayJaccardIndex\}
 
@@ -2673,19 +2738,19 @@ SELECT arrayRandomSample([[1, 2], [3, 4], [5, 6]], 2) as res;
 導入バージョン: v1.1.0
 
 配列要素に集約関数を適用し、その結果を返します。
-集約関数の名前は、シングルクォートで囲んだ文字列として渡します（例: `'max'`、`'sum'`）。
-パラメトリックな集約関数を使用する場合は、関数名の後ろに括弧でパラメータを指定します（例: `'uniqUpTo(6)'`）。
+集約関数の名前は、シングルクォートで囲んだ文字列として渡します (例: `'max'`、`'sum'`) 。
+パラメトリックな集約関数を使用する場合は、関数名の後ろに括弧でパラメータを指定します (例: `'uniqUpTo(6)'`) 。
 
 **構文**
 
 ```sql
-arrayReduce(agg_f, arr1 [, arr2, ... , arrN)])
+arrayReduce(agg_f, arr1[, arr2, ... , arrN])
 ```
 
 **引数**
 
 * `agg_f` — 定数でなければならない集約関数の名前。[`String`](/sql-reference/data-types/string)
-* `arr1 [, arr2, ... , arrN)]` — `agg_f` の引数に対応する N 個の配列。[`Array(T)`](/sql-reference/data-types/array)
+* `arr1[, arr2, ... , arrN]` — `agg_f` の引数に対応する N 個の配列。[`Array(T)`](/sql-reference/data-types/array)
 
 **戻り値**
 
@@ -2731,7 +2796,6 @@ SELECT arrayReduce('uniqUpTo(3)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 └─────────────────────────────────────────────────────────────┘
 ```
 
-
 ## arrayReduceInRanges \{#arrayReduceInRanges\}
 
 導入バージョン: v20.4.0
@@ -2742,16 +2806,16 @@ SELECT arrayReduce('uniqUpTo(3)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 **構文**
 
 ```sql
-arrayReduceInRanges(agg_f, ranges, arr1 [, arr2, ... ,arrN)])
+arrayReduceInRanges(agg_f, ranges, arr1[, arr2, ... ,arrN])
 ```
 
 **引数**
 
 * `agg_f` — 使用する集約関数の名前。[`String`](/sql-reference/data-types/string)
 * `ranges` — 集約を行う範囲。タプル `(i, r)` の配列で、開始位置となるインデックス `i` と、そのインデックスから集約を行う範囲 `r` を含みます。[`Array(T)`](/sql-reference/data-types/array) または [`Tuple(T)`](/sql-reference/data-types/tuple)
-* `arr1 [, arr2, ... ,arrN)]` — 集約関数への引数となる N 個の配列。[`Array(T)`](/sql-reference/data-types/array)
+* `arr1[, arr2, ... ,arrN]` — 集約関数への引数となる N 個の配列。[`Array(T)`](/sql-reference/data-types/array)
 
-**返される値**
+**戻り値**
 
 指定された各範囲に対する集約関数の結果を含む配列を返します。[`Array(T)`](/sql-reference/data-types/array)
 
@@ -2772,7 +2836,6 @@ SELECT arrayReduceInRanges(
 │ [1234500,234000,34560,4567] │
 └─────────────────────────────┘
 ```
-
 
 ## arrayRemove \{#arrayRemove\}
 
@@ -3580,6 +3643,60 @@ arraySymmetricDifference([1, 2], [1, 2], [1, 3]) AS non_empty_symmetric_differen
 └────────────────────────────┴────────────────────────────────┘
 ```
 
+
+## arrayTranspose \{#arrayTranspose\}
+
+導入バージョン: v26.4.0
+
+二次元配列を転置します。
+
+すべての内部配列は同じ長さである必要があります。
+
+**構文**
+
+```sql
+arrayTranspose(arr)
+```
+
+**引数**
+
+* `arr` — 転置する二次元配列。すべての内部配列の長さは同じである必要があります。[`Array(Array(T))`](/sql-reference/data-types/array)
+
+**戻り値**
+
+結果の `[i][j]` 要素が入力の `[j][i]` 要素に対応する、転置後の二次元配列。[`Array(Array(T))`](/sql-reference/data-types/array)
+
+**例**
+
+**正方行列**
+
+```sql title=Query
+SELECT arrayTranspose([[1, 2], [3, 4]])
+```
+
+```response title=Response
+[[1, 3], [2, 4]]
+```
+
+**非正方行列**
+
+```sql title=Query
+SELECT arrayTranspose([[1, 2, 3], [4, 5, 6]])
+```
+
+```response title=Response
+[[1, 4], [2, 5], [3, 6]]
+```
+
+**文字列の要素**
+
+```sql title=Query
+SELECT arrayTranspose([['a', 'b'], ['c', 'd']])
+```
+
+```response title=Response
+[['a', 'c'], ['b', 'd']]
+```
 
 ## arrayUnion \{#arrayUnion\}
 

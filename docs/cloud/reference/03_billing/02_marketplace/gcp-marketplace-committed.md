@@ -1,6 +1,6 @@
 ---
 slug: /cloud/billing/marketplace/gcp-marketplace-committed-contract
-title: 'GCP Marketplace Committed Contract'
+title: 'GCP Marketplace committed contract'
 description: 'Subscribe to ClickHouse Cloud through the GCP Marketplace (Committed Contract)'
 keywords: ['gcp', 'google', 'marketplace', 'billing', 'committed', 'committed contract']
 doc_type: 'guide'
@@ -103,10 +103,6 @@ Note that if you're a new user, you will also need to provide some basic informa
 <br />
 
 <Image img={aws_marketplace_payg_8} size="md" alt="ClickHouse Cloud sign up info form" border/>
-
-<br />
-
-<Image img={aws_marketplace_payg_9} size="md" alt="ClickHouse Cloud sign up info form 2" border/>
 
 <br />
 

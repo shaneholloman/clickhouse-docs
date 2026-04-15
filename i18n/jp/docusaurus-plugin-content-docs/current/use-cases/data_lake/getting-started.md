@@ -1,12 +1,12 @@
 ---
-title: 'レイクハウステーブル形式入門'
-sidebar_label: 'はじめに'
+title: 'オープンテーブル形式の利用開始'
+sidebar_label: '利用開始'
 slug: /use-cases/data-lake/getting-started
 sidebar_position: 1
 pagination_prev: null
 pagination_next: use-cases/data_lake/guides/querying-directly
-description: 'ClickHouse を使用して、オープンなテーブル形式のデータをクエリし、高速化し、書き戻すための実践的な入門ガイドです。'
-keywords: ['データレイク', 'レイクハウス', 'はじめに', 'iceberg', 'delta lake', 'hudi', 'paimon']
+description: 'ClickHouse を使用して、オープンテーブル形式でデータをクエリし、高速化し、書き戻すための実践的な入門ガイドです。'
+keywords: ['データレイク', 'レイクハウス', '利用開始', 'iceberg', 'delta lake', 'hudi', 'paimon']
 doc_type: 'guide'
 ---
 
@@ -19,7 +19,7 @@ import clickhouse_query from '@site/static/images/datalake/clickhouse-query.png'
 # データレイクの利用開始 \{#data-lake-getting-started\}
 
 :::note[TL;DR]
-データレイクテーブルへのクエリ、MergeTree による高速化、結果の Iceberg への書き戻しを、実際に手を動かしながら学べるガイドです。すべての手順で公開データセットを使用し、Cloud と OSS の両方で動作します。
+データレイクテーブルへのクエリ、MergeTree による高速化、結果の Iceberg への書き戻しを、実践的なガイドです。すべての手順で公開データセットを使用し、Cloud と OSS の両方で動作します。
 :::
 
 このガイドのスクリーンショットは、[ClickHouse Cloud](https://console.clickhouse.cloud) の SQL コンソールから取得したものです。すべてのクエリは、Cloud とセルフマネージド環境の両方で動作します。

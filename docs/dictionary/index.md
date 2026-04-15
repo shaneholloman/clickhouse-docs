@@ -1,6 +1,6 @@
 ---
 slug: /dictionary
-title: 'Dictionary'
+title: 'Overview'
 keywords: ['dictionary', 'dictionaries']
 description: 'A dictionary provides a key-value representation of data for fast lookups.'
 doc_type: 'guide'
@@ -314,16 +314,14 @@ Peak memory usage: 666.82 MiB.
 
 ## Advanced dictionary topics {#advanced-dictionary-topics}
 
-### Choosing the Dictionary `LAYOUT` {#choosing-the-dictionary-layout}
-
-The `LAYOUT` clause controls the internal data structure for the dictionary. A number of options exist and are documented [here](/sql-reference/statements/create/dictionary/layouts#storing-dictionaries-in-memory). Some tips on choosing the correct layout can be found [here](https://clickhouse.com/blog/faster-queries-dictionaries-clickhouse#choosing-a-layout).
+For guidance on choosing dictionary layouts, when to use dictionaries vs JOINs, and monitoring dictionary usage, see [Dictionary best practices](/dictionary/best-practices).
 
 ### Refreshing dictionaries {#refreshing-dictionaries}
 
 We have specified a `LIFETIME` for the dictionary of `MIN 600 MAX 900`. LIFETIME is the update interval for the dictionary, with the values here causing a periodic reload at a random interval between 600 and 900s. This random interval is necessary in order to distribute the load on the dictionary source when updating on a large number of servers. During updates, the old version of a dictionary can still be queried, with only the initial load blocking queries. Note that setting `(LIFETIME(0))` prevents dictionaries from updating.
 Dictionaries can be forcibly reloaded using the `SYSTEM RELOAD DICTIONARY` command.
 
-For database sources such as ClickHouse and Postgres, you can set up a query that will update the dictionaries only if they really changed (the response of the query determines this), rather than at a periodic interval. Further details can be found [here](/sql-reference/statements/create/dictionary/lifetime#refreshing-dictionary-data-using-lifetime).
+For database sources such as ClickHouse and Postgres, you can set up a query that will update the dictionaries only if they really changed (the response of the query determines this), rather than at a periodic interval. Further details can be found [here](/sql-reference/statements/create/dictionary/lifetime).
 
 ### Other dictionary types {#other-dictionary-types}
 
@@ -331,5 +329,6 @@ ClickHouse also supports [Hierarchical](/sql-reference/statements/create/diction
 
 ### More reading {#more-reading}
 
+- [Dictionary best practices](/dictionary/best-practices) — layout selection, dictionaries vs JOINs, monitoring
 - [Using Dictionaries to Accelerate Queries](https://clickhouse.com/blog/faster-queries-dictionaries-clickhouse)
 - [Advanced Configuration for Dictionaries](/sql-reference/statements/create/dictionary)

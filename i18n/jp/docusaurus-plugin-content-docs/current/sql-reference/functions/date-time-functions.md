@@ -1209,7 +1209,7 @@ SELECT changeYear('2024-01-01'::DateTime, 2023)
 
 指定した `unit` の境界が `startdate` と `enddate` の間でいくつ跨いだかを返します。
 差分は相対単位を用いて計算されます。例えば、2021-12-29 と 2022-01-01 の差分は、単位 day の場合は 3 日
- ([`toRelativeDayNum`](#toRelativeDayNum) を参照) 、単位 month の場合は 1 か月 ([`toRelativeMonthNum`](#toRelativeMonthNum) を参照) 、単位 year の場合は 1 年 ([`toRelativeYearNum`](#toRelativeYearNum) を参照) です。
+([`toRelativeDayNum`](#toRelativeDayNum) を参照) 、単位 month の場合は 1 か月 ([`toRelativeMonthNum`](#toRelativeMonthNum) を参照) 、単位 year の場合は 1 年 ([`toRelativeYearNum`](#toRelativeYearNum) を参照) です。
 
 単位 `week` が指定された場合、`dateDiff` は週の開始日を月曜日とみなします。
 この挙動は、デフォルトで週の開始日が日曜日である `toWeek()` 関数とは異なる点に注意してください。
@@ -1222,7 +1222,7 @@ SELECT changeYear('2024-01-01'::DateTime, 2023)
 dateDiff(unit, startdate, enddate[, timezone])
 ```
 
-**別名**: `timestampDiff`, `TIMESTAMP_DIFF`, `DATE_DIFF`, `date_diff`, `timestamp_diff`
+**別名**: `timestampDiff`, `DATE_DIFF`, `date_diff`, `TIMESTAMP_DIFF`, `timestamp_diff`
 
 **引数**
 
@@ -1242,8 +1242,8 @@ dateDiff(unit, startdate, enddate[, timezone])
 | quarter     | `quarter`, `quarters`, `qq`, `q`         |
 | year        | `year`, `years`, `yyyy`, `yy`            |
 
-* `startdate` — 減算される最初の時刻値 (被減数) 。[`Date`](/sql-reference/data-types/date) または [`Date32`](/sql-reference/data-types/date32) または [`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
-* `enddate` — 減算の基準となる 2 つ目の時刻値 (減数) 。[`Date`](/sql-reference/data-types/date) または [`Date32`](/sql-reference/data-types/date32) または [`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
+* `startdate` — 減算される最初の時刻値 (減数) 。[`Date`](/sql-reference/data-types/date) または [`Date32`](/sql-reference/data-types/date32) または [`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
+* `enddate` — 減算の基準となる 2 つ目の時刻値 (被減数) 。[`Date`](/sql-reference/data-types/date) または [`Date32`](/sql-reference/data-types/date32) または [`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
 * `timezone` — 任意。タイムゾーン名。指定された場合、`startdate` と `enddate` の両方に適用されます。指定されない場合は、`startdate` と `enddate` のタイムゾーンが使用されます。それらが同じでない場合、結果は未定義です。[`String`](/sql-reference/data-types/string)
 
 **戻り値**
@@ -3464,6 +3464,42 @@ SELECT toDayOfYear(toDateTime('2023-04-21 10:20:30'))
 └────────────────────────────────────────────────┘
 ```
 
+## toDaysInMonth \{#toDaysInMonth\}
+
+導入バージョン: v26.3.0
+
+`Date` または `DateTime` の月の日数を返します。
+
+戻り値の範囲は 28 ～ 31 です。
+
+**構文**
+
+```sql
+toDaysInMonth(datetime)
+```
+
+**引数**
+
+* `datetime` — 月の日数を取得する対象の日付、または日時。[`Date`](/sql-reference/data-types/date) または [`Date32`](/sql-reference/data-types/date32) または [`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
+
+**戻り値**
+
+指定された日付または日時が属する月の日数を返します。[`UInt8`](/sql-reference/data-types/int-uint)
+
+**例**
+
+**使用例**
+
+```sql title=Query
+SELECT toDaysInMonth(toDate('2023-02-01')), toDaysInMonth(toDate('2024-02-01')), toDaysInMonth(toDate('2023-01-01'))
+```
+
+```response title=Response
+┌─toDaysInMonth(toDate('2023-02-01'))─┬─toDaysInMonth(toDate('2024-02-01'))─┬─toDaysInMonth(toDate('2023-01-01'))─┐
+│                                  28 │                                  29 │                                  31 │
+└─────────────────────────────────────┴─────────────────────────────────────┴─────────────────────────────────────┘
+```
+
 ## toDaysSinceYearZero \{#toDaysSinceYearZero\}
 
 導入バージョン: v23.9.0
@@ -3694,7 +3730,7 @@ toLastDayOfWeek(datetime[, mode[, timezone]])
 
 **戻り値**
 
-指定されたモードに応じて、指定された日付以降で最も近い土曜日または日曜日の日付を返します。型は [`Date`](/sql-reference/data-types/date) または [`Date32`](/sql-reference/data-types/date32) または [`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64) のいずれかです。
+指定されたモードに応じて、指定された日付以降で最も近い土曜日または日曜日の日付を返します。型は [`Date`](/sql-reference/data-types/date) または [`Date32`](/sql-reference/data-types/date32) のいずれかです。
 
 **例**
 
@@ -4352,7 +4388,7 @@ toStartOfDay(datetime)
 
 **戻り値**
 
-日付と時刻をその日の開始時刻に切り捨てた値を返します。[`Date`](/sql-reference/data-types/date) または [`DateTime`](/sql-reference/data-types/datetime) または [`Date32`](/sql-reference/data-types/date32) または [`DateTime64`](/sql-reference/data-types/datetime64)
+日付と時刻をその日の開始時刻に切り捨てた値を返します。[`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
 
 **例**
 
@@ -4388,9 +4424,9 @@ toStartOfFifteenMinutes(datetime)
 
 * `datetime` — 丸め対象の日付または日時。[`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
 
-**返り値**
+**戻り値**
 
-最も近い15分単位の開始時刻に丸められた日時を返します。値の型は [`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)。
+最も近い15分単位の開始時刻に丸められた日時を返します。[`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
 
 **使用例**
 
@@ -4416,7 +4452,7 @@ toStartOfFifteenMinutes(toDateTime('2023-04-21 10:23:00')): 2023-04-21 10:15:00
 
 導入バージョン: v22.6.0
 
-日時を直前の 5 分単位区間の開始時刻に切り下げます。
+日時を直前の 5 分単位区間の開始時刻に切り捨てます。
 
 :::note
 戻り値の型は、[`enable_extended_results_for_datetime_functions`](/operations/settings/settings#enable_extended_results_for_datetime_functions) を設定することで変更できます。
@@ -4932,7 +4968,7 @@ SELECT toStartOfSecond(dt64, 'Asia/Istanbul');
 
 導入バージョン: v20.1.0
 
-日時を、その時刻を含む10分単位の区切りの開始時刻に切り下げます。
+日時を、その時刻を含む10分単位の区切りの開始時刻に切り捨てます。
 
 :::note
 戻り値の型は、[`enable_extended_results_for_datetime_functions`](/operations/settings/settings#enable_extended_results_for_datetime_functions) を設定することで変更できます。
@@ -4946,11 +4982,11 @@ toStartOfTenMinutes(datetime)
 
 **引数**
 
-* `datetime` — 時刻付きの日付。[`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
+* `datetime` — 日時。[`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
 
 **戻り値**
 
-最も近い 10 分単位の区切りの開始時刻に丸めた時刻付き日付を返します。[`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
+最も近い 10 分単位の区切りの開始時刻に丸めた日時を返します。[`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
 
 **例**
 
@@ -4996,7 +5032,7 @@ toStartOfWeek(datetime[, mode[, timezone]])
 
 **戻り値**
 
-指定されたモードに応じて、指定した日付と同日またはそれ以前で最も近い日曜日または月曜日の日付を返します。[`Date`](/sql-reference/data-types/date) または [`Date32`](/sql-reference/data-types/date32) または [`DateTime`](/sql-reference/data-types/datetime) または [`DateTime64`](/sql-reference/data-types/datetime64)
+指定されたモードに応じて、指定した日付と同日またはそれ以前で最も近い日曜日または月曜日の日付を返します。[`Date`](/sql-reference/data-types/date) または [`Date32`](/sql-reference/data-types/date32)
 
 **例**
 

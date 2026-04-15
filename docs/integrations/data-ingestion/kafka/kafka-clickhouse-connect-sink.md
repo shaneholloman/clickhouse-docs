@@ -119,6 +119,9 @@ The full table of configuration options:
 | `dateTimeFormats`                               | Date time formats for parsing DateTime64 schema fields, separated by `;` (e.g. `someDateField=yyyy-MM-dd HH:mm:ss.SSSSSSSSS;someOtherDateField=yyyy-MM-dd HH:mm:ss`).                                                              | `""`                                                     |
 | `tolerateStateMismatch`                         | Allows the connector to drop records "earlier" than the current offset stored AFTER_PROCESSING (e.g. if offset 5 is sent, and offset 250 was the last recorded offset). Should be used to fix ingestion after failure and should be reverted back to `"false"` once done.                                                             | `"false"`                                                |
 | `ignorePartitionsWhenBatching`                  | Will ignore partition when collecting messages for insert (though only if `exactlyOnce` is `false`). Performance Note: The more connector tasks, the fewer kafka partitions assigned per task - this can mean diminishing returns. | `"false"`                                                |
+| `bufferCount` (since v1.3.6)                    | Number of records to buffer in memory before flushing to ClickHouse. `0` disables internal buffering. Buffering is not supported with `exactlyOnce=true`.                                                                       | `"0"`                                                    |
+| `bufferFlushTime` (since v1.3.6)                | Maximum time in milliseconds to buffer records before flush when `exactlyOnce=false`. `0` disables time-based flushing. Default value is `0`. Only required for time-base threshold. Only effective when `bufferCount > 0`.                                                                                           | `"0"`                                                    |
+| `reportInsertedOffsets` (since v1.3.6)          | Enables returning only successfully inserted offsets from `preCommit` (instead of `currentOffsets`) when `exactlyOnce=false`. This does not apply when `ignorePartitionsWhenBatching=true`, where `currentOffsets` are still returned. | `"false"`                                                |
 
 ### Target tables {#target-tables}
 
@@ -289,6 +292,37 @@ The connector supports the String Converter in different ClickHouse formats: [JS
     "value.converter": "org.apache.kafka.connect.storage.StringConverter",
     "customInsertFormat": "true",
     "insertFormat": "CSV"
+  }
+}
+```
+
+### Internal buffering {#internal-buffering}
+
+Internal buffering allows the sink task to accumulate records from multiple `poll()` calls and flush them to ClickHouse as larger batches. This can improve throughput in workloads where each poll produces many small per-partition batches.
+
+Key behavior:
+
+- `bufferCount` controls how many records are buffered before flushing.
+- `bufferFlushTime` sets a maximum wait time (in milliseconds) before flushing buffered records.
+- `bufferFlushTime` is only effective when `bufferCount > 0`.
+- `bufferCount=0` and `bufferFlushTime=0` keep buffering disabled (default behavior).
+- Buffering is not supported when `exactlyOnce=true`.
+
+Why buffering is incompatible with exactly-once mode:
+Buffering changes batch boundaries, which breaks ClickHouse block deduplication and the connector offset state machine.  
+To resolve this, either disable exactly-once mode with `exactlyOnce=false` in your connector config, or disable buffering with `bufferCount=0`.
+
+Example:
+
+```json
+{
+  "name": "clickhouse-connect",
+  "config": {
+    "connector.class": "com.clickhouse.kafka.connect.ClickHouseSinkConnector",
+    ...
+    "exactlyOnce": "false",
+    "bufferCount": "5000",
+    "bufferFlushTime": "2000"
   }
 }
 ```
@@ -519,7 +553,7 @@ With asynchronous inserts enabled, ClickHouse:
 2. Writes data to an in-memory buffer (instead of immediately to disk)
 3. Returns success to the connector (if `wait_for_async_insert=0`)
 4. Flushes the buffer to disk when one of these conditions is met:
-   - Buffer reaches `async_insert_max_data_size` (default: 10 MB)
+   - Buffer reaches `async_insert_max_data_size` (default: 100 MB)
    - `async_insert_busy_timeout_ms` milliseconds elapsed since first insert (default: 1000 ms)
    - Maximum number of queries accumulated (`async_insert_max_query_number`, default: 100)
 
@@ -551,12 +585,12 @@ Add async insert settings to the `clickhouseSettings` configuration parameter:
 You can fine-tune the async insert flush behavior:
 
 ```json
-"clickhouseSettings": "async_insert=1,wait_for_async_insert=1,async_insert_max_data_size=10485760,async_insert_busy_timeout_ms=1000"
+"clickhouseSettings": "async_insert=1,wait_for_async_insert=1,async_insert_max_data_size=104857600,async_insert_busy_timeout_ms=1000"
 ```
 
 Common tuning parameters:
 
-- **`async_insert_max_data_size`** (default: 10485760 / 10 MB): Maximum buffer size before flush
+- **`async_insert_max_data_size`** (default: 104857600 / 100 MB): Maximum buffer size before flush
 - **`async_insert_busy_timeout_ms`** (default: 1000): Maximum time (ms) before flush
 - **`async_insert_stale_timeout_ms`** (default: 0): Time (ms) since last insert before flush
 - **`async_insert_max_query_number`** (default: 100): Maximum queries before flush

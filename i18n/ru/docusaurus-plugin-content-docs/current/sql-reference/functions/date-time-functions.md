@@ -1245,7 +1245,7 @@ SELECT changeYear('2024-01-01'::DateTime, 2023)
 dateDiff(unit, startdate, enddate[, timezone])
 ```
 
-**Псевдонимы**: `timestampDiff`, `TIMESTAMP_DIFF`, `DATE_DIFF`, `date_diff`, `timestamp_diff`
+**Псевдонимы**: `timestampDiff`, `DATE_DIFF`, `date_diff`, `TIMESTAMP_DIFF`, `timestamp_diff`
 
 **Аргументы**
 
@@ -3488,6 +3488,42 @@ SELECT toDayOfYear(toDateTime('2023-04-21 10:20:30'))
 └────────────────────────────────────────────────┘
 ```
 
+## toDaysInMonth \{#toDaysInMonth\}
+
+добавлено в версии: v26.3.0
+
+Возвращает количество дней в месяце для значения типа `Date` или `DateTime`.
+
+Возвращаемое значение находится в диапазоне от 28 до 31.
+
+**Синтаксис**
+
+```sql
+toDaysInMonth(datetime)
+```
+
+**Аргументы**
+
+* `datetime` — Дата или дата со временем, для которых нужно получить количество дней в месяце. [`Date`](/sql-reference/data-types/date) или [`Date32`](/sql-reference/data-types/date32) или [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
+
+**Возвращаемое значение**
+
+Возвращает количество дней в месяце для указанной даты/времени. [`UInt8`](/sql-reference/data-types/int-uint)
+
+**Примеры**
+
+**Пример использования**
+
+```sql title=Query
+SELECT toDaysInMonth(toDate('2023-02-01')), toDaysInMonth(toDate('2024-02-01')), toDaysInMonth(toDate('2023-01-01'))
+```
+
+```response title=Response
+┌─toDaysInMonth(toDate('2023-02-01'))─┬─toDaysInMonth(toDate('2024-02-01'))─┬─toDaysInMonth(toDate('2023-01-01'))─┐
+│                                  28 │                                  29 │                                  31 │
+└─────────────────────────────────────┴─────────────────────────────────────┴─────────────────────────────────────┘
+```
+
 ## toDaysSinceYearZero \{#toDaysSinceYearZero\}
 
 Добавлено в версии: v23.9.0
@@ -3698,7 +3734,7 @@ SELECT toLastDayOfMonth(toDateTime('2023-04-21 10:20:30'))
 
 Функция появилась в версии: v23.5.0
 
-Округляет дату или дату-время до ближайшей субботы или воскресенья.
+Округляет дату или дату и время до ближайшей субботы или воскресенья.
 
 :::note
 Тип возвращаемого значения можно настроить с помощью параметра [`enable_extended_results_for_datetime_functions`](/operations/settings/settings#enable_extended_results_for_datetime_functions).
@@ -3718,7 +3754,7 @@ toLastDayOfWeek(datetime[, mode[, timezone]])
 
 **Возвращаемое значение**
 
-Возвращает дату ближайшей субботы или воскресенья (в ту же дату или позже), в зависимости от режима. [`Date`](/sql-reference/data-types/date) или [`Date32`](/sql-reference/data-types/date32) или [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
+Возвращает дату ближайшей субботы или воскресенья (в ту же дату или позже), в зависимости от режима. [`Date`](/sql-reference/data-types/date) или [`Date32`](/sql-reference/data-types/date32)
 
 **Примеры**
 
@@ -4378,7 +4414,7 @@ SELECT toSecond(toDateTime('2023-04-21 10:20:30'))
 
 Введена в версии: v1.1.0
 
-Округляет значение даты и времени до начала дня.
+Округляет значение даты со временем до начала дня.
 
 :::note
 Тип возвращаемого значения можно настроить с помощью настройки [`enable_extended_results_for_datetime_functions`](/operations/settings/settings#enable_extended_results_for_datetime_functions).
@@ -4392,11 +4428,11 @@ toStartOfDay(datetime)
 
 **Аргументы**
 
-* `datetime` — Дата или дата и время для округления. [`Date`](/sql-reference/data-types/date) или [`DateTime`](/sql-reference/data-types/datetime)
+* `datetime` — Дата или дата со временем для округления. [`Date`](/sql-reference/data-types/date) или [`DateTime`](/sql-reference/data-types/datetime)
 
 **Возвращаемое значение**
 
-Возвращает дату и время, округлённые вниз до начала дня. [`Date`](/sql-reference/data-types/date) или [`DateTime`](/sql-reference/data-types/datetime) или [`Date32`](/sql-reference/data-types/date32) или [`DateTime64`](/sql-reference/data-types/datetime64)
+Возвращает дату со временем, округлённые вниз до начала дня. [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
 
 **Примеры**
 
@@ -4434,7 +4470,7 @@ toStartOfFifteenMinutes(datetime)
 
 **Возвращаемое значение**
 
-Возвращает дату и время, округлённые до начала ближайшего пятнадцатиминутного интервала, в виде значения типа [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64).
+Возвращает дату и время, округлённые до начала ближайшего пятнадцатиминутного интервала. [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
 
 **Примеры**
 
@@ -4460,7 +4496,7 @@ toStartOfFifteenMinutes(toDateTime('2023-04-21 10:23:00')): 2023-04-21 10:15:00
 
 Добавлено в: v22.6.0
 
-Округляет дату и время вниз до начала ближайшего пятиминутного интервала.
+Округляет дату со временем вниз до начала ближайшего пятиминутного интервала.
 
 :::note
 Тип возвращаемого значения функции можно настроить с помощью параметра [`enable_extended_results_for_datetime_functions`](/operations/settings/settings#enable_extended_results_for_datetime_functions).
@@ -4476,11 +4512,11 @@ toStartOfFiveMinutes(datetime)
 
 **Аргументы**
 
-* `datetime` — Дата и время, которые нужно округлить. [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
+* `datetime` — Дата со временем, которые нужно округлить. [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
 
 **Возвращаемое значение**
 
-Возвращает дату и время, округленные до начала ближайшего пятиминутного интервала, в виде значения типа [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
+Возвращает дату со временем, округленные до начала ближайшего пятиминутного интервала, в виде значения типа [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
 
 **Примеры**
 
@@ -4976,7 +5012,7 @@ SELECT toStartOfSecond(dt64, 'Asia/Istanbul');
 
 Добавлена в версии: v20.1.0
 
-Округляет дату и время вниз до начала ближайшего десятиминутного интервала.
+Округляет дату со временем вниз до начала ближайшего десятиминутного интервала.
 
 :::note
 Тип возвращаемого значения можно настроить с помощью параметра [`enable_extended_results_for_datetime_functions`](/operations/settings/settings#enable_extended_results_for_datetime_functions).
@@ -4990,11 +5026,11 @@ toStartOfTenMinutes(datetime)
 
 **Аргументы**
 
-* `datetime` — дата и время. [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
+* `datetime` — дата со временем. [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
 
 **Возвращаемое значение**
 
-Возвращает дату и время, округлённые до начала ближайшего десятиминутного интервала, значение типа [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
+Возвращает дату со временем, округлённые до начала ближайшего десятиминутного интервала, значение типа [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
 
 **Примеры**
 
@@ -5020,7 +5056,7 @@ toStartOfTenMinutes(toDateTime('2023-04-21 10:23:00')): 2023-04-21 10:20:00
 
 Впервые появилась в: v20.1.0
 
-Округляет дату или дату‑время до ближайшего (в меньшую сторону) воскресенья или понедельника.
+Округляет дату или дату со временем до ближайшего (в меньшую сторону) воскресенья или понедельника.
 
 :::note
 Тип возвращаемого значения можно настроить с помощью параметра [`enable_extended_results_for_datetime_functions`](/operations/settings/settings#enable_extended_results_for_datetime_functions).
@@ -5040,7 +5076,7 @@ toStartOfWeek(datetime[, mode[, timezone]])
 
 **Возвращаемое значение**
 
-Возвращает дату ближайшего воскресенья или понедельника, не позже заданной даты (включительно), в зависимости от режима, в виде значения типа [`Date`](/sql-reference/data-types/date) или [`Date32`](/sql-reference/data-types/date32) или [`DateTime`](/sql-reference/data-types/datetime) или [`DateTime64`](/sql-reference/data-types/datetime64)
+Возвращает дату ближайшего воскресенья или понедельника, не позже заданной даты (включительно), в зависимости от режима. [`Date`](/sql-reference/data-types/date) или [`Date32`](/sql-reference/data-types/date32)
 
 **Примеры**
 

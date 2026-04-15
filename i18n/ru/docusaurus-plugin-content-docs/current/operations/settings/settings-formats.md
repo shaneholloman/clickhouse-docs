@@ -1598,6 +1598,28 @@ curl -sS --globoff -H 'Accept: application/json' --no-buffer \
 
 Использовать тип Arrow String вместо Binary для столбцов типа String
 
+## output_format_arrow_unsupported_types_as_binary \{#output_format_arrow_unsupported_types_as_binary\}
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory
+  rows={[
+  {
+    id: "row-1",
+    items: [
+      { label: "26.4" },
+      { label: "1" },
+      {
+        label:
+          "Новая настройка для преобразования неподдерживаемых типов CH в двоичный формат Arrow вместо исключения UNKNOWN_TYPE."
+      }
+    ]
+  }
+]}
+/>
+
+Выводит типы, для которых не предусмотрено преобразование, как необработанные двоичные данные. Если false, для таких типов будет возникать исключение UNKNOWN&#95;TYPE.
+
 ## output_format_arrow_use_64_bit_indexes_for_dictionary \{#output_format_arrow_use_64_bit_indexes_for_dictionary\}
 
 <SettingsInfoBlock type="Bool" default_value="0" />
@@ -2202,6 +2224,28 @@ SELECT area/period FROM account_orders FORMAT JSON;
 
 Использовать тип данных Parquet String вместо Binary для строковых столбцов.
 
+## output_format_parquet_unsupported_types_as_binary \{#output_format_parquet_unsupported_types_as_binary\}
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory
+  rows={[
+  {
+    id: "row-1",
+    items: [
+      { label: "26.4" },
+      { label: "0" },
+      {
+        label:
+          "Новая настройка для преобразования неподдерживаемых типов CH в бинарный формат Parquet (Arrow) вместо исключения UNKNOWN_TYPE."
+      }
+    ]
+  }
+]}
+/>
+
+Выводить типы, для которых не предусмотрено преобразование, как необработанные бинарные данные. Если false, для таких типов будет возникать исключение UNKNOWN&#95;TYPE.
+
 ## output_format_parquet_use_custom_encoder \{#output_format_parquet_use_custom_encoder\}
 
 <SettingsInfoBlock type="Bool" default_value="1" />
@@ -2494,6 +2538,14 @@ SELECT *, toTypeName(*) FROM (SELECT * FROM system.numbers LIMIT 1000);
 <SettingsInfoBlock type="Bool" default_value="0" />
 
 Использовать оператор REPLACE вместо INSERT
+
+## output_format_trim_fixed_string \{#output_format_trim_fixed_string\}
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.3"},{"label": "0"},{"label": "Новая настройка для удаления конечных нулевых байтов из значений FixedString в текстовых форматах вывода"}]}]} />
+
+Удаляет конечные нулевые байты из значений FixedString в текстовых форматах вывода. Например, `toFixedString('John', 8)` выводится как `John` вместо `John\0\0\0\0`.
 
 ## output_format_tsv_crlf_end_of_line \{#output_format_tsv_crlf_end_of_line\}
 

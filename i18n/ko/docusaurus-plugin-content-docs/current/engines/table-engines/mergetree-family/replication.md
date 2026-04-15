@@ -19,7 +19,7 @@ ENGINE = ReplicatedMergeTree(
 )
 ```
 
-다음과 함께 사용합니다:
+다음으로 바꿉니다:
 
 ```sql
 ENGINE = ReplicatedMergeTree
@@ -27,15 +27,16 @@ ENGINE = ReplicatedMergeTree
 
 :::
 
-복제는 MergeTree 계열에 속한 테이블에만 지원됩니다:
+복제는 MergeTree 계열에 속한 테이블에만 지원됩니다
 
-* ReplicatedMergeTree
 * ReplicatedSummingMergeTree
+* ReplicatedCoalescingMergeTree
+* ReplicatedVersionedCollapsingMergeTree
+* ReplicatedCollapsingMergeTree
+* ReplicatedGraphiteMergeTree
+* ReplicatedMergeTree
 * ReplicatedReplacingMergeTree
 * ReplicatedAggregatingMergeTree
-* ReplicatedCollapsingMergeTree
-* ReplicatedVersionedCollapsingMergeTree
-* ReplicatedGraphiteMergeTree
 
 복제는 전체 서버가 아니라 개별 테이블 단위에서 동작합니다. 하나의 서버에서 복제된 테이블과 비복제 테이블을 동시에 저장할 수 있습니다.
 
@@ -187,7 +188,7 @@ SAMPLE BY intHash32(UserID);
   ```
 </details>
 
-위 예시에서 볼 수 있듯이, 이러한 매개변수에는 중괄호로 둘러싸인 치환용 값을 포함할 수 있습니다. 치환에 사용되는 값은 설정 파일의 [macros](/operations/server-configuration-parameters/settings.md/#macros) 섹션에서 가져옵니다.
+위 예시에서 볼 수 있듯이, 이러한 매개변수에는 `{}` 안에 치환용 값을 포함할 수 있습니다. 치환에 사용되는 값은 설정 파일의 [macros](/operations/server-configuration-parameters/settings.md/#macros) 섹션에서 가져옵니다.
 
 예시:
 
@@ -217,7 +218,7 @@ ClickHouse Keeper에서의 테이블 경로는 각 복제된 테이블마다 고
 
 대규모 클러스터를 다룰 때는 오류 가능성을 줄이기 위해 치환 사용을 권장합니다.
 
-서버 구성 파일에서 `Replicated` 테이블 엔진에 대한 기본 인자를 지정할 수 있습니다. 예를 들면 다음과 같습니다:
+설정 파일에서 `Replicated` 테이블 엔진에 대한 기본 인수를 지정할 수 있습니다. 예를 들면 다음과 같습니다:
 
 ```xml
 <default_replica_path>/clickhouse/tables/{shard}/{database}/{table}</default_replica_path>

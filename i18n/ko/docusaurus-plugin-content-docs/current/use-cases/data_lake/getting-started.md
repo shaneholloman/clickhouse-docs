@@ -1,11 +1,11 @@
 ---
-title: '레이크하우스 테이블 형식 시작하기'
+title: '오픈 테이블 포맷 시작하기'
 sidebar_label: '시작하기'
 slug: /use-cases/data-lake/getting-started
 sidebar_position: 1
 pagination_prev: null
 pagination_next: use-cases/data_lake/guides/querying-directly
-description: 'ClickHouse를 사용해 개방형 테이블 형식의 데이터를 쿼리하고, 가속하며, 다시 기록하는 방법을 실습을 통해 소개합니다.'
+description: 'ClickHouse를 사용해 개방형 테이블 형식의 데이터를 쿼리하고, 가속화하며, 다시 쓰는 방법을 실습을 통해 소개합니다.'
 keywords: ['데이터 레이크', 'lakehouse', '시작하기', 'iceberg', 'delta lake', 'hudi', 'paimon']
 doc_type: 'guide'
 ---
@@ -19,7 +19,7 @@ import clickhouse_query from '@site/static/images/datalake/clickhouse-query.png'
 # 데이터 레이크 시작하기 \{#data-lake-getting-started\}
 
 :::note[TL;DR]
-데이터 레이크 테이블을 쿼리하고, MergeTree로 성능을 높이며, 결과를 다시 Iceberg에 쓰는 과정을 실습으로 안내합니다. 모든 단계는 공개 데이터세트를 사용하며 Cloud와 OSS 모두에서 작동합니다.
+데이터 레이크 테이블을 쿼리하고, MergeTree로 가속화하며, 결과를 다시 Iceberg에 쓰는 과정을 실습으로 안내합니다. 모든 단계는 공개 데이터세트를 사용하며 Cloud와 OSS 모두에서 작동합니다.
 :::
 
 이 가이드의 스크린샷은 [ClickHouse Cloud](https://console.clickhouse.cloud) SQL 콘솔에서 가져왔습니다. 모든 쿼리는 Cloud와 자가 관리형 배포 환경 모두에서 작동합니다.
