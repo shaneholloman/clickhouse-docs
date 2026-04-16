@@ -109,7 +109,7 @@ You may need to reload the page to ensure the full list of databases is listed i
 
 ### Adjust the time frame {#adjust-the-timeframe}
 
-Adjust the time to show all data from the previous `2 days` using the time picker in the top right.
+Adjust the time to show all data from the previous `1 day` using the time picker in the top right.
 
 <Image img={step_2} alt="Step 2" size="lg"/>
 
