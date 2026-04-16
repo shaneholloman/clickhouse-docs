@@ -64,7 +64,7 @@ ClickHouse maintains two official Terraform providers — the ClickHouse Cloud p
 
 Stable vs. Alpha
 
-Stable versions (e.g. 3.11.1, 1.9.0) only include resources for GA features and are what terraform init downloads by default. Alpha versions (e.g. 3.12.0-alpha2, 1.10.0-alpha1) include everything in stable plus resources for features still in beta or private preview, and must be explicitly pinned to use.
+Stable versions (e.g. 3.11.1, 1.9.0) only include resources for GA features. Alpha versions (e.g. 3.12.0-alpha2, 1.10.0-alpha1) include everything in stable plus resources for features still in beta or private preview, and must be explicitly pinned to use.
 
 Versioning
 
