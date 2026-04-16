@@ -42,7 +42,8 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 - europe-west4 (Netherlands)
 - us-central1 (Iowa)
 - us-east1 (South Carolina)
-- us-west1 (Oregon)
+- europe-west2 (London)
+
 
 **Private Region:**
 
@@ -50,6 +51,7 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 - europe-west3 (Frankfurt)
 - europe-west6 (Zurich)
 - northamerica-northeast1 (Montréal)
+- us-west1 (Oregon)
 
 ## Azure regions {#azure-regions}
 
