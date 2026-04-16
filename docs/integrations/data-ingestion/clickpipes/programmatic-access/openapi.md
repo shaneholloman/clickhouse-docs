@@ -25,7 +25,7 @@ export SERVICE_ID=<your_service_id>
 
 ## Base URL {#base-url}
 
-```
+```bash
 https://api.clickhouse.cloud/v1
 ```
 
