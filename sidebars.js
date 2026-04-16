@@ -844,6 +844,16 @@ const sidebars = {
             'integrations/data-ingestion/clickpipes/bigquery/get-started',
           ],
         },
+        {
+          type: 'category',
+          label: 'OpenAPI & Terraform',
+          collapsed: true,
+          collapsible: true,
+          items: [
+            'integrations/data-ingestion/clickpipes/programmatic-access/openapi',
+            'integrations/data-ingestion/clickpipes/programmatic-access/terraform',
+          ],
+        },
         'integrations/data-ingestion/clickpipes/aws-privatelink',
         'integrations/data-ingestion/dbms/dynamodb/index',
       ],
