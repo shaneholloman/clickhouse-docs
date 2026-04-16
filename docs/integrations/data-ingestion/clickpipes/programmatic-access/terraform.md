@@ -12,6 +12,13 @@ All ClickPipes types can be created and managed using the `clickhouse_clickpipe`
 
 ## Provider setup {#provider-setup}
 
+:::note
+ClickPipes support is generally available from provider version **v3.14.0**.
+If you are using an earlier version, you will need an alpha release — check the
+[provider changelog](https://github.com/ClickHouse/terraform-provider-clickhouse/releases)
+for details.
+:::
+
 Add the ClickHouse provider to your Terraform configuration:
 
 ```hcl
@@ -19,7 +26,7 @@ terraform {
   required_providers {
     clickhouse = {
       source  = "ClickHouse/clickhouse"
-      version = "~> 3.0"
+      version = ">= 3.14.0"
     }
   }
 }
