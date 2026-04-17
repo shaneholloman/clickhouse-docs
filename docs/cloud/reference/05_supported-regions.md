@@ -44,7 +44,6 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 - us-east1 (South Carolina)
 - europe-west2 (London)
 
-
 **Private Region:**
 
 - australia-southeast1(Sydney)
