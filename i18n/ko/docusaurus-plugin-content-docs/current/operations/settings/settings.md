@@ -188,6 +188,86 @@ SELECT SUM(-1), MAX(0) FROM system.one WHERE 0;
 
 메모리 효율 모드에서 중간 집계 결과를 병합할 때 사용할 스레드 수입니다. 값이 클수록 더 많은 메모리가 사용됩니다. 0으로 설정하면 'max_threads'와 동일합니다.
 
+## ai_function_max_api_calls_per_query \{#ai_function_max_api_calls_per_query\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="0" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "새 설정" }] }]} />
+
+AI 함수가 쿼리당 보낼 수 있는 HTTP 요청의 최대 개수입니다. 비활성화하려면 0으로 설정합니다.
+
+## ai_function_max_input_tokens_per_query \{#ai_function_max_input_tokens_per_query\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="1000000" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "1000000" }, { label: "새 설정" }] }]} />
+
+단일 쿼리에서 모든 AI 함수 API 호출에 걸쳐 허용되는 전체 입력(프롬프트) 토큰의 최대값입니다. provider 응답을 기준으로 누적 추적됩니다. 각 호출의 입력 토큰 수는 사전에 알 수 없으므로, 이 제한은 한 번의 호출에 해당하는 입력 토큰 수만큼 초과될 수 있습니다. 비활성화하려면 0으로 설정하십시오.
+
+## ai_function_max_output_tokens_per_query \{#ai_function_max_output_tokens_per_query\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="500000" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "500000" }, { label: "새 설정" }] }]} />
+
+단일 쿼리에서 모든 AI 함수 API 호출 전반에 걸쳐 생성될 수 있는 총 출력(completion) 토큰의 최대값입니다. provider 응답을 기준으로 누적 추적됩니다. 각 호출의 출력 토큰 수는 미리 알 수 없으므로, 이 제한은 한 번의 호출에서 생성된 출력 토큰 수만큼 초과될 수 있습니다. 비활성화하려면 0으로 설정하십시오.
+
+## ai_function_max_retries \{#ai_function_max_retries\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="0" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "새 설정" }] }]} />
+
+개별 API 요청에서 일시적 오류가 발생했을 때의 최대 재시도 횟수입니다. 각 재시도에는 `ai_function_retry_initial_delay_ms`부터 시작하는 지수 백오프가 적용됩니다.
+
+## ai_function_request_timeout_sec \{#ai_function_request_timeout_sec\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="60" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "60" }, { label: "새 설정" }] }]} />
+
+AI 함수(AI 채팅 완료 및 임베딩 API 호출)가 수행하는 개별 HTTP 요청의 타임아웃(초)입니다. 요청이 이 시간 내에 완료되지 않으면 실패한 것으로 간주되며, `ai_function_max_retries`에 따라 재시도될 수 있습니다.
+
+## ai_function_retry_initial_delay_ms \{#ai_function_retry_initial_delay_ms\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="1000" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "1000" }, { label: "새 설정" }] }]} />
+
+실패한 AI 함수 API 요청의 첫 번째 재시도 전에 적용되는 초기 지연 시간(밀리초)입니다. 이후 각 재시도마다 지연 시간은 2배로 증가합니다(지수 백오프). 예를 들어 기본 설정에서는 1000ms, 2000ms, 4000ms입니다.
+
+## ai_function_throw_on_error \{#ai_function_throw_on_error\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "1" }, { label: "새 설정" }] }]} />
+
+true이면(기본값) 모든 재시도를 소진한 후에도 AI 함수 호출이 영구적으로 실패할 경우 예외를 발생시키며 쿼리를 중단합니다. false이면 실패한 행에는 컬럼 타입의 기본값이 할당되고(`String`의 경우 빈 문자열), 처리는 계속됩니다.
+
+## ai_function_throw_on_quota_exceeded \{#ai_function_throw_on_quota_exceeded\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "1" }, { label: "새 설정" }] }]} />
+
+true(기본값)인 경우, AI 함수 할당량 제한(`ai_function_max_input_tokens_per_query`, `ai_function_max_output_tokens_per_query` 또는 `ai_function_max_api_calls_per_query`)을 초과하면 예외를 발생시키며 쿼리를 중단합니다. false인 경우, 나머지 행에는 컬럼 타입의 기본값이 적용됩니다(String의 경우 빈 문자열).
+
 ## allow_aggregate_partitions_independently \{#allow_aggregate_partitions_independently\}
 
 <SettingsInfoBlock type="Bool" default_value="0" />
@@ -298,6 +378,16 @@ JOIN 키에서 Dynamic 타입 사용을 허용합니다. 호환성을 위해 도
 <SettingsInfoBlock type="Bool" default_value="1" />
 
 `multiIf` 함수를 열 지향 방식으로 실행하는 것을 허용합니다.
+
+## allow_experimental_ai_functions \{#allow_experimental_ai_functions\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "새 설정" }] }]} />
+
+실험적 AI 함수(예: `aiGenerateContent`)를 활성화합니다. 이러한 함수는 AI 제공업체로 외부 HTTP 호출을 수행합니다.
 
 ## allow_experimental_alias_table_engine \{#allow_experimental_alias_table_engine\}
 
@@ -3599,6 +3689,21 @@ HTTP 요청에 대한 응답으로 반환되는 데이터의 압축을 활성화
 
 작업이 예외로 종료될 때 작업 생성자의 스택 트레이스를 출력합니다. 성능 오버헤드를 피하기 위해 기본적으로 비활성화되어 있습니다.
 
+## enable_join_fixed_hash_table_conversion \{#enable_join_fixed_hash_table_conversion\}
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory
+  rows={[
+  {
+    id: "row-1",
+    items: [{ label: "26.4" }, { label: "1" }, { label: "키가 값 범위가 작은 단일 정수일 때 조인 시 해시 테이블을 플랫 배열로 변환하도록 하는 새 설정" }]
+  }
+]}
+/>
+
+키가 값 범위가 작은 단일 정수일 때 조인 시 해시 테이블을 플랫 배열로 변환하도록 합니다.
+
 ## enable_join_runtime_filters \{#enable_join_runtime_filters\}
 
 <BetaBadge/>
@@ -3615,7 +3720,12 @@ HTTP 요청에 대한 응답으로 반환되는 데이터의 압축을 활성화
 
 <SettingsInfoBlock type="Bool" default_value="0" />
 
-<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "0"},{"label": "조인 순서 최적화를 위해 추이적 등가 조인 프레디케이트를 추론하는 새 설정입니다."}]}]} />
+<VersionHistory
+  rows={[
+  { id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "조인 순서 최적화를 위해 추이적 등가 조인 프레디케이트를 추론하는 새 설정입니다." }] },
+  { id: "row-2", items: [{ label: "26.4" }, { label: "0" }, { label: "조인 순서 최적화를 위해 추이적 등가 조인 프레디케이트를 추론하는 새 설정입니다." }] }
+]}
+/>
 
 기존 조인 조건에서 추이적 등가 조인 프레디케이트를 추론합니다.
 예를 들어 `A.x = B.x` 및 `B.x = C.x`가 주어지면 `A.x = C.x` 프레디케이트가 추가로 생성되어,
@@ -4649,7 +4759,7 @@ SELECT JSON_VALUE('{"hello":"world"}', '$.b') settings function_json_value_retur
 
 <SettingsInfoBlock type="Bool" default_value="0" />
 
-<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.3"},{"label": "0"},{"label": "h3 함수에서 잘못된 입력을 허용하는 레거시 동작을 위한 새 설정"}]}, {"id": "row-2","items": [{"label": "26.2"},{"label": "0"},{"label": "h3 함수에서 잘못된 입력을 허용하는 레거시 동작을 위한 새 설정"}]}]} />
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.2" }, { label: "0" }, { label: "h3 함수에서 잘못된 입력을 허용하는 기존 방식을 위한 새 설정" }] }]} />
 
 false인 경우 h3 함수(예: h3CellAreaM2)는 입력이 잘못되면 예외를 발생시킵니다. true인 경우 0 또는 기본값을 반환합니다.
 
@@ -6421,28 +6531,9 @@ INSERT 시 skip 인덱스를 생성하고 저장합니다. 비활성화하면 sk
 
 <VersionHistory
   rows={[
-  {
-    id: "row-1",
-    items: [
-      { label: "26.4" },
-      { label: "0" },
-      {
-        label:
-          "기본적으로 INSERT 시 통계를 생성하지 않고, 대신 병합에 의존합니다"
-      }
-    ]
-  },
-  {
-    id: "row-2",
-    items: [
-      { label: "24.6" },
-      { label: "1" },
-      {
-        label:
-          "Added new setting to allow to disable materialization of statistics on insert"
-      }
-    ]
-  }
+  { id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "기본적으로 INSERT 시 통계를 생성하지 않고, 대신 병합에 의존합니다" }] },
+  { id: "row-2", items: [{ label: "26.4" }, { label: "0" }, { label: "기본적으로 INSERT 시 통계를 생성하지 않고, 대신 병합에 의존합니다" }] },
+  { id: "row-3", items: [{ label: "24.6" }, { label: "1" }, { label: "INSERT 시 통계의 머티리얼라이즈를 비활성화할 수 있도록 하는 새 설정이 추가되었습니다" }] }
 ]}
 />
 

@@ -66,6 +66,14 @@ SELECT * FROM system.events LIMIT 5
 
 발급된 ACME 인증서 요청 수입니다.
 
+### AIAPICalls \{#aiapicalls\}
+
+AI 제공업체로 전송된 HTTP 요청 수입니다.
+
+### AIInputTokens \{#aiinputtokens\}
+
+쿼리의 모든 AI 함수 호출에서 사용된 프롬프트 토큰의 총수입니다.
+
 ### AIORead \{#aioread\}
 
 Linux 또는 FreeBSD의 AIO 인터페이스를 사용한 읽기 횟수
@@ -81,6 +89,18 @@ Linux 또는 FreeBSD AIO 인터페이스를 통한 쓰기 횟수
 ### AIOWriteBytes \{#aiowritebytes\}
 
 Linux 또는 FreeBSD AIO 인터페이스를 통해 쓴 바이트 수
+
+### AIOutputTokens \{#aioutputtokens\}
+
+쿼리 내 모든 AI 함수 호출에서 사용된 총 생성 토큰 수입니다.
+
+### AIRowsProcessed \{#airowsprocessed\}
+
+AI 결과가 반환된 행 수입니다.
+
+### AIRowsSkipped \{#airowsskipped\}
+
+QUOTA 또는 오류로 인해 기본값이 사용된 행 수입니다.
 
 ### ASTFuzzerQueries \{#astfuzzerqueries\}
 
@@ -2104,6 +2124,10 @@ jemalloc 할당 샘플 추적이 실패한 총 횟수
 ### jemalloc 할당 해제 샘플 추적 실패 \{#jemallocfaileddeallocationsampletracking\}
 
 jemalloc 할당 해제 샘플 추적이 실패한 총 횟수
+
+### JoinBuildPostProcessingMicroseconds \{#joinbuildpostprocessingmicroseconds\}
+
+오른쪽 JOIN 측을 구축한 후 수행되는 후처리 단계의 경과 시간입니다.
 
 ### JoinBuildTableRowCount \{#joinbuildtablerowcount\}
 

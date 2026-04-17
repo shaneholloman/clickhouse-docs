@@ -67,6 +67,14 @@ SELECT * FROM system.events LIMIT 5
 
 Количество выданных запросов на сертификаты ACME.
 
+### AIAPICalls \{#aiapicalls\}
+
+Количество HTTP-запросов, отправленных поставщикам AI.
+
+### AIInputTokens \{#aiinputtokens\}
+
+Общее количество токенов запроса, использованных во всех вызовах AI-функций в рамках запроса.
+
 ### AIORead \{#aioread\}
 
 Количество операций чтения с использованием интерфейса AIO в Linux или FreeBSD
@@ -82,6 +90,18 @@ SELECT * FROM system.events LIMIT 5
 ### AIOWriteBytes \{#aiowritebytes\}
 
 Количество байт, записанных через интерфейс AIO в Linux или FreeBSD
+
+### AIOutputTokens \{#aioutputtokens\}
+
+Общее количество токенов автодополнения, израсходованных во всех вызовах AI-функций в запросе.
+
+### AIRowsProcessed \{#airowsprocessed\}
+
+Количество строк, для которых получен результат ИИ.
+
+### AIRowsSkipped \{#airowsskipped\}
+
+Количество строк, для которых было использовано значение по умолчанию из-за квоты или ошибки.
 
 ### ASTFuzzerQueries \{#astfuzzerqueries\}
 
@@ -2105,6 +2125,10 @@ SELECT * FROM system.events LIMIT 5
 ### JemallocFailedDeallocationSampleTracking \{#jemallocfaileddeallocationsampletracking\}
 
 Общее количество случаев, когда не удалось отследить выборку освобождения памяти jemalloc
+
+### JoinBuildPostProcessingMicroseconds \{#joinbuildpostprocessingmicroseconds\}
+
+Время, затраченное на этапы постобработки после построения правой части соединения.
 
 ### JoinBuildTableRowCount \{#joinbuildtablerowcount\}
 

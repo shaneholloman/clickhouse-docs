@@ -66,6 +66,14 @@ SELECT * FROM system.events LIMIT 5
 
 発行された ACME 証明書の申請数。
 
+### AIAPICalls \{#aiapicalls\}
+
+AIプロバイダーに送信されたHTTPリクエストの数。
+
+### AIInputTokens \{#aiinputtokens\}
+
+クエリ内のすべての AI 関数呼び出しで消費された提示トークンの総数。
+
 ### AIORead \{#aioread\}
 
 Linux または FreeBSD の AIO インターフェースを使用した読み取り回数
@@ -81,6 +89,18 @@ Linux または FreeBSD の AIO インターフェースを使用した書き込
 ### AIOWriteBytes \{#aiowritebytes\}
 
 Linux または FreeBSD の AIO インターフェースを介して書き込まれたバイト数
+
+### AIOutputTokens \{#aioutputtokens\}
+
+クエリ内のすべての AI 関数呼び出しで消費された補完トークンの総数。
+
+### AIで処理された行数 \{#airowsprocessed\}
+
+AIの結果が返された行数。
+
+### AIRowsSkipped \{#airowsskipped\}
+
+QUOTA またはエラーによりデフォルト値が設定された行数。
 
 ### ASTFuzzerQueries \{#astfuzzerqueries\}
 
@@ -2104,6 +2124,10 @@ jemalloc の割り当てサンプルの追跡に失敗した総回数
 ### JemallocFailedDeallocationSampleTracking \{#jemallocfaileddeallocationsampletracking\}
 
 jemalloc の解放サンプルのトラッキングに失敗した合計回数
+
+### JoinBuildPostProcessingMicroseconds \{#joinbuildpostprocessingmicroseconds\}
+
+右側のJOINを構築した後の後処理ステップにかかった時間。
 
 ### JoinBuildTableRowCount \{#joinbuildtablerowcount\}
 

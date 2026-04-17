@@ -102,7 +102,7 @@ import add_backup from '@site/static/images/cloud/reference/billing/05-add-backu
 
 ## 通过您的云服务商设置 Marketplace 计费 \{#set-up-marketplace-billing-from-cp\}
 
-您也可以直接通过云市场设置或更新组织的 Marketplace 订阅，而无需通过 ClickHouse Cloud 控制台。
+您也可以直接通过云市场设置或更新组织的 Marketplace 订阅，而无需通过 ClickHouse Cloud 控制台。如果您希望将 ClickHouse 组织切换为通过其他 Marketplace 计费账户上的新订阅进行计费，这会很有帮助。
 
 请根据 Marketplace 和订阅类型，按照以下说明操作：
 
