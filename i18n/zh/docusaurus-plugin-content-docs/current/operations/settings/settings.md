@@ -188,6 +188,86 @@ SELECT SUM(-1), MAX(0) FROM system.one WHERE 0;
 
 在内存高效模式下，用于合并中间聚合结果的线程数。值越大，内存消耗越多。0 表示与 `max_threads` 相同。
 
+## ai_function_max_api_calls_per_query \{#ai_function_max_api_calls_per_query\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="0" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "新增设置" }] }]} />
+
+AI 函数在每个查询中最多可发起的 HTTP 请求数。设为 0 可禁用。
+
+## ai_function_max_input_tokens_per_query \{#ai_function_max_input_tokens_per_query\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="1000000" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "1000000" }, { label: "Новая настройка" }] }]} />
+
+单个查询中所有 AI 函数 API 调用的输入 (提示) 标记总数上限。根据提供商返回的响应进行累计统计。请注意，由于单次调用的输入标记数无法预先得知，此限制可能会被单次调用的输入标记数超出。设置为 0 可禁用。
+
+## ai_function_max_output_tokens_per_query \{#ai_function_max_output_tokens_per_query\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="500000" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "500000" }, { label: "Новая настройка" }] }]} />
+
+单个查询中，所有 AI 函数 API 调用的输出 (completion) 标记总数上限。该值根据提供商的响应进行累计统计。请注意，由于单次调用的输出标记数无法预先得知，因此该限制可能会被某一次调用的输出标记数超出。设置为 0 可禁用。
+
+## ai_function_max_retries \{#ai_function_max_retries\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="0" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "新增设置" }] }]} />
+
+每个 API 请求在遇到瞬时错误时的最大再试行次数。每次再试行都使用指数退避时间，初始值为 `ai_function_retry_initial_delay_ms`。
+
+## ai_function_request_timeout_sec \{#ai_function_request_timeout_sec\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="60" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "60" }, { label: "新设置" }] }]} />
+
+AI 函数 (AI 聊天补全和嵌入 API 调用) 发起的单个 HTTP 请求的超时时间 (秒) 。如果请求未在此时间内完成，则会被视为失败，并可根据 `ai_function_max_retries` 进行重试。
+
+## ai_function_retry_initial_delay_ms \{#ai_function_retry_initial_delay_ms\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="1000" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "1000" }, { label: "新设置" }] }]} />
+
+失败的 AI 函数 API 请求在首次重试前的初始延迟，单位为毫秒。后续每次尝试前的延迟都会加倍 (指数退避时间) 。例如，在默认设置下：1000ms、2000ms、4000ms。
+
+## ai_function_throw_on_error \{#ai_function_throw_on_error\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "1" }, { label: "新设置" }] }]} />
+
+如果为 true (默认值) ，AI 函数调用在用尽所有重试后仍失败时，会抛出异常并中止查询。如果为 false，失败的行将使用该列类型的默认值 (String 为空字符串) ，并继续处理。
+
+## ai_function_throw_on_quota_exceeded \{#ai_function_throw_on_quota_exceeded\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "1" }, { label: "新设置" }] }]} />
+
+如果为 true (默认值) ，当 AI 函数配额超出限制 (`ai_function_max_input_tokens_per_query`、`ai_function_max_output_tokens_per_query` 或 `ai_function_max_api_calls_per_query`) 时，查询将因异常而中止。如果为 false，其余行将使用该列类型的默认值 (对于 String，默认为空字符串) 。
+
 ## allow_aggregate_partitions_independently \{#allow_aggregate_partitions_independently\}
 
 <SettingsInfoBlock type="Bool" default_value="0" />
@@ -296,6 +376,16 @@ File/S3 引擎/表函数在归档文件具有正确扩展名时，会将包含 `
 <SettingsInfoBlock type="Bool" default_value="1" />
 
 允许以列式方式执行 multiIf 函数
+
+## allow_experimental_ai_functions \{#allow_experimental_ai_functions\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "新增设置" }] }]} />
+
+启用实验性的 AI 函数 (例如 `aiGenerateContent`) 。这些函数会向 AI 提供商发起外部 HTTP 调用。
 
 ## allow_experimental_alias_table_engine \{#allow_experimental_alias_table_engine\}
 
@@ -3595,6 +3685,21 @@ Cloud 默认值：`1`。
 
 当作业导致异常时，输出作业创建方的堆栈跟踪。为避免性能开销，默认禁用。
 
+## enable_join_fixed_hash_table_conversion \{#enable_join_fixed_hash_table_conversion\}
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory
+  rows={[
+  {
+    id: "row-1",
+    items: [{ label: "26.4" }, { label: "1" }, { label: "用于启用以下功能的新设置：当键为单个整数且取值范围较小时，将连接的哈希表转换为扁平数组。" }]
+  }
+]}
+/>
+
+启用以下功能：当键为单个整数且取值范围较小时，将连接的哈希表转换为扁平数组。
+
 ## enable_join_runtime_filters \{#enable_join_runtime_filters\}
 
 <BetaBadge/>
@@ -3611,7 +3716,12 @@ Cloud 默认值：`1`。
 
 <SettingsInfoBlock type="Bool" default_value="0" />
 
-<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "0"},{"label": "用于推导传递性等值连接谓词以优化连接顺序的新增设置。"}]}]} />
+<VersionHistory
+  rows={[
+  { id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "用于推导传递性等值连接谓词以优化 JOIN 顺序的新增设置。" }] },
+  { id: "row-2", items: [{ label: "26.4" }, { label: "0" }, { label: "用于推导传递性等值连接谓词以优化 JOIN 顺序的新增设置。" }] }
+]}
+/>
 
 根据现有连接条件推导传递性等值连接谓词。
 例如，给定 `A.x = B.x` 和 `B.x = C.x`，会额外添加一个 `A.x = C.x` 谓词，
@@ -4645,7 +4755,7 @@ SELECT JSON_VALUE('{"hello":"world"}', '$.b') settings function_json_value_retur
 
 <SettingsInfoBlock type="Bool" default_value="0" />
 
-<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.3"},{"label": "0"},{"label": "新的设置，用于保持旧版行为，以允许 h3 函数接受无效输入"}]}, {"id": "row-2","items": [{"label": "26.2"},{"label": "0"},{"label": "新的设置，用于保持旧版行为，以允许 h3 函数接受无效输入"}]}]} />
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.2" }, { label: "0" }, { label: "新的设置，用于保持旧版行为，以允许 h3 函数接受无效输入" }] }]} />
 
 如果为 false，h3 函数 (例如 h3CellAreaM2) 在输入无效时会抛出异常。如果为 true，则返回 0 或默认值。
 
@@ -6418,28 +6528,9 @@ log_query_views=1
 
 <VersionHistory
   rows={[
-  {
-    id: "row-1",
-    items: [
-      { label: "26.4" },
-      { label: "0" },
-      {
-        label:
-          "默认禁用在 INSERT 时构建统计信息，改为依赖合并"
-      }
-    ]
-  },
-  {
-    id: "row-2",
-    items: [
-      { label: "24.6" },
-      { label: "1" },
-      {
-        label:
-          "Added new setting to allow to disable materialization of statistics on insert"
-      }
-    ]
-  }
+  { id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "默认禁用在 INSERT 时构建统计信息，改为依赖合并" }] },
+  { id: "row-2", items: [{ label: "26.4" }, { label: "0" }, { label: "默认禁用在 INSERT 时构建统计信息，改为依赖合并" }] },
+  { id: "row-3", items: [{ label: "24.6" }, { label: "1" }, { label: "Added new setting to allow to disable materialization of statistics on insert" }] }
 ]}
 />
 

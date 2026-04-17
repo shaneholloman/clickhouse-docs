@@ -189,6 +189,86 @@ SELECT SUM(-1), MAX(0) FROM system.one WHERE 0;
 
 Количество потоков, используемых для слияния промежуточных результатов агрегации в режиме экономичного использования памяти. Чем больше значение, тем больше потребление памяти. 0 означает то же, что и `max_threads`.
 
+## ai_function_max_api_calls_per_query \{#ai_function_max_api_calls_per_query\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="0" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "Новая настройка" }] }]} />
+
+Максимальное количество HTTP-запросов, которые функции AI могут отправить в рамках одного запроса. Установите 0, чтобы отключить.
+
+## ai_function_max_input_tokens_per_query \{#ai_function_max_input_tokens_per_query\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="1000000" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "1000000" }, { label: "Новая настройка" }] }]} />
+
+Максимальное суммарное количество входных токенов (prompt) во всех вызовах API AI-функций в рамках одного запроса. Отслеживается накопительно по ответам провайдера. Обратите внимание, что этот лимит может быть превышен на количество входных токенов одного вызова, поскольку число входных токенов для вызова заранее неизвестно. Установите 0, чтобы отключить.
+
+## ai_function_max_output_tokens_per_query \{#ai_function_max_output_tokens_per_query\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="500000" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "500000" }, { label: "Новая настройка" }] }]} />
+
+Максимальное суммарное число выходных токенов (completion) во всех вызовах API AI-функций в рамках одного запроса. Учитывается накопительно по ответам провайдера. Обратите внимание, что этот лимит может быть превышен на число выходных токенов одного вызова, поскольку количество выходных токенов для вызова заранее неизвестно. Установите значение 0, чтобы отключить ограничение.
+
+## ai_function_max_retries \{#ai_function_max_retries\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="0" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "Новая настройка" }] }]} />
+
+Максимальное количество повторных попыток при временных ошибках для каждого API-запроса. При каждой повторной попытке используется экспоненциальный бэкофф, начиная с `ai_function_retry_initial_delay_ms`.
+
+## ai_function_request_timeout_sec \{#ai_function_request_timeout_sec\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="60" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "60" }, { label: "Новая настройка" }] }]} />
+
+Таймаут в секундах для отдельных HTTP-запросов, выполняемых AI-функциями (запросы к AI chat completions и embedding API). Если запрос не завершается в течение этого времени, он считается неуспешным, и для него могут выполняться повторные попытки в соответствии с `ai_function_max_retries`.
+
+## ai_function_retry_initial_delay_ms \{#ai_function_retry_initial_delay_ms\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="UInt64" default_value="1000" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "1000" }, { label: "Новая настройка" }] }]} />
+
+Начальная задержка в миллисекундах перед первой повторной попыткой API-запроса к AI function, завершившегося ошибкой. При каждой следующей попытке задержка удваивается (экспоненциальный бэкофф). Например, при настройках по умолчанию: 1000ms, 2000ms, 4000ms.
+
+## ai_function_throw_on_error \{#ai_function_throw_on_error\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "1" }, { label: "Новая настройка" }] }]} />
+
+Если true (по умолчанию), вызов AI-функции, который безвозвратно завершается ошибкой после исчерпания всех повторных попыток, прерывает запрос с исключением. Если false, для строки, в которой произошла ошибка, используется значение по умолчанию для типа столбца (пустая строка для String), и обработка продолжается.
+
+## ai_function_throw_on_quota_exceeded \{#ai_function_throw_on_quota_exceeded\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "1" }, { label: "Новая настройка" }] }]} />
+
+Если установлено значение true (по умолчанию), превышение лимита квоты для функции AI (`ai_function_max_input_tokens_per_query`, `ai_function_max_output_tokens_per_query` или `ai_function_max_api_calls_per_query`) прерывает запрос с исключением. Если установлено значение false, для оставшихся строк используется значение по умолчанию для типа столбца (пустая строка для String).
+
 ## allow_aggregate_partitions_independently \{#allow_aggregate_partitions_independently\}
 
 <SettingsInfoBlock type="Bool" default_value="0" />
@@ -298,6 +378,16 @@ SELECT SUM(-1), MAX(0) FROM system.one WHERE 0;
 <SettingsInfoBlock type="Bool" default_value="1" />
 
 Разрешает столбцовое выполнение функции multiIf
+
+## allow_experimental_ai_functions \{#allow_experimental_ai_functions\}
+
+<ExperimentalBadge />
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "Новая настройка" }] }]} />
+
+Включает экспериментальные функции ИИ (например, `aiGenerateContent`). Эти функции выполняют внешние HTTP-запросы к провайдерам ИИ.
 
 ## allow_experimental_alias_table_engine \{#allow_experimental_alias_table_engine\}
 
@@ -3601,6 +3691,21 @@ ClickHouse применяет этот SETTING, когда запрос соде
 
 Выводит стек-трейс компонента, создавшего задание, если выполнение задания приводит к исключению. По умолчанию отключено, чтобы избежать накладных расходов по производительности.
 
+## enable_join_fixed_hash_table_conversion \{#enable_join_fixed_hash_table_conversion\}
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory
+  rows={[
+  {
+    id: "row-1",
+    items: [{ label: "26.4" }, { label: "1" }, { label: "Новая настройка, включающая преобразование хеш-таблицы в плоский массив для соединений, если ключ представляет собой одно целое число с небольшим диапазоном значений." }]
+  }
+]}
+/>
+
+Включает преобразование хеш-таблицы в плоский массив для соединений, если ключ представляет собой одно целое число с небольшим диапазоном значений.
+
 ## enable_join_runtime_filters \{#enable_join_runtime_filters\}
 
 <BetaBadge/>
@@ -3617,7 +3722,12 @@ ClickHouse применяет этот SETTING, когда запрос соде
 
 <SettingsInfoBlock type="Bool" default_value="0" />
 
-<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "0"},{"label": "Новая настройка для определения транзитивных предикатов экви-соединения при оптимизации порядка соединений."}]}]} />
+<VersionHistory
+  rows={[
+  { id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "Новая настройка для определения транзитивных предикатов экви-соединения при оптимизации порядка соединений." }] },
+  { id: "row-2", items: [{ label: "26.4" }, { label: "0" }, { label: "Новая настройка для определения транзитивных предикатов экви-соединения при оптимизации порядка соединений." }] }
+]}
+/>
 
 Определяет транзитивные предикаты экви-соединения на основе существующих условий соединения.
 Например, если заданы `A.x = B.x` и `B.x = C.x`, добавляется синтетический предикат `A.x = C.x`,
@@ -4651,7 +4761,7 @@ SELECT JSON_VALUE('{"hello":"world"}', '$.b') settings function_json_value_retur
 
 <SettingsInfoBlock type="Bool" default_value="0" />
 
-<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.3"},{"label": "0"},{"label": "Настройка для унаследованного поведения, позволяющая функциям h3 принимать некорректные входные данные"}]}, {"id": "row-2","items": [{"label": "26.2"},{"label": "0"},{"label": "Настройка для унаследованного поведения, позволяющая функциям h3 принимать некорректные входные данные"}]}]} />
+<VersionHistory rows={[{ id: "row-1", items: [{ label: "26.2" }, { label: "0" }, { label: "Настройка для унаследованного поведения, позволяющая функциям h3 принимать некорректные входные данные" }] }]} />
 
 Если false, функции h3, например h3CellAreaM2, сгенерируют исключение, если входные данные некорректны. Если true, они возвращают 0 или значение по умолчанию.
 
@@ -6424,28 +6534,9 @@ log_query_views=1
 
 <VersionHistory
   rows={[
-  {
-    id: "row-1",
-    items: [
-      { label: "26.4" },
-      { label: "0" },
-      {
-        label:
-          "По умолчанию отключено построение статистики при INSERT, вместо этого используется слияние"
-      }
-    ]
-  },
-  {
-    id: "row-2",
-    items: [
-      { label: "24.6" },
-      { label: "1" },
-      {
-        label:
-          "Добавлена новая настройка, позволяющая отключить материализацию статистики при вставке"
-      }
-    ]
-  }
+  { id: "row-1", items: [{ label: "26.4" }, { label: "0" }, { label: "По умолчанию отключено построение статистики при INSERT, вместо этого используется слияние" }] },
+  { id: "row-2", items: [{ label: "26.4" }, { label: "0" }, { label: "По умолчанию отключено построение статистики при INSERT, вместо этого используется слияние" }] },
+  { id: "row-3", items: [{ label: "24.6" }, { label: "1" }, { label: "Добавлена новая настройка, позволяющая отключить материализацию статистики при вставке" }] }
 ]}
 />
 
