@@ -2312,25 +2312,21 @@ Supported operations:
 | `ALTER TABLE ADD INDEX` / `DROP INDEX` | Data-skipping indexes only |
 | `CREATE DATABASE` / `DROP DATABASE` | Via `EnsureCreated` / `EnsureDeleted` and migrations |
 
-Foreign keys raise `NotSupportedException` since ClickHouse does not enforce them; the model validator emits a warning instead.
+#### Migration limitations {#ef-core-limitations}
 
-#### Limitations {#ef-core-limitations}
-
-| Feature | Status |
+| Feature | Reason |
 |---|---|
-| SELECT / WHERE / ORDER BY / GROUP BY | Supported |
-| JOINs, subqueries, set operations | Supported |
-| INSERT via `SaveChanges` / `BulkInsertAsync` | Supported |
-| Migrations (CREATE / ALTER / DROP, indexes, engines) | Supported |
-| UPDATE / DELETE | Not supported (ClickHouse mutations are async, not OLTP-compatible) |
-| Transactions | No-op (ClickHouse does not support ACID transactions) |
-| Server-generated values (auto-increment) | Not supported |
-| Foreign key enforcement | Not supported (warning emitted; migrations reject `FOREIGN KEY`) |
-| Unique constraints | Not supported (ClickHouse does not enforce uniqueness) |
-| Nested types (`Nested(…)`) | Not supported |
-| JSON path query translation (`.Data["key"]` in LINQ) | Not supported |
-| Owned entities as JSON (`.ToJson()`) | Not supported |
-| CROSS APPLY / OUTER APPLY patterns | Not supported (ClickHouse has no APPLY syntax) |
+| Foreign keys | ClickHouse does not enforce foreign keys. Migrations reject `AddForeignKey`; the model validator emits a warning at model build time. |
+| Unique constraints / unique indexes | ClickHouse does not enforce uniqueness. Unique indexes throw at migration time. |
+| Server-generated values (auto-increment / `IDENTITY`) | ClickHouse has no equivalent. |
+| `Nested(…)` columns | Not yet supported as a mapped CLR type. |
+| Owned entities as JSON (`.ToJson()`) | Structural JSON mapping for owned entities is not yet implemented. Use `JsonNode` / `string` on a `Json` column instead (see [JSON columns](#ef-core-json)). |
+
+Beyond migrations, the provider also does not yet support:
+
+- **`UPDATE` / `DELETE`**
+- **Transactions**: `BeginTransaction` is a no-op. No support for ACID transactions in ClickHouse.
+- **JSON path query translation**: `entity.Data["key"]` in LINQ does not translate to ClickHouse's `data.key` SQL syntax. Filter on non-JSON columns and inspect JSON in memory.
 
 ## Limitations {#limitations}
 
