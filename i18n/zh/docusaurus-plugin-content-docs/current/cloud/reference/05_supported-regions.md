@@ -35,23 +35,21 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 * sa-east-1 (南美)
 * ap-southeast-3 (雅加达)
 * ap-east-1 (香港)
-* mx-central-1 (墨西哥)
 
 ## Google Cloud 区域 \{#google-cloud-regions\}
 
-* asia-southeast1 (新加坡) 
-* asia-northeast1 (东京) 
-* europe-west4 (荷兰) 
-* us-central1 (爱荷华州) 
-* us-east1 (南卡罗来纳州) 
-* europe-west2 (伦敦) 
+* asia-southeast1 (新加坡)
+* asia-northeast1 (东京)
+* europe-west4 (荷兰)
+* us-central1 (爱荷华州)
+* us-east1 (南卡罗来纳州)
 
 **私有区域：**
 
-* australia-southeast1 (悉尼) 
-* europe-west3 (法兰克福) 
-* europe-west6 (苏黎世) 
-* northamerica-northeast1 (蒙特利尔) 
+* australia-southeast1 (悉尼)
+* europe-west3 (法兰克福)
+* europe-west6 (苏黎世)
+* northamerica-northeast1 (蒙特利尔)
 * us-west1 (俄勒冈州)
 
 ## Azure 区域 \{#azure-regions\}
@@ -64,7 +62,6 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 
 * Japan East (Tokyo, Saitama)
 * UAE North (Dubai)
-* Australia East (New South Wales)
 
 :::note
 需要部署到目前未列出的区域？[提交申请](https://clickhouse.com/pricing?modal=open)。
@@ -92,17 +89,16 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 
 * AWS af-south-1 (南非) **私有区域**
 * AWS ca-central-1 (加拿大) **私有区域**
-* AWS eu-central-1 (法兰克福) 
+* AWS eu-central-1 (法兰克福)
 * AWS eu-north-1 (斯德哥尔摩) **私有区域**
-* AWS eu-west-1 (爱尔兰) 
-* AWS eu-west-2 (伦敦) 
+* AWS eu-west-1 (爱尔兰)
+* AWS eu-west-2 (伦敦)
 * AWS sa-east-1 (南美) **私有区域**
-* AWS mx-central-1 (墨西哥) **私有区域**
-* AWS us-east-1 (北弗吉尼亚) 
-* AWS us-east-2 (俄亥俄) 
-* AWS us-west-2 (俄勒冈) 
-* GCP europe-west4 (荷兰) 
-* GCP us-central1 (爱荷华) 
+* AWS us-east-1 (北弗吉尼亚)
+* AWS us-east-2 (俄亥俄)
+* AWS us-west-2 (俄勒冈)
+* GCP europe-west4 (荷兰)
+* GCP us-central1 (爱荷华)
 * GCP us-east1 (南卡罗来纳)
 
 ## 符合 PCI 合规要求的区域 \{#pci-compliant-regions\}
@@ -113,15 +109,14 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 
 * AWS af-south-1 (南非) **私有区域**
 * AWS ca-central-1 (加拿大) **私有区域**
-* AWS eu-central-1 (法兰克福) 
+* AWS eu-central-1 (法兰克福)
 * AWS eu-north-1 (斯德哥尔摩) **私有区域**
-* AWS eu-west-1 (爱尔兰) 
-* AWS eu-west-2 (伦敦) 
-* AWS mx-central-1 (墨西哥) **私有区域**
+* AWS eu-west-1 (爱尔兰)
+* AWS eu-west-2 (伦敦)
 * AWS sa-east-1 (南美) **私有区域**
-* AWS us-east-1 (弗吉尼亚北部) 
-* AWS us-east-2 (俄亥俄) 
-* AWS us-west-2 (俄勒冈) 
-* GCP europe-west4 (荷兰) 
-* GCP us-central1 (爱荷华) 
+* AWS us-east-1 (弗吉尼亚北部)
+* AWS us-east-2 (俄亥俄)
+* AWS us-west-2 (俄勒冈)
+* GCP europe-west4 (荷兰)
+* GCP us-central1 (爱荷华)
 * GCP us-east1 (南卡罗来纳)
