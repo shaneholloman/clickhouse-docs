@@ -35,7 +35,6 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 * sa-east-1 (Южная Америка)
 * ap-southeast-3 (Джакарта)
 * ap-east-1 (Гонконг)
-* mx-central-1 (Мексика)
 
 ## Регионы Google Cloud \{#google-cloud-regions\}
 
@@ -44,7 +43,6 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 * europe-west4 (Нидерланды)
 * us-central1 (Айова)
 * us-east1 (Южная Каролина)
-* europe-west2 (Лондон)
 
 **Частный регион:**
 
@@ -64,7 +62,6 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 
 * Japan East (Токио, Сайтама)
 * UAE North (Дубай)
-* Australia East (Новый Южный Уэльс)
 
 :::note
 Нужно развернуть в регионе, который сейчас не указан в списке? [Отправьте запрос](https://clickhouse.com/pricing?modal=open).
@@ -97,7 +94,6 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 * AWS eu-west-1 (Ireland)
 * AWS eu-west-2 (London)
 * AWS sa-east-1 (South America) **Частный регион**
-* AWS mx-central-1 (Mexico) **Частный регион**
 * AWS us-east-1 (N. Virginia)
 * AWS us-east-2 (Ohio)
 * AWS us-west-2 (Oregon)
@@ -117,7 +113,6 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 * AWS eu-north-1 (Стокгольм) **Частный регион**
 * AWS eu-west-1 (Ирландия)
 * AWS eu-west-2 (Лондон)
-* AWS mx-central-1 (Мексика) **Частный регион**
 * AWS sa-east-1 (Южная Америка) **Частный регион**
 * AWS us-east-1 (Северная Вирджиния)
 * AWS us-east-2 (Огайо)

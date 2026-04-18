@@ -35,7 +35,6 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 * sa-east-1 (남아메리카)
 * ap-southeast-3 (자카르타)
 * ap-east-1 (홍콩)
-* mx-central-1 (멕시코)
 
 ## Google Cloud 리전 \{#google-cloud-regions\}
 
@@ -44,7 +43,6 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 * europe-west4 (네덜란드)
 * us-central1 (아이오와)
 * us-east1 (사우스캐롤라이나)
-* europe-west2 (런던)
 
 **프라이빗 리전:**
 
@@ -64,7 +62,6 @@ import EnterprisePlanFeatureBadge from '@theme/badges/EnterprisePlanFeatureBadge
 
 * Japan East (Tokyo, Saitama)
 * UAE North (Dubai)
-* Australia East (New South Wales)
 
 :::note
 현재 나열되어 있지 않은 리전에 배포해야 하는 경우 [요청을 제출하십시오](https://clickhouse.com/pricing?modal=open).
@@ -97,7 +94,6 @@ HIPAA 규정을 준수하는 리전에 서비스를 설정하려면 고객은 Bu
 * AWS eu-west-1 (Ireland)
 * AWS eu-west-2 (London)
 * AWS sa-east-1 (South America) **프라이빗 리전**
-* AWS mx-central-1 (Mexico) **프라이빗 리전**
 * AWS us-east-1 (N. Virginia)
 * AWS us-east-2 (Ohio)
 * AWS us-west-2 (Oregon)
@@ -117,7 +113,6 @@ HIPAA 규정을 준수하는 리전에 서비스를 설정하려면 고객은 Bu
 * AWS eu-north-1 (Stockholm) **프라이빗 리전**
 * AWS eu-west-1 (Ireland)
 * AWS eu-west-2 (London)
-* AWS mx-central-1 (Mexico) **프라이빗 리전**
 * AWS sa-east-1 (South America) **프라이빗 리전**
 * AWS us-east-1 (N. Virginia)
 * AWS us-east-2 (Ohio)
