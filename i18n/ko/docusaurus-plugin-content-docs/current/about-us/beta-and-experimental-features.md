@@ -49,25 +49,26 @@ ClickHouse는 오픈 소스 프로젝트이므로 ClickHouse 직원뿐만 아니
 
 ## 베타 설정 \{#beta-settings\}
 
-| 이름                                                                                                                                     | 기본값       |
-| -------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| [geotoh3&#95;argument&#95;order](/operations/settings/settings#geotoh3_argument_order)                                                 | `lat_lon` |
-| [enable&#95;lightweight&#95;update](/operations/settings/settings#enable_lightweight_update)                                           | `1`       |
-| [allow&#95;experimental&#95;correlated&#95;subqueries](/operations/settings/settings#allow_experimental_correlated_subqueries)         | `1`       |
-| [parallel&#95;replicas&#95;count](/operations/settings/settings#parallel_replicas_count)                                               | `0`       |
-| [parallel&#95;replica&#95;offset](/operations/settings/settings#parallel_replica_offset)                                               | `0`       |
-| [parallel&#95;replicas&#95;custom&#95;key](/operations/settings/settings#parallel_replicas_custom_key)                                 | ``        |
-| [parallel&#95;replicas&#95;custom&#95;key&#95;range&#95;lower](/operations/settings/settings#parallel_replicas_custom_key_range_lower) | `0`       |
-| [parallel&#95;replicas&#95;custom&#95;key&#95;range&#95;upper](/operations/settings/settings#parallel_replicas_custom_key_range_upper) | `0`       |
-| [parallel&#95;replicas&#95;filter&#95;pushdown](/operations/settings/settings#parallel_replicas_filter_pushdown)                       | `0`       |
-| [allow&#95;experimental&#95;database&#95;iceberg](/operations/settings/settings#allow_experimental_database_iceberg)                   | `0`       |
-| [allow&#95;experimental&#95;database&#95;unity&#95;catalog](/operations/settings/settings#allow_experimental_database_unity_catalog)   | `0`       |
-| [allow&#95;experimental&#95;database&#95;glue&#95;catalog](/operations/settings/settings#allow_experimental_database_glue_catalog)     | `0`       |
-| [session&#95;timezone](/operations/settings/settings#session_timezone)                                                                 | ``        |
-| [low&#95;priority&#95;query&#95;wait&#95;time&#95;ms](/operations/settings/settings#low_priority_query_wait_time_ms)                   | `1000`    |
-| [allow&#95;experimental&#95;delta&#95;kernel&#95;rs](/operations/settings/settings#allow_experimental_delta_kernel_rs)                 | `1`       |
-| [allow&#95;insert&#95;into&#95;iceberg](/operations/settings/settings#allow_insert_into_iceberg)                                       | `0`       |
-| [enable&#95;join&#95;runtime&#95;filters](/operations/settings/settings#enable_join_runtime_filters)                                   | `1`       |
+| 이름                                                                                                                                           | 기본값       |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| [geotoh3&#95;argument&#95;order](/operations/settings/settings#geotoh3_argument_order)                                                       | `lat_lon` |
+| [enable&#95;lightweight&#95;update](/operations/settings/settings#enable_lightweight_update)                                                 | `1`       |
+| [allow&#95;experimental&#95;correlated&#95;subqueries](/operations/settings/settings#allow_experimental_correlated_subqueries)               | `1`       |
+| [parallel&#95;replicas&#95;count](/operations/settings/settings#parallel_replicas_count)                                                     | `0`       |
+| [parallel&#95;replica&#95;offset](/operations/settings/settings#parallel_replica_offset)                                                     | `0`       |
+| [parallel&#95;replicas&#95;custom&#95;key](/operations/settings/settings#parallel_replicas_custom_key)                                       | ``        |
+| [parallel&#95;replicas&#95;custom&#95;key&#95;range&#95;lower](/operations/settings/settings#parallel_replicas_custom_key_range_lower)       | `0`       |
+| [parallel&#95;replicas&#95;custom&#95;key&#95;range&#95;upper](/operations/settings/settings#parallel_replicas_custom_key_range_upper)       | `0`       |
+| [parallel&#95;replicas&#95;filter&#95;pushdown](/operations/settings/settings#parallel_replicas_filter_pushdown)                             | `0`       |
+| [parallel&#95;replicas&#95;allow&#95;view&#95;over&#95;mergetree](/operations/settings/settings#parallel_replicas_allow_view_over_mergetree) | `0`       |
+| [allow&#95;experimental&#95;database&#95;iceberg](/operations/settings/settings#allow_experimental_database_iceberg)                         | `0`       |
+| [allow&#95;experimental&#95;database&#95;unity&#95;catalog](/operations/settings/settings#allow_experimental_database_unity_catalog)         | `0`       |
+| [allow&#95;experimental&#95;database&#95;glue&#95;catalog](/operations/settings/settings#allow_experimental_database_glue_catalog)           | `0`       |
+| [session&#95;timezone](/operations/settings/settings#session_timezone)                                                                       | ``        |
+| [low&#95;priority&#95;query&#95;wait&#95;time&#95;ms](/operations/settings/settings#low_priority_query_wait_time_ms)                         | `1000`    |
+| [allow&#95;experimental&#95;delta&#95;kernel&#95;rs](/operations/settings/settings#allow_experimental_delta_kernel_rs)                       | `1`       |
+| [allow&#95;insert&#95;into&#95;iceberg](/operations/settings/settings#allow_insert_into_iceberg)                                             | `0`       |
+| [enable&#95;join&#95;runtime&#95;filters](/operations/settings/settings#enable_join_runtime_filters)                                         | `1`       |
 
 ## 실험적 설정 \{#experimental-settings\}
 

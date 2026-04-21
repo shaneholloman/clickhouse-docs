@@ -176,7 +176,9 @@ SELECT * FROM clusterAllReplicas('all_groups.default', system, processes)
 
 ### 实用提示 \{#callouts\}
 
-* **默认情况下，`CREATE`/`RENAME`/`DROP DATABASE` 查询可能会因服务处于空闲/停止状态而被阻塞。** 如果在服务处于空闲或停止状态时执行这些查询，查询可能会挂起。要绕过此问题，你可以在会话级别或单条查询级别使用 [`settings distributed_ddl_task_timeout=0`](/operations/settings/settings#distributed_ddl_task_timeout) 运行数据库管理查询。
+* **ClickHouse 版本**：[升级计划](/manage/updates) 由主服务的设置决定。次级服务不能拥有独立于主服务的发布计划。
+
+* **默认情况下，`CREATE`/`RENAME`/`DROP DATABASE` 查询可能会因服务处于休眠/停止状态而被阻塞。** 如果在服务处于休眠或停止状态时执行这些查询，查询可能会挂起。要绕过此问题，你可以在会话级别或单条查询级别使用 [`settings distributed_ddl_task_timeout=0`](/operations/settings/settings#distributed_ddl_task_timeout) 运行数据库管理查询。
 
 例如：
 
@@ -187,10 +189,9 @@ SETTINGS distributed_ddl_task_timeout=0
 
 如果您手动停止某个服务，则需要再次将其启动，查询才能执行。
 
-* **目前每个 warehouse 最多软限制为 5 个服务。** 如果您在单个 warehouse 中需要超过 5 个服务，请联系支持团队。
-* **主服务不能只有一个副本** 虽然辅助服务可以只有一个副本，但主服务必须至少有 2 个副本。
-* **主服务闲置** 当前默认情况下，主服务不能自动闲置。创建辅助服务后，该功能会被禁用。若要启用此功能，请联系支持以启用父服务闲置。父服务自动闲置将在 2026 年第二季度默认启用 (现有服务将可使用该功能，新服务将默认启用) 。
-
+* **目前每个 仓库 最多软限制为 5 个服务。** 如果您在单个 仓库 中需要超过 5 个服务，请联系支持团队。
+* **主服务不能只有一个副本** 虽然次级服务可以只有一个副本，但主服务必须至少有 2 个副本。
+* **主服务闲置** 当前默认情况下，主服务不能自动闲置。创建次级服务后，该功能会被禁用。若要启用此功能，请联系支持以启用父服务闲置。父服务自动闲置将在 2026 年第二季度默认启用 (现有服务将可使用该功能，新服务将默认启用) 。 
 
 ## 定价 \{#pricing\}
 

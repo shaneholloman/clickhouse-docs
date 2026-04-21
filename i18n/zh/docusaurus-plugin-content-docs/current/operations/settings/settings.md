@@ -3523,6 +3523,18 @@ FORMAT PrettyCompactMonoBlock
 
 启用后，在执行 SELECT FINAL 查询时，来自不同分区的分区片段将不会被合并在一起，合并只会在各自的分区内单独进行。在处理分区表时，这可以显著提升查询性能。
 
+## dynamic_throw_on_type_mismatch \{#dynamic_throw_on_type_mismatch\}
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "1"},{"label": "用于控制默认 Dynamic 实现中类型不匹配行为的新设置"}]}]} />
+
+使用默认实现将函数应用于 [Dynamic](../../sql-reference/data-types/dynamic.md) 列时，
+此设置用于控制那些实际类型与函数不兼容的行会如何处理：
+
+* `true` (默认) — 抛出异常。
+* `false` — 对这些行返回 `NULL`。
+
 ## empty_result_for_aggregation_by_constant_keys_on_empty_set \{#empty_result_for_aggregation_by_constant_keys_on_empty_set\}
 
 <SettingsInfoBlock type="Bool" default_value="1" />
@@ -9333,6 +9345,16 @@ FROM default.fuse_tbl AS __table1
 
 允许将 materialized view 与并行副本一起使用
 
+## parallel_replicas_allow_view_over_mergetree \{#parallel_replicas_allow_view_over_mergetree\}
+
+<BetaBadge />
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "0"},{"label": "新设置"}]}]} />
+
+允许并行副本对基于 `MergeTree` 表的简单视图执行外层查询 (而非视图的内部查询) ，从而增强跨节点并行处理能力。同样适用于 `UNION ALL` 视图，前提是其所有分支都从不同的 `MergeTree` 表读取数据。
+
 ## parallel_replicas_connect_timeout_ms \{#parallel_replicas_connect_timeout_ms\}
 
 <SettingsInfoBlock type="Milliseconds" default_value="300" />
@@ -11070,6 +11092,14 @@ S3 中单次复制操作的最大大小。仅当 `s3_allow_multipart_copy` 为 t
 
 每当上传到 S3 的分区片段数量达到该阈值时，`s3_min_upload_part_size` 就会乘以 `s3_upload_part_size_multiply_factor`。
 
+## s3_uri_style \{#s3_uri_style\}
+
+<SettingsInfoBlock type="S3UriStyle" default_value="auto" />
+
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "auto"},{"label": "新设置。"}]}]} />
+
+强制使用 S3 端点样式。可选值：auto、virtual&#95;hosted、path。
+
 ## s3_use_adaptive_timeouts \{#s3_use_adaptive_timeouts\}
 
 <SettingsInfoBlock type="Bool" default_value="1" />
@@ -12513,6 +12543,18 @@ ORDER BY 子句中位于 WITH FILL 列之前的列构成排序前缀。具有不
 
 - 0 — 禁用抛出异常。`pointInPolygon` 接受无效的多边形，并为其返回可能不正确的结果。
 - 1 — 启用抛出异常。
+
+## variant_throw_on_type_mismatch \{#variant_throw_on_type_mismatch\}
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "1"},{"label": "用于控制默认 Variant 实现中类型不匹配时行为的新设置"}]}]} />
+
+当使用默认实现对 [Variant](../../sql-reference/data-types/variant.md) 列应用函数时，
+该设置用于控制实际类型与函数不兼容的行会如何处理：
+
+* `true` (默认) — 抛出异常。
+* `false` — 改为对这些行返回 `NULL`。
 
 ## vector_search_filter_strategy \{#vector_search_filter_strategy\}
 

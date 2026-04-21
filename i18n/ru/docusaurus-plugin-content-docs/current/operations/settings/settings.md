@@ -3529,6 +3529,18 @@ ClickHouse применяет этот SETTING, когда запрос соде
 
 Когда параметр включён, при выполнении запросов SELECT FINAL части из разных партиций не будут объединяться друг с другом. Вместо этого слияние будет происходить только внутри каждой партиции отдельно. Это может значительно повысить производительность запросов при работе с партиционированными таблицами.
 
+## dynamic_throw_on_type_mismatch \{#dynamic_throw_on_type_mismatch\}
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "1"},{"label": "Новая настройка для управления поведением при несоответствии типов в стандартной реализации Dynamic"}]}]} />
+
+При применении функции к столбцу [Dynamic](../../sql-reference/data-types/dynamic.md) в стандартной реализации
+эта настройка определяет, что происходит со строками, фактический тип которых несовместим с функцией:
+
+* `true` (по умолчанию) — выбрасывается исключение.
+* `false` — для таких строк вместо этого возвращается `NULL`.
+
 ## empty_result_for_aggregation_by_constant_keys_on_empty_set \{#empty_result_for_aggregation_by_constant_keys_on_empty_set\}
 
 <SettingsInfoBlock type="Bool" default_value="1" />
@@ -9371,6 +9383,16 @@ FROM default.fuse_tbl AS __table1
 
 Разрешает использование materialized views с параллельными репликами
 
+## parallel_replicas_allow_view_over_mergetree \{#parallel_replicas_allow_view_over_mergetree\}
+
+<BetaBadge />
+
+<SettingsInfoBlock type="Bool" default_value="0" />
+
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "0"},{"label": "Новая настройка"}]}]} />
+
+Разрешить параллельным репликам выполнять внешний запрос простого представления над таблицами `MergeTree` (вместо внутреннего запроса самого представления), что улучшает распараллеливание между узлами. Также применяется к представлениям `UNION ALL`, все ветви которых читают из разных таблиц `MergeTree`.
+
 ## parallel_replicas_connect_timeout_ms \{#parallel_replicas_connect_timeout_ms\}
 
 <SettingsInfoBlock type="Milliseconds" default_value="300" />
@@ -11110,6 +11132,14 @@ FORMAT Null;
 
 Каждый раз, когда в S3 загружается такое количество частей, значение s3_min_upload_part_size умножается на s3_upload_part_size_multiply_factor.
 
+## s3_uri_style \{#s3_uri_style\}
+
+<SettingsInfoBlock type="S3UriStyle" default_value="auto" />
+
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "auto"},{"label": "Новая настройка"}]}]} />
+
+Принудительно задаёт стиль конечной точки S3. Возможные значения: auto, virtual&#95;hosted, path.
+
 ## s3_use_adaptive_timeouts \{#s3_use_adaptive_timeouts\}
 
 <SettingsInfoBlock type="Bool" default_value="1" />
@@ -12558,6 +12588,18 @@ SELECT map('a', range(number), 'b', number, 'c', 'str_' || toString(number)) as 
 
 - 0 — генерация исключения отключена. `pointInPolygon` принимает некорректные многоугольники и возвращает для них потенциально неверные результаты.
 - 1 — генерация исключения включена.
+
+## variant_throw_on_type_mismatch \{#variant_throw_on_type_mismatch\}
+
+<SettingsInfoBlock type="Bool" default_value="1" />
+
+<VersionHistory rows={[{"id": "row-1","items": [{"label": "26.4"},{"label": "1"},{"label": "Новая настройка для управления поведением при несоответствии типов в стандартной реализации Variant"}]}]} />
+
+При применении функции к столбцу [Variant](../../sql-reference/data-types/variant.md) со стандартной реализацией
+эта настройка определяет, что происходит со строками, фактический тип которых несовместим с функцией:
+
+* `true` (по умолчанию) — выбрасывать исключение.
+* `false` — вместо этого возвращать `NULL` для таких строк.
 
 ## vector_search_filter_strategy \{#vector_search_filter_strategy\}
 
