@@ -1,7 +1,7 @@
 ---
 slug: /cloud/features/backups/faq
 sidebar_label: 'Backups FAQ'
-title: 'Backups FAQ'
+title: 'Backups billing discrepancy FAQs'
 description: 'Frequently asked questions about ClickHouse Cloud backup billing and retention'
 keywords: ['backups', 'cloud backups', 'billing', 'retention', 'faq']
 doc_type: 'reference'
@@ -9,7 +9,7 @@ doc_type: 'reference'
 
 ### Why is the backup storage bill going up? {#why-bill-going-up}
 
-ClickHouse Cloud retains up to 8 backup versions of your data — a combination of full and incremental backups — for reliable recovery. Invoices previously either reflected only the 2 most recent versions (default backup settings), or retention plus an additional day of backups (custom configurations). We are correcting this so charges match actual retained storage from July 1, 2026 onward.
+ClickHouse Cloud retains up to 8 backup versions of your data - a combination of full and incremental backups - for reliable recovery. Invoices previously reflected only a fraction of this data. We are correcting this so charges match actual retained storage from July 1, 2026 onward.
 
 :::note
 The price per GB of backup storage has not changed. This correction changes the number of backup versions that appear on your invoice to match what is actually retained for your service.
@@ -25,7 +25,7 @@ No. We will not backdate or recover any charges for prior billing periods. The c
 
 ### Where can I see all the backup versions being retained? {#see-backup-versions}
 
-All retained backup versions will be visible in the ClickHouse Cloud console starting April 23rd. You will also be able to see whether a specific version is currently being billed, or retained, but not yet billed. The updated pricing calculator also reflects these costs.
+All retained backup versions will be visible in the ClickHouse Cloud console starting April 23rd. You will also be able to see whether a specific version is currently being billed, or retained, but not yet billed. The updated [pricing calculator](https://clickhouse.com/pricing) also reflects these costs.
 
 ### Who can I contact with questions? {#contact}
 
@@ -37,7 +37,7 @@ No. Your backup coverage, retention, and recovery capabilities are unchanged. We
 
 ### Where can I find more details? {#more-details}
 
-A notification email will go out on April 23 with full details. You can utilize the pricing calculator to get a better estimate of true backup costs.
+A notification email will go out on April 23 with full details. You can utilize the [pricing calculator](https://clickhouse.com/pricing) to get a better estimate of true backup costs.
 
 ### When will the billing changes go live? {#when-changes-go-live}
 
