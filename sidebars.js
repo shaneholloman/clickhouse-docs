@@ -2077,6 +2077,11 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'link',
+          label: 'OTel FYI',
+          href: 'https://otel.fyi',
+        },
       ],
     },
   ],
