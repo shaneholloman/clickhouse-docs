@@ -1,7 +1,7 @@
 ---
 slug: /use-cases/data-lake/biglake-catalog
 sidebar_label: 'BigLake Metastore'
-title: 'Lakehouse runtime Catalog (BigLake Metastore)'
+title: 'Lakehouse runtime catalog (BigLake Metastore)'
 pagination_prev: null
 pagination_next: null
 description: 'In this guide, we will walk you through the steps to query
